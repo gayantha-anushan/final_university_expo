@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard} from 'react-native'
-
+import { AntDesign } from '@expo/vector-icons';
 const Login = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
@@ -21,15 +21,17 @@ const Login = ({ navigation }) => {
                        </View> 
                     <View style={styles.ButtonCont}>
                         <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Register')}>
-                <Text style={styles.Text}>Register</Text>
+                                <Text style={styles.Text}>Register</Text>
                          </TouchableOpacity>
                         <TouchableOpacity style={styles.Touchable}>
-                <Text style={styles.Text}>Login</Text>
+                            <Text style={styles.Text}>Login</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.ButtonCont1}>
-                    <TouchableOpacity style={styles.Touchable1}>
-                        <Text style={styles.Text1}>Sign in with Google</Text>
+                        <TouchableOpacity style={styles.Touchable1}>
+                            <AntDesign name="google" size={26} color="white"/>
+                            <Text style={styles.Text1}>Sign in with Google</Text>
+                            
                     </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -78,12 +80,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40,  
     },
     Touchable1: {
-        backgroundColor: 'grey',
+        backgroundColor: '#4d8aeb',
         borderColor:'rgba(0,0,0,0.2)',
         padding: 15,
         paddingHorizontal: 30,
         borderRadius: 50,
-        
+        flexDirection:'row'
         
     },
     ButtonCont: {
@@ -118,8 +120,9 @@ const styles = StyleSheet.create({
         color:'white'
     },
     Text1: {
-        color: 'black',
-        fontWeight:'bold'
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize:18
     },
     container: {
         

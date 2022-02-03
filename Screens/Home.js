@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 36,
-        color: '#59E64C',
+        color: '#46e85b',
         fontWeight: 'bold',
         marginLeft: 30,
         paddingTop: 20,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         height: 400,        
     },
     Touchable: {
-        backgroundColor: '#59E64C',
+        backgroundColor: '#43e864',
         padding: 15,
         borderRadius: 20,
         paddingHorizontal: 40,  
