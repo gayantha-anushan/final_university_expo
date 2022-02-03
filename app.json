@@ -1,7 +1,12 @@
 {
   "expo": {
+<<<<<<< HEAD
     "name": "final-frontend",
     "slug": "final-frontend",
+=======
+    "name": "frontend",
+    "slug": "frontend",
+>>>>>>> 92291179b4c140ac5ba3f7b833ceb80ab86a6fc9
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
