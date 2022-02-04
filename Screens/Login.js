@@ -1,9 +1,39 @@
 import React,{useState} from 'react'
-import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard} from 'react-native'
+import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+//import {AsyncStorage} from '@react-native-async-storage/async-storage'
 import { AntDesign } from '@expo/vector-icons';
+import Connection from '../Connection'
 const Login = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
+
+    const loginNow = () => {
+        //connection
+        if(email != "" && password != ""){
+            fetch(Connection.getConnection()+"/api/auth/login",{
+                method:'POST',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                },
+                body: JSON.stringify({
+                    uemail:email,
+                    upass:password
+                }),
+            }).then((response)=>response.json()).then(async (responseJson)=>{
+                //response coming from derver
+                if(responseJson.status == "OK"){
+                    await AsyncStorage.setItem('auth_code',responseJson.token);
+                    navigation.navigate('Profile')
+                }else{
+                    ToastAndroid.show(responseJson.error.message)
+                }
+            })
+        }else{
+            ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
+        }
+    }
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
@@ -23,7 +53,7 @@ const Login = ({ navigation }) => {
                         <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Register')}>
                                 <Text style={styles.Text}>Register</Text>
                          </TouchableOpacity>
-                        <TouchableOpacity style={styles.Touchable}>
+                        <TouchableOpacity style={styles.Touchable} onPress={() => loginNow()}>
                             <Text style={styles.Text}>Login</Text>
                         </TouchableOpacity>
                     </View>

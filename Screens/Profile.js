@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems:'flex-end'
 },
     container: {
-        flex: 1,
+        display:'flex',
         alignItems: 'flex-start',
         justifyContent:'flex-start',
     },

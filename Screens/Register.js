@@ -1,10 +1,41 @@
 import React,{useState} from 'react'
-import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard} from 'react-native'
+import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+//import {AsyncStorage} from '@react-native-async-storage/async-storage'
 import { AntDesign } from '@expo/vector-icons';
+import Connection from '../Connection'
+
 const Register = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
     const [ReTypepassword, Resetpassword] =useState('');
+
+    const registerNow = () => {
+        //Registration process goes here
+        if(email != "" && password != "" && password == ReTypepassword){
+            fetch(Connection.getConnection()+"/api/auth/new-usr",{
+                method:'POST',
+                headers:{
+                    Accept:'application/json',
+                    'Content-Type':'application/json',
+                },
+                body: JSON.stringify({
+                    uemail:email,
+                    upass:password
+                }),
+            }).then((response)=>response.json()).then(async (responseJson)=>{
+                //response coming from derver
+                if(responseJson.status == "OK"){
+                    await AsyncStorage.setItem('auth_code',responseJson.token);
+                    navigation.navigate('Profile')
+                }else{
+                    ToastAndroid.show(responseJson.error.message)
+                }
+            })
+        }else{
+            ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
+        }
+    }
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
@@ -25,7 +56,7 @@ const Register = ({ navigation }) => {
                         <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Login')}>
                 <Text style={styles.Text}>Login</Text>
                          </TouchableOpacity>
-                        <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Profile')}>
+                        <TouchableOpacity style={styles.Touchable} onPress={()=>registerNow()}>
                 <Text style={styles.Text}>Register</Text>
                         </TouchableOpacity>      
                     </View>
