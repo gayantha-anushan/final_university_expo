@@ -48,9 +48,8 @@ const Login = ({ navigation }) => {
                         </ImageBackground> 
                         
                     <View style={styles.container}>
-                            <TextInput value={email} onChangeText={setemail} style={styles.input} placeholder="Email" /> 
-
-                        <TextInput value={password}  onChangeText={setpassword} style={styles.input} placeholder="Password" />
+                        <TextInput value={email} onChangeText={setemail} style={styles.input} placeholder="Email" />
+                        <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" />
                     </View> 
                     <View style={styles.ButtonCont}>
                         <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Register')}>
@@ -61,7 +60,7 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.ButtonCont1}>
-                        <TouchableOpacity style={styles.Touchable1}>
+                        <TouchableOpacity style={styles.Touchable1} >
                             <AntDesign name="google" size={26} color="white"/>
                             <Text style={styles.Text1}>Sign in with Google</Text>
                             

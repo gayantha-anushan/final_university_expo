@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import { View,Dimensions,Text,StyleSheet,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard,Image, TextInput, TouchableOpacity } from 'react-native'
 import RadioGroup from 'react-native-radio-buttons-group';
 import MapView from 'react-native-maps';
+import { NavigationContainer } from '@react-navigation/native';
 const radioButtonsData = [
   {
     id: '1',
@@ -32,7 +33,7 @@ const radioButtonsData = [
     selected: false,
   },
 ];
-const Profile = () => {
+const Profile = ({navigation}) => {
     const [radioButtons, setRadioButtons] = useState(radioButtonsData);
 
  /* const onPressRadioButton = radioButtonsArray => {
@@ -68,7 +69,7 @@ const Profile = () => {
                         <MapView style={styles.map} />
                     </View>
                     <View style={styles.ButtonCont1}>
-                    <TouchableOpacity style={styles.Touchable1}>
+                    <TouchableOpacity style={styles.Touchable1} onPress={()=>navigation.navigate('Interface')}>
                             <Text style={styles.Text}>Submit</Text>
                     </TouchableOpacity>
                     </View>
