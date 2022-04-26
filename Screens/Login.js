@@ -7,6 +7,7 @@ import Connection from '../Connection'
 const Login = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
+    
 
     const loginNow = () => {
         //connection
@@ -43,12 +44,14 @@ const Login = ({ navigation }) => {
                     <Image style={styles.logo} source={require('../assets/logo.jpg')} />
                     <Text style={styles.headerText}>Login</Text>
                     </View>
+                         <ImageBackground style={styles.backImage} source={require('../assets/Login.png')}>
+                        </ImageBackground> 
+                        
                     <View style={styles.container}>
-                        <ImageBackground style={styles.backImage} source={require('../assets/Login.png')}>
-                            <TextInput value={email} onChangeText={setemail}  style={styles.input} placeholder="Email"  /> 
-                            <TextInput value={password} onChangeText={setpassword}  style={styles.input} placeholder="Password" />
-                        </ImageBackground>
-                       </View> 
+                            <TextInput value={email} onChangeText={setemail} style={styles.input} placeholder="Email" /> 
+
+                        <TextInput value={password}  onChangeText={setpassword} style={styles.input} placeholder="Password" />
+                    </View> 
                     <View style={styles.ButtonCont}>
                         <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Register')}>
                                 <Text style={styles.Text}>Register</Text>
@@ -96,9 +99,9 @@ const styles = StyleSheet.create({
         
     },
     backImage: {
-        width:750,
-        height: 550,
-        justifyContent: 'center',
+        width:380,
+        height: 250,
+        justifyContent: "center",
         opacity: 0.8,
         paddingTop: 50,
     
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
         
     },
     input: {
-        margin: 40,
+        margin:15,
         marginHorizontal:5,
         borderWidth: 2,
         padding: 13,
@@ -155,7 +158,8 @@ const styles = StyleSheet.create({
         fontSize:18
     },
     container: {
-        
+        display:'flex',
+        justifyContent: 'space-around',
         
 
     }

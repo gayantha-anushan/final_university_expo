@@ -24,7 +24,7 @@ const Register = ({ navigation }) => {
                     upass:password
                 }),
             }).then((response)=>response.json()).then(async (responseJson)=>{
-                //response coming from derver
+                //response coming from server
                 if(responseJson.status == "OK"){
                     await AsyncStorage.setItem('auth_code',responseJson.token);
                     navigation.navigate('Profile')
@@ -45,12 +45,14 @@ const Register = ({ navigation }) => {
                     <Image style={styles.logo} source={require('../assets/logo.jpg')} />
                     <Text style={styles.headerText}>Register</Text>
                     </View>
-                    <View style={styles.container}>
                         <ImageBackground style={styles.backImage} source={require('../assets/Register.png')}>
+                        </ImageBackground>
+                    <View style={styles.container}>
+                        
                             <TextInput value={email} onChangeText={setemail}  style={styles.input} placeholder="Email"  /> 
                             <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" />
                             <TextInput value={ReTypepassword} onChangeText={Resetpassword}  style={styles.input} placeholder="ReType-Password" />
-                        </ImageBackground>
+                        
                        </View> 
                     <View style={styles.ButtonCont}>
                         <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Login')}>
@@ -93,13 +95,13 @@ const styles = StyleSheet.create({
         fontSize: 36,
         color: '#46e85b',
         fontWeight: 'bold',
-        marginLeft: 50,
+        marginLeft: 38,
         paddingTop: 20,
         
     },
     backImage: {
-        width:450,
-        height: 550,
+        width:380,
+        height: 250,
         justifyContent: 'center',
     },
     Touchable: {
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,   
     },
     input: {
-        margin: 30,
+        margin: 10,
         marginHorizontal:5,
         borderWidth: 2,
         padding: 13,
