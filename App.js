@@ -8,6 +8,7 @@ import Login from './Screens/Login';
 import Register from './Screens/Register';
 import Profile from './Screens/Profile';
 import Interface from './Screens/Interface';
+import Message from './Screens/Message';
 
 const stack = createNativeStackNavigator();
 export default function App() {
@@ -18,7 +19,8 @@ export default function App() {
         <stack.Screen name="Login" component={Login} />
         <stack.Screen name="Register" component={Register} />
         <stack.Screen name="Profile" component={Profile} />
-        <stack.Screen name="Interface" component={Interface}/>
+        <stack.Screen name="Interface" component={Interface} />
+        <stack.Screen name="Message" component={Message}/>
       </stack.Navigator>
 
     </NavigationContainer>
