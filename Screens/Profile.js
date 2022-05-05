@@ -1,7 +1,8 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { View,Dimensions,Text,StyleSheet,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard,Image, TextInput, TouchableOpacity } from 'react-native'
 import RadioGroup from 'react-native-radio-buttons-group';
 import MapView from 'react-native-maps';
+import Connection from '../Connection';
 import { NavigationContainer } from '@react-navigation/native';
 const radioButtonsData = [
   {
@@ -40,6 +41,33 @@ const Profile = ({navigation}) => {
     console.log(radioButtonsArray);
     setRadioButtons(radioButtonsArray);
   };*/
+
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [address, setAddress] = useState("")
+  const [contact, setContact] = useState("")
+  
+
+
+  const uploadProfileData = () => {
+      fetch(Connection.getConnection()+"/api/auth/new-profile",{
+          method:"POST",
+          headers:{
+              Accept:'application/json',
+              'Content-Type':'application/json'
+          },
+          body:JSON.stringify({
+              firstname:firstname,
+              lastname:lastname,
+              address:address,
+              contact:contact
+          }).then((response)=>response.json()).then((responseJson)=>{
+              //post action after setup url
+              navigation.navigate('Interface')
+          })
+      })
+  }
+
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -49,17 +77,17 @@ const Profile = ({navigation}) => {
                         <Text style={styles.headerText}>Profile</Text>
                     </View>
                         <Text style={styles.Text}>First Name</Text>
-                        <TextInput style={styles.input} />
+                        <TextInput value={firstName} onChangeText={setFirstName} style={styles.input} />
                         <Text style={styles.Text}>Last Name</Text>
-                        <TextInput style={styles.input} />
+                        <TextInput value={lastName} onChangeText={setLastName} style={styles.input} />
                         <Text style={styles.Text}>Address</Text>
-                        <TextInput style={styles.input1} />
+                        <TextInput value={address} onChangeText={setAddress} style={styles.input1} />
                     <Text style={styles.Text}>Profile Picture</Text>
                     <View style={styles.ButtonCont1}>
                         <TouchableOpacity style={styles.Touchable}><Text style={styles.Text}>Choose the Photo</Text></TouchableOpacity>
                     </View> 
                         <Text style={styles.Text}>Contact</Text>
-                        <TextInput style={styles.input} />
+                        <TextInput value={contact} onChangeText={setContact} style={styles.input} />
                         <Text style={styles.Text}>Type</Text>
                         <View style={styles.container}>
                             <RadioGroup radioButtons={radioButtons} /*onPress={onPressRadioButton}*/ layout="column"/>
@@ -69,7 +97,7 @@ const Profile = ({navigation}) => {
                         <MapView style={styles.map} />
                     </View>
                     <View style={styles.ButtonCont1}>
-                    <TouchableOpacity style={styles.Touchable1} onPress={()=>navigation.navigate('Interface')}>
+                    <TouchableOpacity style={styles.Touchable1} onPress={()=>uploadProfileData()}>
                             <Text style={styles.Text}>Submit</Text>
                     </TouchableOpacity>
                     </View>

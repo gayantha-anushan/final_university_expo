@@ -26,7 +26,7 @@ const Login = ({ navigation }) => {
                 //response coming from derver
                 if(responseJson.status == "OK"){
                     await AsyncStorage.setItem('auth_code',responseJson.token);
-                    navigation.navigate('Profile')
+                    navigateToSuitable(responseJson.token)
                 }else{
                     ToastAndroid.show(responseJson.error.message)
                 }
@@ -34,6 +34,28 @@ const Login = ({ navigation }) => {
         }else{
             ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
         }
+    }
+
+    const navigateToSuitable = (token) => {
+        //this functon create to navigate for suitable directory
+        //TODO1:Check Profile Availability
+        //Todo2:route to suitab;e terfaces
+        fetch(Connection.getConnection()+"/api/auth/profile-data",{
+            method:"POST",
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json',
+            },
+            body:JSON.stringify({
+                token:token
+            }).then((response)=>response.json()).then((responseJson)=>{
+                if(responseJson == null){
+                    navigation.navigate('Profile')
+                }else{
+                    navigation.navigate('Interface')
+                }
+            })
+        })
     }
 
     return (
