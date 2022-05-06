@@ -57,8 +57,8 @@ const Profile = ({navigation}) => {
               'Content-Type':'application/json'
           },
           body:JSON.stringify({
-              firstname:firstname,
-              lastname:lastname,
+              firstname:firstName,
+              lastname:lastName,
               address:address,
               contact:contact
           }).then((response)=>response.json()).then((responseJson)=>{

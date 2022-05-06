@@ -12,6 +12,7 @@ const Login = ({ navigation }) => {
     const loginNow = () => {
         //connection
         if(email != "" && password != ""){
+            try{
             fetch(Connection.getConnection()+"/api/auth/login",{
                 method:'POST',
                 headers:{
@@ -31,6 +32,9 @@ const Login = ({ navigation }) => {
                     ToastAndroid.show(responseJson.error)
                 }
             })
+            }catch(error){
+                console.log(error);
+            }
         }else{
             ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
         }
@@ -40,6 +44,7 @@ const Login = ({ navigation }) => {
         //this functon create to navigate for suitable directory
         //TODO1:Check Profile Availability
         //Todo2:route to suitab;e terfaces
+        try{
         fetch(Connection.getConnection()+"/api/auth/profile-data",{
             method:"POST",
             headers:{
@@ -48,14 +53,19 @@ const Login = ({ navigation }) => {
             },
             body:JSON.stringify({
                 token:token
-            }).then((response)=>response.json()).then((responseJson)=>{
-                if(responseJson == null){
-                    navigation.navigate('Profile')
-                }else{
-                    navigation.navigate('Interface')
-                }
             })
         })
+        .then((response)=>response.json()).then((responseJson)=>{
+            //console.log(responseJson);
+            if(responseJson == null){
+                navigation.navigate('Profile')
+            }else{
+                navigation.navigate('Interface')
+            }
+        })
+        }catch(error){
+            console.log(error)
+        }
     }
 
     return (
