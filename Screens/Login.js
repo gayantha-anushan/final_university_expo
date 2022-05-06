@@ -19,8 +19,8 @@ const Login = ({ navigation }) => {
                     'Content-Type':'application/json',
                 },
                 body: JSON.stringify({
-                    uemail:email,
-                    upass:password
+                    email:email,
+                    password:password
                 }),
             }).then((response)=>response.json()).then(async (responseJson)=>{
                 //response coming from derver
@@ -28,7 +28,7 @@ const Login = ({ navigation }) => {
                     await AsyncStorage.setItem('auth_code',responseJson.token);
                     navigateToSuitable(responseJson.token)
                 }else{
-                    ToastAndroid.show(responseJson.error.message)
+                    ToastAndroid.show(responseJson.error)
                 }
             })
         }else{

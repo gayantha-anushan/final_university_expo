@@ -13,15 +13,15 @@ const Register = ({ navigation }) => {
     const registerNow = () => {
         //Registration process goes here
         if(email != "" && password != "" && password == ReTypepassword){
-            fetch(Connection.getConnection()+"/api/auth/new-usr",{
+            fetch(Connection.getConnection()+"/api/auth/signup",{
                 method:'POST',
                 headers:{
                     Accept:'application/json',
                     'Content-Type':'application/json',
                 },
                 body: JSON.stringify({
-                    uemail:email,
-                    upass:password
+                    email:email,
+                    password:password
                 }),
             }).then((response)=>response.json()).then(async (responseJson)=>{
                 //response coming from server
@@ -29,7 +29,7 @@ const Register = ({ navigation }) => {
                     await AsyncStorage.setItem('auth_code',responseJson.token);
                     navigation.navigate('Profile')
                 }else{
-                    ToastAndroid.show(responseJson.error.message)
+                    ToastAndroid.show(responseJson.error)
                 }
             })
         }else{
