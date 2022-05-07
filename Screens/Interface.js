@@ -1,6 +1,7 @@
 import React from 'react';
 import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard,Image,Text,TouchableOpacity} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import Post from '../components/Post';
 import { TextInput } from 'react-native';
 const Interface = ({navigation }) => {
     
@@ -33,7 +34,8 @@ const Interface = ({navigation }) => {
                         </TouchableOpacity>
                         
                     </View>
-
+                    <Post/>
+                    <Post/>
                 </ScrollView>
              </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
