@@ -55,9 +55,10 @@ const Login = ({ navigation }) => {
                 token:token
             })
         })
-        .then((response)=>response.json()).then((responseJson)=>{
+        .then((response)=>response.text()).then((responseJson)=>{
             //console.log(responseJson);
-            if(responseJson == null){
+            console.log("fucked")
+            if(responseJson == ""){
                 navigation.navigate('Profile')
             }else{
                 navigation.navigate('Interface')

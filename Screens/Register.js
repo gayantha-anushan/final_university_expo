@@ -24,18 +24,16 @@ const Register = ({ navigation }) => {
                     email:email,
                     password:password
                 }),
-            }).then((response)=>{
-                console.log(response)
             })
-            // .then((response)=>response.json()).then(async (responseJson)=>{
-            //     //response coming from server
-            //     if(responseJson.status == "OK"){
-            //         await AsyncStorage.setItem('auth_code',responseJson.token);
-            //         navigation.navigate('Profile')
-            //     }else{
-            //         ToastAndroid.show(responseJson.error)
-            //     }
-            // })
+            .then((response)=>response.json()).then(async (responseJson)=>{
+                //response coming from server
+                if(responseJson.status == "OK"){
+                    await AsyncStorage.setItem('auth_code',responseJson.token);
+                    navigation.navigate('Profile')
+                }else{
+                    ToastAndroid.show(responseJson.error)
+                }
+            })
             }catch(error){
                 console.log(error)
             }

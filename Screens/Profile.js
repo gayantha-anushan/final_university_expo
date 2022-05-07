@@ -50,6 +50,7 @@ const Profile = ({navigation}) => {
 
 
   const uploadProfileData = () => {
+      try{
       fetch(Connection.getConnection()+"/api/auth/new-profile",{
           method:"POST",
           headers:{
@@ -61,11 +62,15 @@ const Profile = ({navigation}) => {
               lastname:lastName,
               address:address,
               contact:contact
-          }).then((response)=>response.json()).then((responseJson)=>{
-              //post action after setup url
-              navigation.navigate('Interface')
           })
-      })
+      }).then((response)=>response.text()).then((responseJson)=>{
+        //post action after setup url
+        console.log(responseJson)
+        navigation.navigate('Interface')
+    })
+    }catch(error){
+        console.log(error);
+    }
   }
 
     return (
