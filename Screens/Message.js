@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text,StyleSheet,View,ScrollView,Keyboard,KeyboardAvoidingView,TouchableWithoutFeedback,TouchableOpacity} from 'react-native'
-import { TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 

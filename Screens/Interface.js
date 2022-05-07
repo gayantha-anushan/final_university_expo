@@ -1,7 +1,7 @@
 import React from 'react';
 import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard,Image,Text,TouchableOpacity} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native';
 const Interface = ({navigation }) => {
     
     return (
