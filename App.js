@@ -9,6 +9,7 @@ import Register from './Screens/Register';
 import Profile from './Screens/Profile';
 import Interface from './Screens/Interface';
 import Message from './Screens/Message';
+import CreatePost from './Screens/CreatePost';
 
 const stack = createNativeStackNavigator();
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         <stack.Screen name="Register" component={Register} />
         <stack.Screen name="Profile" component={Profile} />
         <stack.Screen name="Interface" component={Interface} />
+        <stack.Screen name="CreatePost" component={CreatePost}/>
         <stack.Screen name="Message" component={Message}/>
       </stack.Navigator>
 

@@ -1,12 +1,14 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import strawberry from '../assets/strawberry.jpg'
+import { LinearGradient } from 'expo-linear-gradient'
 
 const Post = () => {
   return (
     <View style={styles.card}>
-        <View>
+        <View style={styles.container2}>
             <View style={styles.container1}>
-                <Image style={styles.userImage} />
+                <Image source={strawberry} style={styles.userImage} />
                 <View>
                     <Text style={styles.user}>Piyasena Farm</Text>
                     <Text>2020/01/01</Text>
@@ -16,10 +18,16 @@ const Post = () => {
                 <Text>Add To Cart</Text>
             </TouchableOpacity>
         </View>
-        <Image/>
-        <View>
+        <ImageBackground source={strawberry} style={styles.image}>
+            <LinearGradient
+                colors={["rgba(0,0,0,0.7)","transparent"]}
+                style={styles.gradient}
+            />
+            <Text style={styles.titleText}>Strawberry For Sale in Sri Lanka</Text>
+        </ImageBackground>
+        <View style={styles.container2}>
             <View>
-                <Text>Direct Sell</Text>
+                <Text style={styles.typeBtn}>Direct Sell</Text>
                 <View style={styles.container1}>
                     <TouchableOpacity style={styles.btn1}>
                         <Text>Location</Text>
@@ -41,18 +49,53 @@ const Post = () => {
 export default Post
 
 const styles = StyleSheet.create({
+    card:{
+        borderColor:'#000000',
+        borderRadius:10,
+        borderWidth:1,
+        margin:5
+    },
     user:{
         fontWeight:'bold'
+    },
+    gradient:{
+        position:'absolute',
+        top:0,
+        bottom:0,
+        left:0,
+        right:0
+    },
+    image:{
+        height:250,
+        resizeMode:'cover',
+        width:'100%',
+    },
+    typeBtn:{
+        marginLeft:8,
+        fontWeight:'bold'
+    },
+    titleText:{
+        color:'#ffffff',
+        margin:8,
+        fontWeight:'bold',
+        fontSize:18
     },
     userImage:{
         height:50,
         width:50,
+        margin:8,
         borderRadius:25
     },
     container1:{
         display:'flex',
         flexDirection:'row',
-        justifyContent:'left',
+        justifyContent:'flex-start',
+        alignItems:'center'
+    },
+    container2:{
+        display:'flex',
+        justifyContent:'space-between',
+        flexDirection:'row',
         alignItems:'center'
     },
     btn1:{
@@ -60,6 +103,9 @@ const styles = StyleSheet.create({
         display:'flex',
         justifyContent:'center',
         alignItems:'center',
-        padding:5
+        padding:5,
+        margin:8,
+        paddingHorizontal:10,
+        borderRadius:8
     }
 })
