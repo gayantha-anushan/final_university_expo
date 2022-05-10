@@ -13,6 +13,7 @@ const Register = ({ navigation }) => {
     const registerNow = () => {
         //Registration process goes here
         if(email != "" && password != "" && password == ReTypepassword){
+            try{
             fetch(Connection.getConnection()+"/api/auth/signup",{
                 method:'POST',
                 headers:{
@@ -23,7 +24,8 @@ const Register = ({ navigation }) => {
                     email:email,
                     password:password
                 }),
-            }).then((response)=>response.json()).then(async (responseJson)=>{
+            })
+            .then((response)=>response.json()).then(async (responseJson)=>{
                 //response coming from server
                 if(responseJson.status == "OK"){
                     await AsyncStorage.setItem('auth_code',responseJson.token);
@@ -32,6 +34,9 @@ const Register = ({ navigation }) => {
                     ToastAndroid.show(responseJson.error)
                 }
             })
+            }catch(error){
+                console.log(error)
+            }
         }else{
             ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
         }
