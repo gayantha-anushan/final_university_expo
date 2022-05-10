@@ -1,17 +1,32 @@
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import strawberry from '../assets/strawberry.jpg'
 import { LinearGradient } from 'expo-linear-gradient'
 
-const Post = () => {
+const Post = ({username,postdate,title,quantity,price,type}) => {
+
+    const [typeName, setTypeName] = useState("")
+    const [isDirect, setIsDirect] = useState(false)
+
+    useEffect(() => {
+        if(type == "DIRECT"){
+            setTypeName("Direct Sell")
+            setIsDirect(true)
+        }else{
+            setTypeName("Auction")
+            setIsDirect(false)
+        }
+    }, [])
+    
+
   return (
     <View style={styles.card}>
         <View style={styles.container2}>
             <View style={styles.container1}>
                 <Image source={strawberry} style={styles.userImage} />
                 <View>
-                    <Text style={styles.user}>Piyasena Farm</Text>
-                    <Text>2020/01/01</Text>
+                    <Text style={styles.user}>{username}</Text>
+                    <Text>{postdate}</Text>
                 </View>
             </View>
             <TouchableOpacity style={styles.btn1}>
@@ -23,11 +38,11 @@ const Post = () => {
                 colors={["rgba(0,0,0,0.7)","transparent"]}
                 style={styles.gradient}
             />
-            <Text style={styles.titleText}>Strawberry For Sale in Sri Lanka</Text>
+            <Text style={styles.titleText}>{title}</Text>
         </ImageBackground>
         <View style={styles.container2}>
             <View>
-                <Text style={styles.typeBtn}>Direct Sell</Text>
+                <Text style={styles.typeBtn}>{typeName}</Text>
                 <View style={styles.container1}>
                     <TouchableOpacity style={styles.btn1}>
                         <Text>Location</Text>
@@ -38,8 +53,8 @@ const Post = () => {
                 </View>
             </View>
             <View>
-                <Text>100 kg</Text>
-                <Text>Rs : 15 000.00</Text>
+                <Text>{quantity} kg</Text>
+                <Text>Rs : {price}</Text>
             </View>
         </View>
     </View>

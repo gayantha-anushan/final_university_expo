@@ -57,7 +57,6 @@ const Login = ({ navigation }) => {
         })
         .then((response)=>response.text()).then((responseJson)=>{
             //console.log(responseJson);
-            console.log("fucked")
             if(responseJson == ""){
                 navigation.navigate('Profile')
             }else{

@@ -1,22 +1,85 @@
-import { StyleSheet, KeyboardAvoidingView,Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, KeyboardAvoidingView,Text, View, TouchableOpacity } from 'react-native'
+import React,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import { TextInput } from 'react-native'
+import * as ImagePicker from  'expo-image-picker'
+import { getConnection } from '../Connection'
 
 const CreatePost = ({navigation}) => {
+
+    const [title, setTitle] = useState("");
+    const [quantity, setQuantity] = useState("")
+    const [wholeSeller, setWholeSeller] = useState("")
+    const [localSeller, setLocalSeller] = useState("")
+    const [customer, setCustomer] = useState("")
+    const [image, setImage] = useState(null)
+    const [name, setName] = useState(null)
+    const [type, setType] = useState(null)
+
+    const openImagePickerAsync = async () => {
+        var permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if(permissionResult.granted === false){
+            alert("Permission to access camera roll is required!");
+            return
+        }
+
+        var pickerResult = await ImagePicker.launchImageLibraryAsync();
+        
+        if(pickerResult.cancelled == true){
+            return
+        }
+
+
+        setImage({localUri:pickerResult.uri})
+
+        var localuri = pickerResult.uri;
+        var filename = localuri.split("/").pop();
+
+        //infer the type of the image
+        var match = /\.(\w+)$/.exec(filename);
+        var type = match ? `image/${match[1]}`:`image`;
+        setName(filename)
+        setType(type)
+    }
+
+    const uploadContent = () => {
+        var formdata = new FormData();
+        formdata.append('title',title)
+        formdata.append('quantity',quantity)
+        formdata.append('wholeseller',wholeSeller)
+        formdata.append('localseller',localSeller)
+        formdata.append('customer',customer)
+        formdata.append('image',{type:type,uri:image.localUri,name:name})
+
+        fetch(getConnection()+'/api/posts/createpost',{
+            method:'POST',
+            body:formdata
+        }).then((response)=>response.text()).then((responseText)=>{
+            console.log("Responded by server")
+            console.log(responseText)
+        })
+    }
+
   return (
     <View>
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation}/>
             <View style={styles.container}>
-                <TextInput style={styles.inputStyler} placeholder='Title' />
-                <TextInput style={styles.inputStyler} placeholder='Available Quantity'/>
+                <TextInput value={title} onTextChange={setTitle} style={styles.inputStyler} placeholder='Title' />
+                <TextInput value={quantity} onTextChange={setQuantity} style={styles.inputStyler} placeholder='Available Quantity'/>
                 <Text style={styles.priceChooser}>Price</Text>
                 <View style={styles.container2}>
-                    <TextInput style={styles.inputStyler} placeholder='WholeSeller'/>
-                    <TextInput style={styles.inputStyler} placeholder='Local Seller'/>
-                    <TextInput style={styles.inputStyler} placeholder='Customer'/>
+                    <TextInput value={wholeSeller} onTextChange={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller'/>
+                    <TextInput value={localSeller} onTextChange={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'/>
+                    <TextInput value={customer} onTextChange={setCustomer} style={styles.inputStyler} placeholder='Customer'/>
                 </View>
+                <TouchableOpacity onPress={()=>openImagePickerAsync()}>
+                    <Text>Add Image</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>uploadContent()} style={styles.buttonCover}>
+                    <Text style={styles.buttonText}>Create Post</Text>
+                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     </View>
@@ -37,6 +100,20 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'row',
         justifyContent:'space-between'
+    },
+    buttonCover:{
+        backgroundColor:'green',
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        height:40,
+        width:150,
+        borderRadius:20,
+        marginTop:10,
+        marginLeft:8
+    },
+    buttonText:{
+        color:'#ffffff'
     },
     inputStyler:{
         backgroundColor:'#e9e9e9',
