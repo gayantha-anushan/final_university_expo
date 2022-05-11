@@ -18,7 +18,7 @@ const Header = ({navigation}) => {
         <TextInput style={styles.Input} placeholder='Search here......' />
           <View style={styles.mainCont1}>
                 <TouchableOpacity onPress={()=>navigation.openDrawer()}>
-                  <AntDesign name="profile" size={30} color="black" />
+                  <AntDesign name="bars" size={30} color="black" />
               </TouchableOpacity>
               
             <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>

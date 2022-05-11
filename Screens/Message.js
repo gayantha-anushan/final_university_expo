@@ -1,28 +1,29 @@
 import React from 'react';
 import {Text,StyleSheet,View,ScrollView,Keyboard,KeyboardAvoidingView,TouchableWithoutFeedback,TouchableOpacity} from 'react-native'
-import { TextInput } from 'react-native';
+import { TextInput,Image} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
 
-const Message = ({ }) => {
+const Message = ({navigation}) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
                     <View style={styles.maincont}>
-                        <Text style={styles.maintext}>Amal Srinath</Text>
-                        <View style={styles.icon1}>
-                            <AntDesign name="profile" color='black' size={30}/>
+                        <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
+                            <AntDesign name="left" size={40} color="black"></AntDesign>
+                        </TouchableOpacity>
+                        
+                        <Image source={require('../assets/profile.jpg')} style={styles.image}></Image>
+                        <TouchableOpacity onPress={()=>navigation.navigate("ViewProfile")}>
+                            <Text style={styles.maintext}>Amal Srinath</Text>  
+                        </TouchableOpacity>
                         </View>
-                    </View>
 
                     <View style={styles.messagecontainer}>
                     <View style={styles.Message}>
-                        <TextInput style={styles.input} placeholder='Message'/>
+                       <TextInput style={styles.Input} placeholder='Message' />
                             <TouchableOpacity style={styles.Touchable}>
-                                <View style={styles.icon}>
-                                    <AntDesign name="enter" color="black" size={32}/>
-                                </View>
                             </TouchableOpacity>
                         </View>
                         </View>
@@ -43,31 +44,19 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         padding: 10,
         flexDirection: 'row',
-        backgroundColor: '#59E64C',
-        alignItems:'stretch'
+        backgroundColor: '#40e0d0',
+        justifyContent:'flex-start'
+        
+        
     },
     maintext: {
         fontSize: 25,
-        marginLeft:200
+        textAlign: "justify",
+        fontWeight:'bold'
         
     },
     icon1: {
         paddingTop:6
-    },
-    Message: {
-        borderWidth: 1,
-        flexDirection: 'row',
-        margin: 4,
-        borderRadius: 10,
-        
-    },
-    input: {
-        backgroundColor: "white",
-        display: 'flex',
-        marginHorizontal: 20,
-        flexDirection: 'row',
-        borderColor: "green", 
-
     },
     icon: {
         marginLeft: 200,
@@ -76,7 +65,21 @@ const styles = StyleSheet.create({
     },
     messagecontainer: {
         paddingTop:650
-    }
+    },
+    image: {
+        width: 40,
+        height: 40,
+        borderRadius:30
+    },
+    Input: {
+        backgroundColor: "white",
+        borderWidth: 1,
+        borderRadius:10,
+        marginHorizontal:10,
+        marginBottom:8,
+        borderColor: "green",  
+        padding:8
+}       
     
 });
 export default Message;
