@@ -7,10 +7,11 @@ import Home from './Screens/Home';
 import Login from './Screens/Login';
 import Register from './Screens/Register';
 import Profile from './Screens/Profile';
-import Interface from './Screens/Interface';
-import Message from './Screens/Message';
-import CreatePost from './Screens/CreatePost';
-import Drawer from './Screens/Drawer';
+// import Interface from './Screens/Interface';
+// import Message from './Screens/Message';
+// import CreatePost from './Screens/CreatePost';
+//import Drawer from './Screens/Drawer';
+import DrawerContainer from './Screens/DrawerContainer';
 
 const stack = createNativeStackNavigator();
 export default function App() {
@@ -21,10 +22,11 @@ export default function App() {
         <stack.Screen name="Login" component={Login} />
         <stack.Screen name="Register" component={Register} />
         <stack.Screen name="Profile" component={Profile} />
-        <stack.Screen name="Interface" component={Interface} />
+        {/* <stack.Screen name="Interface" component={Interface} />
         <stack.Screen name="CreatePost" component={CreatePost}/>
-        <stack.Screen name="Message" component={Message} />
-        <stack.Screen name="Drawer" component={Drawer} />
+        <stack.Screen name="Message" component={Message} /> */}
+        {/* <stack.Screen name="Drawer" component={Drawer} /> */}
+        <stack.Screen name='DrawerContainer' component={DrawerContainer}/>
       </stack.Navigator>
 
     </NavigationContainer>

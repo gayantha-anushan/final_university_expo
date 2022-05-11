@@ -66,7 +66,7 @@ const Profile = ({navigation}) => {
       }).then((response)=>response.text()).then((responseJson)=>{
         //post action after setup url
         console.log(responseJson)
-        navigation.navigate('Interface')
+        navigation.navigate('DrawerContainer')
     })
     }catch(error){
         console.log(error);

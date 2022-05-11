@@ -17,7 +17,7 @@ const Header = ({navigation}) => {
         </View>
         <TextInput style={styles.Input} placeholder='Search here......' />
           <View style={styles.mainCont1}>
-                <TouchableOpacity onPress={()=>navigation.navigate("Drawer")}>
+                <TouchableOpacity onPress={()=>navigation.openDrawer()}>
                   <AntDesign name="profile" size={30} color="black" />
               </TouchableOpacity>
               

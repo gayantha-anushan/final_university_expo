@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
+import { StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
 import React,{useState} from 'react'
 import home from '../assets/home.png';
 import profile from '../assets/user.png';
@@ -6,12 +6,13 @@ import orders from '../assets/clipboard.png';
 import contacts from '../assets/contact-book.png';
 import settings from '../assets/settings.png';
 import logout from '../assets/logout.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const Drawer = ({ }) => {
+const Drawer = (props) => {
     const [currentTab, setCurrentTab] = useState("Home");
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.cont}>
                 <Image style={styles.image} source={require('../assets/profile.jpg')}>
                 </Image>
@@ -22,7 +23,7 @@ const Drawer = ({ }) => {
                     <Text style={styles.text1}>View Profile</Text>
                 </TouchableOpacity>
                 <View>
-                    {TabButton(currentTab, setCurrentTab, "Home", home)}
+                    {TabButton(currentTab, setCurrentTab, "Home", home,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Profile",profile)}
                     {TabButton(currentTab, setCurrentTab, "Orders", orders)}
                     {TabButton(currentTab, setCurrentTab, "Contacts", contacts)}
@@ -30,17 +31,18 @@ const Drawer = ({ }) => {
                     {TabButton(currentTab,setCurrentTab,"Logout",logout)}   
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
-const TabButton = (currentTab,setCurrentTab,title,image) => {
+const TabButton = (currentTab,setCurrentTab,title,image,navigation) => {
     return (
         <TouchableOpacity onPress={() => {
-            if (title == "Logout") {
-                
-            }
-            else {
-                setCurrentTab(title)
+            switch(title){
+                case "Home":navigation.navigate("Interface");
+                break;
+                case "Logout":
+                    AsyncStorage.clear();
+                    navigation.navigate("Login")
             }
         }}>
             <View style={{

@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import { TextInput } from 'react-native'
 import * as ImagePicker from  'expo-image-picker'
 import { getConnection } from '../Connection'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const CreatePost = ({navigation}) => {
 
@@ -16,7 +17,20 @@ const CreatePost = ({navigation}) => {
     const [name, setName] = useState(null)
     const [type, setType] = useState(null)
 
-    const openImagePickerAsync = async () => {
+    useEffect(() => {
+        AsyncStorage.getItem("auth_code",(error,result)=>{
+            if(error){
+                console.log(error)
+            }else{
+                console.log(result)
+                setAuthToken(result)
+            }
+        })
+    }, [])
+
+    const [authToken, setAuthToken] = useState(null)
+
+    const openImagePickerAsync = async () => {        
         var permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if(permissionResult.granted === false){
@@ -47,8 +61,10 @@ const CreatePost = ({navigation}) => {
         var formdata = new FormData();
         formdata.append('title',title)
         formdata.append('quantity',quantity)
+        formdata.append('token',authToken)
         formdata.append('wholeseller',wholeSeller)
         formdata.append('localseller',localSeller)
+        formdata.append('date',new Date().toISOString())
         formdata.append('customer',customer)
         formdata.append('image',{type:type,uri:image.localUri,name:name})
 
@@ -66,13 +82,13 @@ const CreatePost = ({navigation}) => {
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation}/>
             <View style={styles.container}>
-                <TextInput value={title} onTextChange={setTitle} style={styles.inputStyler} placeholder='Title' />
-                <TextInput value={quantity} onTextChange={setQuantity} style={styles.inputStyler} placeholder='Available Quantity'/>
+                <TextInput value={title} onChangeText={setTitle} style={styles.inputStyler} placeholder='Title' />
+                <TextInput value={quantity} onChangeText={setQuantity} style={styles.inputStyler} placeholder='Available Quantity'/>
                 <Text style={styles.priceChooser}>Price</Text>
                 <View style={styles.container2}>
-                    <TextInput value={wholeSeller} onTextChange={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller'/>
-                    <TextInput value={localSeller} onTextChange={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'/>
-                    <TextInput value={customer} onTextChange={setCustomer} style={styles.inputStyler} placeholder='Customer'/>
+                    <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller'/>
+                    <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'/>
+                    <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'/>
                 </View>
                 <TouchableOpacity onPress={()=>openImagePickerAsync()}>
                     <Text>Add Image</Text>

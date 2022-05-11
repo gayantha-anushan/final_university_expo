@@ -56,11 +56,11 @@ const Login = ({ navigation }) => {
             })
         })
         .then((response)=>response.text()).then((responseJson)=>{
-            //console.log(responseJson);
+            console.log(responseJson);
             if(responseJson == ""){
                 navigation.navigate('Profile')
             }else{
-                navigation.navigate('Interface')
+                navigation.navigate('DrawerContainer')
             }
         })
         }catch(error){
