@@ -7,33 +7,45 @@ import { getConnection } from '../Connection';
 
 const Interface = ({navigation }) => {
     
-    const renderItem = ({item}) => <Post username={item.username} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type}/>
+    const renderItem = ({item}) => <Post username={item.username} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type}/>
 
-    const [data, setData] = useState([
-        {
-            username:"gayantha",
-            date:"2022/01/01"
-        }
-    ])
+    const [data, setData] = useState([])
+    const [listRefreshing, setListRefreshing] = useState(false)
 
     useEffect(() => {
         //startup functions
+        loaddata()
+    }, [])
+
+    const loaddata = () => {
+        setListRefreshing(true)
+        //Loading Data
         fetch(getConnection()+'/api/posts/',{
             method:'GET'
         }).then((response)=>response.json()).then((responseJson)=>{
-            console.log(responseJson)
+            //setData(responseJson)
+            var datas = []
+            for(var i = 0 ; i < responseJson.length ; i++){
+                datas.push({
+                    username:responseJson[i].author.firstname + " "+responseJson[i].author.lastname,
+                    date:responseJson[i].date,
+                    title:responseJson[i].title,
+                    price:responseJson[i].price.customer,
+                    quantity:responseJson[i].quantity,
+                    image:getConnection()+"/post-img/"+responseJson[i].image
+                })
+            }
+            setData(datas)
         })
-    }, [])
+        setListRefreshing(false)
+    }
     
-
+ 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation} />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <FlatList data={data} renderItem={renderItem} keyExtractor={item => item._id} />
-                {/* <ScrollView>
-                    <Post username="Kasun" postdate="2022/05/05" title="Strawberry But Not for you" price="20.00" quantity="120" type="DIRECT"/>
-                </ScrollView> */}
+                <FlatList refreshing={listRefreshing} onRefresh={()=>loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     );

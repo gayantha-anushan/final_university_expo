@@ -3,7 +3,7 @@ import React,{useState,useEffect} from 'react'
 import strawberry from '../assets/strawberry.jpg'
 import { LinearGradient } from 'expo-linear-gradient'
 
-const Post = ({username,postdate,title,quantity,price,type}) => {
+const Post = ({username,postdate,title,quantity,price,type,image}) => {
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
@@ -33,7 +33,7 @@ const Post = ({username,postdate,title,quantity,price,type}) => {
                 <Text>Add To Cart</Text>
             </TouchableOpacity>
         </View>
-        <ImageBackground source={strawberry} style={styles.image}>
+        <ImageBackground source={{uri:image}} style={styles.image}>
             <LinearGradient
                 colors={["rgba(0,0,0,0.7)","transparent"]}
                 style={styles.gradient}

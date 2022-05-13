@@ -73,6 +73,11 @@ const CreatePost = ({navigation}) => {
             body:formdata
         }).then((response)=>response.text()).then((responseText)=>{
             console.log("Responded by server")
+            setTitle("")
+            setQuantity("")
+            setWholeSeller("")
+            setLocalSeller("")
+            setCustomer("")
             console.log(responseText)
         })
     }

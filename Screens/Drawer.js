@@ -1,5 +1,5 @@
-import { StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
-import React,{useState} from 'react'
+import { StyleSheet, Image, View, Text, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react'
 import home from '../assets/home.png';
 import profile from '../assets/user.png';
 import orders from '../assets/clipboard.png';
@@ -23,26 +23,31 @@ const Drawer = (props) => {
                     <Text style={styles.text1}>View Profile</Text>
                 </TouchableOpacity>
                 <View>
-                    {TabButton(currentTab, setCurrentTab, "Home", home,props.navigation)}
-                    {TabButton(currentTab, setCurrentTab, "Profile",profile)}
+                    {TabButton(currentTab, setCurrentTab, "Home", home, props.navigation)}
+                    {TabButton(currentTab, setCurrentTab, "Profile", profile,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Orders", orders)}
                     {TabButton(currentTab, setCurrentTab, "Contacts", contacts)}
                     {TabButton(currentTab, setCurrentTab, "Settings", settings)}
-                    {TabButton(currentTab,setCurrentTab,"Logout",logout,props.navigation)}   
+                    {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
                 </View>
             </View>
         </View>
     )
 }
-const TabButton = (currentTab,setCurrentTab,title,image,navigation) => {
+const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
     return (
         <TouchableOpacity onPress={() => {
-            switch(title){
-                case "Home":navigation.navigate("Interface");
-                break;
+            switch (title) {
+                case "Home":
+                    navigation.navigate("Interface");
+                    break;
+                case "Profile":
+                    navigation.navigate("ViewProfile");
+                    break;
                 case "Logout":
                     AsyncStorage.clear();
-                    navigation.navigate("Login")
+                    navigation.navigate("Login");
+                    break;
             }
         }}>
             <View style={{
@@ -50,25 +55,25 @@ const TabButton = (currentTab,setCurrentTab,title,image,navigation) => {
                 marginTop: 18,
                 alignItems: 'center',
                 paddingVertical: 8,
-                backgroundColor: currentTab==title ? 'white' : 'transparent',
+                backgroundColor: currentTab == title ? 'white' : 'transparent',
                 borderRadius: 10,
-                padding: 20      
+                padding: 20
 
             }}>
                 <Image style={{
                     width: 40,
                     height: 40,
-                    tintColor:currentTab==title? "#5359D1" :"white"
+                    tintColor: currentTab == title ? "#5359D1" : "white"
                 }} source={image}></Image>
                 <Text style={{
                     fontSize: 25,
                     fontWeight: 'bold',
                     paddingLeft: 15,
-                    color:currentTab==title? "#5359D1" :"white"
+                    color: currentTab == title ? "#5359D1" : "white"
                 }}>{title}</Text>
             </View>
         </TouchableOpacity>
-                    
+
     );
 }
 const styles = StyleSheet.create({
@@ -77,11 +82,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#5359D1',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        paddingTop:50
+        paddingTop: 50
     },
     cont: {
         justifyContent: 'flex-start',
-        padding:20
+        padding: 20
     },
     image: {
         width: 70,
@@ -92,19 +97,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
-        marginTop:20,
+        marginTop: 20,
     },
     text1: {
         fontSize: 15,
         color: 'white',
         marginTop: 13,
     },
-    textlist: {
-        
-        
-        
-    }
-
-
 });
 export default Drawer;

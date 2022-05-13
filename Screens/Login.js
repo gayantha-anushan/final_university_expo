@@ -58,7 +58,9 @@ const Login = ({ navigation }) => {
         .then((response)=>response.json()).then((responseJson)=>{
             console.log(responseJson);
             if(responseJson.status == "ERROR"){
-                navigation.navigate('Profile')
+                navigation.navigate('Profile',{
+                    state:"NEW"
+                })
             }else{
                 AsyncStorage.setItem("current_profile",responseJson.data._id)
                 navigation.navigate('DrawerContainer')

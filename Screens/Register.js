@@ -29,7 +29,9 @@ const Register = ({ navigation }) => {
                 //response coming from server
                 if(responseJson.status == "OK"){
                     await AsyncStorage.setItem('auth_code',responseJson.token);
-                    navigation.navigate('Profile')
+                    navigation.navigate('Profile',{
+                        state:"NEW"
+                    })
                 }else{
                     ToastAndroid.show(responseJson.error)
                 }

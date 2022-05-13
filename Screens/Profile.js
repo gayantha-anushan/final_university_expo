@@ -35,8 +35,19 @@ const radioButtonsData = [
     selected: false,
   },
 ];
-const Profile = ({navigation}) => {
+const Profile = ({route,navigation}) => {
     const [radioButtons, setRadioButtons] = useState(radioButtonsData);
+
+    const { state} = route.params
+
+    useEffect(() => {
+        if(state == "NEW"){
+            //
+        }else{
+            //
+        }
+    }, [])
+    
 
  /* const onPressRadioButton = radioButtonsArray => {
     console.log(radioButtonsArray);
@@ -48,7 +59,46 @@ const Profile = ({navigation}) => {
   const [address, setAddress] = useState("")
   const [contact, setContact] = useState("")
   
+  const getAction = () => {
+      if(state == "NEW"){
+          uploadProfileData();
+      }else{
+          updateProfileData();
+      }
+  }
 
+  const updateProfileData = () => {
+    try{
+        var uid;
+        AsyncStorage.getItem("auth_code",(error,result)=>{
+            if(error){
+                console.log(error)
+            }else{
+                fetch(Connection.getConnection()+"/api/auth/update-profile",{
+                    method:"POST",
+                    headers:{
+                        Accept:'application/json',
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                        token:result,
+                        firstname:firstName,
+                        lastname:lastName,
+                        address:address,
+                        contact:contact
+                    })
+                }).then((response)=>response.json()).then((responseJson)=>{
+                  //post action after setup url
+                  console.log(responseJson.id)
+                  AsyncStorage.setItem("current_profile",responseJson.id)
+                  navigation.navigate('DrawerContainer')
+              })
+            }
+        })      
+    }catch(error){
+        console.log(error);
+    }
+  }
 
   const uploadProfileData = () => {
       try{
@@ -114,7 +164,7 @@ const Profile = ({navigation}) => {
                         <MapView style={styles.map} />
                     </View>
                     <View style={styles.ButtonCont1}>
-                    <TouchableOpacity style={styles.Touchable1} onPress={()=>uploadProfileData()}>
+                    <TouchableOpacity style={styles.Touchable1} onPress={()=>getAction()}>
                             <Text style={styles.Text}>Submit</Text>
                     </TouchableOpacity>
                     </View>
