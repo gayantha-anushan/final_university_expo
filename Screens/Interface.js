@@ -3,12 +3,28 @@ import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleShee
 
 import Post from '../components/Post';
 import Header from '../components/Header';
+import { getConnection } from '../Connection';
 
 const Interface = ({navigation }) => {
     
-    const renderItem = ({post}) => <Post username={post.username} postdate={post.date} title={post.title} price={post.price} quantity={post.quantity} type={post.type}/>
+    const renderItem = ({item}) => <Post username={item.username} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type}/>
 
-    const [data, setData] = useState([])
+    const [data, setData] = useState([
+        {
+            username:"gayantha",
+            date:"2022/01/01"
+        }
+    ])
+
+    useEffect(() => {
+        //startup functions
+        fetch(getConnection()+'/api/posts/',{
+            method:'GET'
+        }).then((response)=>response.json()).then((responseJson)=>{
+            console.log(responseJson)
+        })
+    }, [])
+    
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
@@ -16,7 +32,6 @@ const Interface = ({navigation }) => {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <FlatList data={data} renderItem={renderItem} keyExtractor={item => item._id} />
                 {/* <ScrollView>
-                    
                     <Post username="Kasun" postdate="2022/05/05" title="Strawberry But Not for you" price="20.00" quantity="120" type="DIRECT"/>
                 </ScrollView> */}
             </TouchableWithoutFeedback>

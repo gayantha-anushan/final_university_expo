@@ -18,7 +18,7 @@ const CreatePost = ({navigation}) => {
     const [type, setType] = useState(null)
 
     useEffect(() => {
-        AsyncStorage.getItem("auth_code",(error,result)=>{
+        AsyncStorage.getItem("current_profile",(error,result)=>{
             if(error){
                 console.log(error)
             }else{
@@ -61,7 +61,7 @@ const CreatePost = ({navigation}) => {
         var formdata = new FormData();
         formdata.append('title',title)
         formdata.append('quantity',quantity)
-        formdata.append('token',authToken)
+        formdata.append('profile_id',authToken)
         formdata.append('wholeseller',wholeSeller)
         formdata.append('localseller',localSeller)
         formdata.append('date',new Date().toISOString())

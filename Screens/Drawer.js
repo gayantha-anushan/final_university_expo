@@ -28,7 +28,7 @@ const Drawer = (props) => {
                     {TabButton(currentTab, setCurrentTab, "Orders", orders)}
                     {TabButton(currentTab, setCurrentTab, "Contacts", contacts)}
                     {TabButton(currentTab, setCurrentTab, "Settings", settings)}
-                    {TabButton(currentTab,setCurrentTab,"Logout",logout)}   
+                    {TabButton(currentTab,setCurrentTab,"Logout",logout,props.navigation)}   
                 </View>
             </View>
         </View>

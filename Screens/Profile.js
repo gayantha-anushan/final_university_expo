@@ -4,6 +4,7 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import MapView from 'react-native-maps';
 import Connection from '../Connection';
 import { NavigationContainer } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const radioButtonsData = [
   {
     id: '1',
@@ -51,23 +52,34 @@ const Profile = ({navigation}) => {
 
   const uploadProfileData = () => {
       try{
-      fetch(Connection.getConnection()+"/api/auth/new-profile",{
-          method:"POST",
-          headers:{
-              Accept:'application/json',
-              'Content-Type':'application/json'
-          },
-          body:JSON.stringify({
-              firstname:firstName,
-              lastname:lastName,
-              address:address,
-              contact:contact
-          })
-      }).then((response)=>response.text()).then((responseJson)=>{
-        //post action after setup url
-        console.log(responseJson)
-        navigation.navigate('DrawerContainer')
-    })
+        var uid;
+        AsyncStorage.getItem("auth_code",(error,result)=>{
+            if(error){
+                console.log(error)
+            }else{
+                fetch(Connection.getConnection()+"/api/auth/new-profile",{
+                    method:"POST",
+                    headers:{
+                        Accept:'application/json',
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({
+                        token:result,
+                        firstname:firstName,
+                        lastname:lastName,
+                        address:address,
+                        contact:contact
+                    })
+                }).then((response)=>response.json()).then((responseJson)=>{
+                  //post action after setup url
+                  console.log(responseJson.id)
+                  AsyncStorage.setItem("current_profile",responseJson.id)
+                  navigation.navigate('DrawerContainer')
+              })
+            }
+        })
+
+      
     }catch(error){
         console.log(error);
     }

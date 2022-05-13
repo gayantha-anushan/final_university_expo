@@ -55,11 +55,12 @@ const Login = ({ navigation }) => {
                 token:token
             })
         })
-        .then((response)=>response.text()).then((responseJson)=>{
+        .then((response)=>response.json()).then((responseJson)=>{
             console.log(responseJson);
-            if(responseJson == ""){
+            if(responseJson.status == "ERROR"){
                 navigation.navigate('Profile')
             }else{
+                AsyncStorage.setItem("current_profile",responseJson.data._id)
                 navigation.navigate('DrawerContainer')
             }
         })
