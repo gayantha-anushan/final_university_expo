@@ -13,6 +13,7 @@ import Profile from './Screens/Profile';
 //import Drawer from './Screens/Drawer';
 import DrawerContainer from './Screens/DrawerContainer';
 import ViewProfile from './Screens/ViewProfile';
+import ViewPost from './Screens/ViewPost';
 
 const stack = createNativeStackNavigator();
 export default function App() {
@@ -28,7 +29,8 @@ export default function App() {
         <stack.Screen name="Message" component={Message} /> */}
         {/* <stack.Screen name="Drawer" component={Drawer} /> */}
         <stack.Screen name='DrawerContainer' component={DrawerContainer} />
-        <stack.Screen name='ViewProfile' component={ViewProfile}/>
+        <stack.Screen name='ViewProfile' component={ViewProfile} />
+        <stack.Screen name="ViewPost" component={ViewPost}/>
       </stack.Navigator>
 
     </NavigationContainer>

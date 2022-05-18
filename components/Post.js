@@ -2,6 +2,7 @@ import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from
 import React,{useState,useEffect} from 'react'
 import strawberry from '../assets/strawberry.jpg'
 import { LinearGradient } from 'expo-linear-gradient'
+import { AntDesign } from '@expo/vector-icons';
 
 const Post = ({username,postdate,title,quantity,price,type,image}) => {
 
@@ -29,7 +30,8 @@ const Post = ({username,postdate,title,quantity,price,type,image}) => {
                     <Text>{postdate}</Text>
                 </View>
             </View>
-            <TouchableOpacity style={styles.btn1}>
+              <TouchableOpacity style={styles.btn1}>
+                  <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
                 <Text>Add To Cart</Text>
             </TouchableOpacity>
         </View>
@@ -44,10 +46,12 @@ const Post = ({username,postdate,title,quantity,price,type,image}) => {
             <View>
                 <Text style={styles.typeBtn}>{typeName}</Text>
                 <View style={styles.container1}>
-                    <TouchableOpacity style={styles.btn1}>
+                      <TouchableOpacity style={styles.btn1}>
+                          <AntDesign name="enviroment" size={20} color="black"></AntDesign>
                         <Text>Location</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn1}>
+                      <TouchableOpacity style={styles.btn1}>
+                          <AntDesign name="eye" size={20} color="black"></AntDesign>
                         <Text>View</Text>
                     </TouchableOpacity>
                 </View>
@@ -121,6 +125,7 @@ const styles = StyleSheet.create({
         padding:5,
         margin:8,
         paddingHorizontal:10,
-        borderRadius:8
+        borderRadius: 8,
+        flexDirection:'row'
     }
 })

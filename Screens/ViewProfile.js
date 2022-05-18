@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View ,Image,ScrollView,SafeAreaView,TouchableOpacity} from 'react-native'
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons';
-import { Touchable } from 'react-native-web';
 
 const ViewProfile = ({ navigation }) => {
     return (
@@ -54,11 +53,17 @@ const ViewProfile = ({ navigation }) => {
                     <Text style={styles.text1}>Phone Number:</Text>
                     <Text style={styles.text2}>0773456272</Text>
                 </View> 
-                <View style={styles.ButtonCont}>
-                <TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate("Profile",{state:"EDIT"})}>
-                        <Text style={styles.text1}>Edit Profile Details</Text>
-                        
+                <View style={styles.ButtonCont1}>
+                    <TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
+                        <AntDesign name="isv" size={25} color="blue"></AntDesign>
+                    <Text style={styles.text1}>Your Post</Text>
+                    </TouchableOpacity>
+                </View>
 
+                <View style={styles.ButtonCont}>   
+                    <TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
+                        <AntDesign name="edit" size={25} color="blue"></AntDesign>
+                        <Text style={styles.text1}>Edit Profile Details</Text>
                     </TouchableOpacity>
                 </View>
                 
@@ -121,15 +126,22 @@ const styles = StyleSheet.create({
         paddingTop:25
     },
     touchable: {
-        backgroundColor: '#ee82ee',
+        backgroundColor: '#e9967a',
         padding: 10,
         borderRadius: 20,
-        paddingHorizontal: 40,  
+        paddingHorizontal: 40, 
+        flexDirection:'row'
     },
     ButtonCont: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop:80
-},
+        paddingTop:30
+    },
+    ButtonCont1: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingTop:40
+    }
 })

@@ -12,7 +12,7 @@ const Login = ({ navigation })=> {
             </View>
                 <Image style={styles.backImage} source={require('../assets/Farmer.png')} />
             <View style={styles.ButtonCont}>
-                <TouchableOpacity style={styles.Touchable}  onPress={()=>navigation.navigate('Register')}>
+                <TouchableOpacity style={styles.Touchable}  onPress={()=>navigation.navigate('Login')}>
                     <Text style={styles.Text}>Get Started</Text>
                 </TouchableOpacity>
                 

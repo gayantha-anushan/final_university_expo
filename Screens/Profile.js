@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
         margin: 10,
         marginHorizontal:5,
         borderWidth: 1,
-        padding: 13,
+        padding: 10,
         borderRadius: 20,
         borderColor: '#696969',
         justifyContent: "center",
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         margin: 10,
         marginHorizontal: 5,
         borderWidth: 1,
-        padding: 50,
+        padding: 15,
         borderRadius: 20,
         borderColor: '#696969',
         justifyContent: "center",
@@ -237,15 +237,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     ButtonCont1: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems:'flex-end'
+
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'flex-end',
+        paddingTop:10
+    
 },
     container: {
         display:'flex',
-        alignItems: 'flex-start',
-        justifyContent:'flex-start',
+        flexDirection:'row'
     },
     container1: {
         flex: 2,
@@ -254,8 +256,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
   },
   map: {
-        width:500,
-        height:400
+        width:350,
+        height:350
   },
     
 })

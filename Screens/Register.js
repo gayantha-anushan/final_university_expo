@@ -57,12 +57,12 @@ const Register = ({ navigation }) => {
                     <View style={styles.container}>
                         
                             <TextInput value={email} onChangeText={setemail}  style={styles.input} placeholder="Email"  /> 
-                            <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" />
-                            <TextInput value={ReTypepassword} onChangeText={Resetpassword}  style={styles.input} placeholder="ReType-Password" />
+                            <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" secureTextEntry={true} />
+                            <TextInput value={ReTypepassword} onChangeText={Resetpassword}  style={styles.input} placeholder="ReType-Password" secureTextEntry={true} />
                         
                        </View> 
                     <View style={styles.ButtonCont}>
-                        <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Login')}>
+                        <TouchableOpacity style={styles.Touchable2} onPress={()=>navigation.navigate('Login')}>
                 <Text style={styles.Text}>Login</Text>
                          </TouchableOpacity>
                         <TouchableOpacity style={styles.Touchable} onPress={()=>registerNow()}>
@@ -72,7 +72,7 @@ const Register = ({ navigation }) => {
                     <View style={styles.ButtonCont1}>
                             <TouchableOpacity style={styles.Touchable1}>
                                 <AntDesign name="google" size={26} color="white"/>
-                                <Text style={styles.Text1}>Sign in with Google</Text>
+                                <Text style={styles.Text1}>Sign Up with Google</Text>
                             </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -124,6 +124,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         borderRadius: 50,
         flexDirection:'row'
+    },
+    Touchable2: {
+        backgroundColor: '#03a9fc',
+        padding: 15,
+        borderRadius: 20,
+        paddingHorizontal: 40,  
     },
     ButtonCont: {
         display: 'flex',

@@ -84,11 +84,11 @@ const Login = ({ navigation }) => {
                         
                     <View style={styles.container}>
                         <TextInput value={email} onChangeText={setemail} style={styles.input} placeholder="Email" />
-                        <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" />
+                        <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" secureTextEntry={true} />
                     </View> 
                     <View style={styles.ButtonCont}>
-                        <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Register')}>
-                                <Text style={styles.Text}>Register</Text>
+                        <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Home')}>
+                                <Text style={styles.Text}>Cancel</Text>
                          </TouchableOpacity>
                         <TouchableOpacity style={styles.Touchable} onPress={() => loginNow()}>
                             <Text style={styles.Text}>Login</Text>
@@ -100,6 +100,12 @@ const Login = ({ navigation }) => {
                             <Text style={styles.Text1}>Sign in with Google</Text>
                             
                     </TouchableOpacity>
+                    </View>
+                    <View style={styles.ButtonCont}>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Register')}>
+                            <Text style={styles.text2}>To Register your Account?</Text>
+                        </TouchableOpacity>
+                        
                     </View>
                 </ScrollView>
             </TouchableWithoutFeedback>
@@ -196,6 +202,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         
 
+    },
+    text2: {
+        color: 'black',
+        fontSize: 18,
+        paddingTop: 10,
+        color: 'blue',
+        fontWeight:'bold'
     }
 
     
