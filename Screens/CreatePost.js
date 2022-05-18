@@ -88,12 +88,12 @@ const CreatePost = ({navigation}) => {
             <Header navigation={navigation}/>
             <View style={styles.container}>
                 <TextInput value={title} onChangeText={setTitle} style={styles.inputStyler} placeholder='Title' />
-                <TextInput value={quantity} onChangeText={setQuantity} style={styles.inputStyler} placeholder='Available Quantity'/>
+                <TextInput value={quantity} onChangeText={setQuantity} style={styles.inputStyler} placeholder='Available Quantity' keyboardType='numeric'/>
                 <Text style={styles.priceChooser}>Price</Text>
                 <View style={styles.container2}>
-                    <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller'/>
-                    <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'/>
-                    <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'/>
+                    <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric'/>
+                    <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
+                    <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
                 </View>
                 <TouchableOpacity onPress={()=>openImagePickerAsync()}>
                     <Text>Add Image</Text>

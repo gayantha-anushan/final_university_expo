@@ -13,7 +13,7 @@ import Profile from './Screens/Profile';
 //import Drawer from './Screens/Drawer';
 import DrawerContainer from './Screens/DrawerContainer';
 import ViewProfile from './Screens/ViewProfile';
-import ViewPost from './Screens/ViewPost';
+import ViewPost from './components/ViewPost';
 
 const stack = createNativeStackNavigator();
 export default function App() {
