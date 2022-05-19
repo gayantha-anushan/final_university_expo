@@ -5,61 +5,120 @@ import MapView from 'react-native-maps';
 import Connection from '../Connection';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location'
+import Strawberry from '../assets/strawberry.jpg'
+import * as ImagePicker from 'expo-image-picker'
 const radioButtonsData = [
   {
     id: '1',
     label: 'Farmer',
-    value: 'option1',
+    value: 'farmer',
     color: 'black',
     selected: true,
   },
   {
     id: '2',
     label: 'WholeSaler',
-    value: 'option2',
+    value: 'wholeseller',
     color: 'black',
     selected: false,
     },
   {
     id: '3',
     label: 'Local Seller',
-    value: 'option3',
+    value: 'localseller',
     color: 'black',
     selected: false,
     },
   {
     id: '4',
     label: 'Customer',
-    value: 'option4',
+    value: 'customer',
     color: 'black',
     selected: false,
   },
 ];
 const Profile = ({route,navigation}) => {
     const [radioButtons, setRadioButtons] = useState(radioButtonsData);
+    const [profileID, setProfileID] = useState(null)
+    const [location, setLocation] = useState(null)
+    const [selectedUserType, setSelectedUserType] = useState(null)
+    const [image, setImage] = useState(null)
+    const [name, setName] = useState(null)
+    const [type, setType] = useState(null)
 
     const { state} = route.params
 
     useEffect(() => {
+        getLocation();
         if(state == "NEW"){
             //
         }else{
-            //
+            AsyncStorage.getItem("current_profile",(error,result)=>{
+                if(error){
+                    console.log(error)
+                }else{
+                    console.log(result)
+                    setProfileID(result);
+                }
+            })
         }
     }, [])
+
+    const getLocation = async() =>{
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if(status !== "granted"){
+            console.log("Not Permission Granted!");
+            return;
+        }
+        let locations = await Location.getCurrentPositionAsync()
+        setLocation({
+            latitude:locations.coords.latitude,
+            longitude:locations.coords.longitude,
+            latitudeDelta:0.1,
+            longitudeDelta:0.1
+        })
+        console.log(location)
+    }
     
 
- /* const onPressRadioButton = radioButtonsArray => {
-    console.log(radioButtonsArray);
+ const onPressRadioButton = radioButtonsArray => {
     setRadioButtons(radioButtonsArray);
-  };*/
+  };
 
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [address, setAddress] = useState("")
   const [contact, setContact] = useState("")
   
+  const openImagePicker = async () =>{
+      var permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if(permissionResult.granted == false){
+          alert("Permission Access to Camera roll is required!")
+          return
+      }
+      var pickerResult = await ImagePicker.launchImageLibraryAsync();
+      if(pickerResult.cancelled == true){
+          return
+      }
+      setImage({localUrl:pickerResult.uri})
+      var localUri = pickerResult.uri;
+      var filename = localUri.split("/").pop();
+
+      var match =  /\.(\w+)$/.exec(filename);
+      var type = match ? `image/${match[1]}`:`image`;
+      setName(filename)
+      setType(type)
+  }
+
   const getAction = () => {
+
+    for(var i = 0; i < radioButtons.length ; i++){
+        if(radioButtons[i].selected == true){
+            setSelectedUserType(radioButtons[i].value);
+        }
+    }
+
       if(state == "NEW"){
           uploadProfileData();
       }else{
@@ -74,19 +133,24 @@ const Profile = ({route,navigation}) => {
             if(error){
                 console.log(error)
             }else{
+                var formdata = new FormData()
+                formdata.append('image',{type:type,uri:image.localUri,name:name})
+                formdata.append('token',result)
+                formdata.append('firstname',firstName)
+                formdata.append('lastname',lastName)
+                formdata.append('profile',profileID)
+                formdata.append('address',address)
+                formdata.append('contact',contact)
+                formdata.append('latitude',location.latitude)
+                formdata.append('longitude',location.longitude)
+                formdata.append('type',selectedUserType)
                 fetch(Connection.getConnection()+"/api/auth/update-profile",{
                     method:"POST",
                     headers:{
                         Accept:'application/json',
                         'Content-Type':'application/json'
                     },
-                    body:JSON.stringify({
-                        token:result,
-                        firstname:firstName,
-                        lastname:lastName,
-                        address:address,
-                        contact:contact
-                    })
+                    body:formdata
                 }).then((response)=>response.json()).then((responseJson)=>{
                   //post action after setup url
                   console.log(responseJson.id)
@@ -102,24 +166,23 @@ const Profile = ({route,navigation}) => {
 
   const uploadProfileData = () => {
       try{
-        var uid;
+        var formdata = new FormData();
+        formdata.append('image',{type:type,uri:image.localUri,name:name})
+        formdata.append('token',result)
+        formdata.append('firstname',firstName)
+        formdata.append('lastname',lastName)
+        formdata.append('address',address)
+        formdata.append('contact',contact)
+        formdata.append('latitude',location.latitude)
+        formdata.append('longitude',location.longitude)
+        formdata.append('type',selectedUserType)
         AsyncStorage.getItem("auth_code",(error,result)=>{
             if(error){
                 console.log(error)
             }else{
                 fetch(Connection.getConnection()+"/api/auth/new-profile",{
                     method:"POST",
-                    headers:{
-                        Accept:'application/json',
-                        'Content-Type':'application/json'
-                    },
-                    body:JSON.stringify({
-                        token:result,
-                        firstname:firstName,
-                        lastname:lastName,
-                        address:address,
-                        contact:contact
-                    })
+                    body:formdata
                 }).then((response)=>response.json()).then((responseJson)=>{
                   //post action after setup url
                   console.log(responseJson.id)
@@ -151,17 +214,18 @@ const Profile = ({route,navigation}) => {
                         <TextInput value={address} onChangeText={setAddress} style={styles.input1} />
                     <Text style={styles.Text}>Profile Picture</Text>
                     <View style={styles.ButtonCont1}>
-                        <TouchableOpacity style={styles.Touchable}><Text style={styles.Text}>Choose the Photo</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>openImagePicker()} style={styles.Touchable}><Text style={styles.Text}>Choose the Photo</Text></TouchableOpacity>
                     </View> 
                         <Text style={styles.Text}>Contact</Text>
                         <TextInput value={contact} onChangeText={setContact} style={styles.input} />
                         <Text style={styles.Text}>Type</Text>
                         <View style={styles.container}>
-                            <RadioGroup radioButtons={radioButtons} /*onPress={onPressRadioButton}*/ layout="column"/>
+                            <RadioGroup radioButtons={radioButtons} onPress={onPressRadioButton} layout="column"/>
                     </View>
                     <Text style={styles.Text}>Location</Text>
                         <View style={styles.container1}>
-                        <MapView style={styles.map} />
+                        <MapView style={styles.map} region={location} onRegionChange={setLocation} >
+                        </MapView>
                     </View>
                     <View style={styles.ButtonCont1}>
                     <TouchableOpacity style={styles.Touchable1} onPress={()=>getAction()}>
