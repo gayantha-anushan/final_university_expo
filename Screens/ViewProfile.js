@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View ,Image,ScrollView,SafeAreaView,TouchableOpacity} from 'react-native'
-import React from 'react'
+import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 
 const ViewProfile = ({ navigation }) => {
+    const [image, setImage] = useState(null)
+    
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>

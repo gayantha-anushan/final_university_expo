@@ -22,9 +22,15 @@ const Interface = ({navigation }) => {
         setListRefreshing(true)
         //Loading Data
         fetch(getConnection()+'/api/posts/',{
-            method:'GET'
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Cache-Control':'no-cache',
+            }
         }).then((response)=>response.json()).then((responseJson)=>{
             //setData(responseJson)
+            console.log(responseJson)
             var datas = []
             for(var i = 0 ; i < responseJson.length ; i++){
                 datas.push({

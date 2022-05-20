@@ -126,76 +126,106 @@ const Profile = ({route,navigation}) => {
       }
   }
 
-  const updateProfileData = () => {
-    try{
-        var uid;
-        AsyncStorage.getItem("auth_code",(error,result)=>{
-            if(error){
-                console.log(error)
-            }else{
-                var formdata = new FormData()
-                formdata.append('image',{type:type,uri:image.localUri,name:name})
-                formdata.append('token',result)
-                formdata.append('firstname',firstName)
-                formdata.append('lastname',lastName)
-                formdata.append('profile',profileID)
-                formdata.append('address',address)
-                formdata.append('contact',contact)
-                formdata.append('latitude',location.latitude)
-                formdata.append('longitude',location.longitude)
-                formdata.append('type',selectedUserType)
-                fetch(Connection.getConnection()+"/api/auth/update-profile",{
-                    method:"POST",
-                    headers:{
-                        Accept:'application/json',
-                        'Content-Type':'application/json'
-                    },
-                    body:formdata
-                }).then((response)=>response.json()).then((responseJson)=>{
-                  //post action after setup url
-                  console.log(responseJson.id)
-                  AsyncStorage.setItem("current_profile",responseJson.id)
-                  navigation.navigate('DrawerContainer')
-              })
+    const updateProfileData = () => {
+        if (formVerifier()) {
+            try {
+                console.log("ok")
+                var uid;
+                AsyncStorage.getItem("auth_code", (error, result) => {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        var formdata = new FormData()
+                        formdata.append('token', result)
+                        formdata.append('firstname', firstName)
+                        formdata.append('lastname', lastName)
+                        formdata.append('profile', profileID)
+                        formdata.append('address', address)
+                        formdata.append('contact', contact)
+                        formdata.append('latitude', location.latitude)
+                        formdata.append('longitude', location.longitude)
+                        formdata.append('type', selectedUserType)
+                        formdata.append('image', { type: type, uri: image.localUrl, name: name })
+                        fetch(Connection.getConnection() + "/api/auth/update-profile", {
+                            method: "POST",
+                            body: formdata
+                        }).then((response) => response.json()).then((responseJson) => {
+                            //post action after setup url
+                            console.log("Successing");
+                            alert("Changes Applied Successful!");
+                        })
+                    }
+                })
+            } catch (error) {
+                console.log(error);
             }
-        })      
-    }catch(error){
-        console.log(error);
-    }
+        }
   }
+  
+    const formVerifier = () => {
+        console.log("Called to me")
+        var error = ""
+        if (firstName == "") {
+            error = "First Name Missing"
+        }
+        if (lastName == "") {
+            error = "Last Name Missing"
+        }
+        if (address == "") {
+            error = "address is missing"
+        }
 
-  const uploadProfileData = () => {
-      try{
-        var formdata = new FormData();
-        formdata.append('image',{type:type,uri:image.localUri,name:name})
-        formdata.append('token',result)
-        formdata.append('firstname',firstName)
-        formdata.append('lastname',lastName)
-        formdata.append('address',address)
-        formdata.append('contact',contact)
-        formdata.append('latitude',location.latitude)
-        formdata.append('longitude',location.longitude)
-        formdata.append('type',selectedUserType)
-        AsyncStorage.getItem("auth_code",(error,result)=>{
-            if(error){
-                console.log(error)
-            }else{
-                fetch(Connection.getConnection()+"/api/auth/new-profile",{
-                    method:"POST",
-                    body:formdata
-                }).then((response)=>response.json()).then((responseJson)=>{
-                  //post action after setup url
-                  console.log(responseJson.id)
-                  AsyncStorage.setItem("current_profile",responseJson.id)
-                  navigation.navigate('DrawerContainer')
-              })
-            }
-        })
+        if (contact == "") {
+            error = "contact is missing"
+        }
+        if (type == null) {
+            error = "Type is missing"
+        }
+        if (image == null) {
+            error = "Image is not selected"
+        }
+        if (error !== "") {
+            alert(error)
+            return false
+        } else {
+            return true;
+        }
+    }
+
+    const uploadProfileData = () => {
+        if (formVerifier()) {
+            try {
+                var formdata = new FormData();
+                formdata.append('image', { type: type, uri: image.localUrl, name: name })
+                formdata.append('token', result)
+                formdata.append('firstname', firstName)
+                formdata.append('lastname', lastName)
+                formdata.append('address', address)
+                formdata.append('contact', contact)
+                formdata.append('latitude', location.latitude)
+                formdata.append('longitude', location.longitude)
+                formdata.append('type', selectedUserType)
+                AsyncStorage.getItem("auth_code", (error, result) => {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        fetch(Connection.getConnection() + "/api/auth/new-profile", {
+                            method: "POST",
+                            body: formdata
+                        }).then((response) => response.json()).then((responseJson) => {
+                            //post action after setup url
+                            console.log(responseJson.id)
+                            AsyncStorage.setItem("current_profile", responseJson.id)
+                            navigation.navigate('DrawerContainer')
+                        })
+                    }
+                })
 
       
-    }catch(error){
-        console.log(error);
-    }
+            } catch (error) {
+                console.log(error);
+            }
+        }
   }
 
     return (
