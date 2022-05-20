@@ -1,9 +1,11 @@
 import { StyleSheet, View,Image,Text,TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
 
-const Header = ({navigation}) => {
+const Header = ({ navigation }) => {
+    const [searchComponent, setSearchComponent] = useState(false)
+
   return (
     <View>
         <View style={styles.topContent}>
@@ -12,10 +14,12 @@ const Header = ({navigation}) => {
                 <Text style={styles.headerText}>Vege Sup</Text>   
             </View>
             <TouchableOpacity style={styles.Touchable}>
-                <AntDesign name="search1" color="black" size={32} />
+                <AntDesign name="search1" onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
             </TouchableOpacity>
         </View>
-        <TextInput style={styles.Input} placeholder='Search here......' />
+          {
+              searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' />):null
+        }
           <View style={styles.mainCont1}>
                 <TouchableOpacity onPress={()=>navigation.openDrawer()}>
                   <AntDesign name="bars" size={30} color="black" />

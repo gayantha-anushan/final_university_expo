@@ -1,9 +1,45 @@
 import { StyleSheet, Text, View ,Image,ScrollView,SafeAreaView,TouchableOpacity} from 'react-native'
 import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
+import Connection, { getConnection } from '../Connection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ViewProfile = ({ navigation }) => {
-    const [image, setImage] = useState(null)
+    const [image, setImage] = useState("")
+    const [type, setType] = useState("")
+    const [name, setName] = useState("")
+    const [Address, setAddress] = useState("")
+    const [contact, setContact] = useState("")
+
+    useEffect(() => {
+        AsyncStorage.getItem("auth_code", (error, result) => {
+            if (error) {
+                console.log(error)
+            } else {
+                console.log(result)
+                fetch(Connection.getConnection() + "/api/auth/profile-data", {
+                    method: 'POST',
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type":"application/json"
+                    },
+                    body: JSON.stringify({
+                        token:result
+                    })
+                }).then((response) => response.json()).then((responsejson) => {
+                    console.log(responsejson);
+                    setImage(getConnection() + "/profile/" + responsejson.data.image);
+                    setName(responsejson.data.firstname + " " + responsejson.data.lastname)
+                    setType(responsejson.data.type)
+                    setAddress(responsejson.data.address);
+                    setContact(responsejson.data.contact)
+                }).catch((error) => {
+                    console.log(error)
+                })
+            }
+        })
+    }, [])
+    
     
     return (
         <SafeAreaView style={styles.container}>
@@ -19,7 +55,7 @@ const ViewProfile = ({ navigation }) => {
                 </View>
                 <View style={{alignSelf:"center"}}>
                     <View style={styles.profileimage}>
-                        <Image source={require('../assets/profile.jpg')} style={styles.image} resizeMode="center"></Image>
+                        <Image source={{uri:image}} style={styles.image} resizeMode="center"></Image>
                     </View>
                     <View style={styles.add}>
                         <TouchableOpacity>
@@ -27,13 +63,13 @@ const ViewProfile = ({ navigation }) => {
                         </TouchableOpacity>
                         
                     </View>
-                    <Text style={styles.text}>Amal Srinath</Text>
+                    <Text style={styles.text}>{name}</Text>
                     
                 </View>
                 <View style={styles.textset}>
                     <AntDesign name="user" size={25} color="black"></AntDesign>
                     <Text style={styles.text1}>Postion As:</Text>
-                    <Text style={styles.text2}>Farmer</Text>
+                    <Text style={styles.text2}>{ type}</Text>
                 </View>
                 <View style={styles.textset}>
                     <AntDesign name="carryout" size={25} color="black"></AntDesign>
@@ -48,12 +84,12 @@ const ViewProfile = ({ navigation }) => {
                 <View style={styles.textset}>
                     <AntDesign name="home" size={25} color="black"></AntDesign>
                     <Text style={styles.text1}>Address:</Text>
-                    <Text style={styles.text2}>294/A Silva Rd,NuwaraEliya</Text>
+                    <Text style={styles.text2}>{Address}</Text>
                 </View>     
                 <View style={styles.textset}>
                     <AntDesign name="phone" size={25} color="black"></AntDesign>
                     <Text style={styles.text1}>Phone Number:</Text>
-                    <Text style={styles.text2}>0773456272</Text>
+                    <Text style={styles.text2}>{ contact}</Text>
                 </View> 
                 <View style={styles.ButtonCont1}>
                     <TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
