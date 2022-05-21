@@ -195,32 +195,38 @@ const Profile = ({route,navigation}) => {
     const uploadProfileData = () => {
         if (formVerifier()) {
             try {
-                var formdata = new FormData();
-                formdata.append('image', { type: type, uri: image.localUrl, name: name })
-                formdata.append('token', result)
-                formdata.append('firstname', firstName)
-                formdata.append('lastname', lastName)
-                formdata.append('address', address)
-                formdata.append('contact', contact)
-                formdata.append('latitude', location.latitude)
-                formdata.append('longitude', location.longitude)
-                formdata.append('type', selectedUserType)
                 AsyncStorage.getItem("auth_code", (error, result) => {
                     if (error) {
                         console.log(error)
                     } else {
-                        fetch(Connection.getConnection() + "/api/auth/new-profile", {
-                            method: "POST",
-                            body: formdata
-                        }).then((response) => response.json()).then((responseJson) => {
-                            //post action after setup url
-                            console.log(responseJson.id)
-                            AsyncStorage.setItem("current_profile", responseJson.id)
-                            navigation.navigate('DrawerContainer')
+                        var formdata = new FormData();
+                        formdata.append('image', { type: type, uri: image.localUrl, name: name })
+                        formdata.append('token', result)
+                        formdata.append('firstname', firstName)
+                        formdata.append('lastname', lastName)
+                        formdata.append('address', address)
+                        formdata.append('contact', contact)
+                        formdata.append('latitude', location.latitude)
+                        formdata.append('longitude', location.longitude)
+                        formdata.append('type', selectedUserType)
+                        AsyncStorage.getItem("auth_code", (error, result) => {
+                            if (error) {
+                                console.log(error)
+                            } else {
+                                console.log("fetching")
+                                fetch(Connection.getConnection() + "/api/auth/new-profile", {
+                                    method: "POST",
+                                    body: formdata
+                                }).then((response) => response.json()).then((responseJson) => {
+                                    //post action after setup url
+                                    console.log(responseJson.id)
+                                    AsyncStorage.setItem("current_profile", responseJson.id)
+                                    navigation.navigate('DrawerContainer')
+                                })
+                            }
                         })
                     }
-                })
-
+                });
       
             } catch (error) {
                 console.log(error);
