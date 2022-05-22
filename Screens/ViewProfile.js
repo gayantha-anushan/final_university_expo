@@ -3,13 +3,15 @@ import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import Connection, { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MapView from 'react-native-maps';
 
-const ViewProfile = ({ navigation }) => {
+const ViewProfile = ({ route,navigation }) => {
     const [image, setImage] = useState("")
     const [type, setType] = useState("")
     const [name, setName] = useState("")
     const [Address, setAddress] = useState("")
     const [contact, setContact] = useState("")
+
 
     useEffect(() => {
         AsyncStorage.getItem("auth_code", (error, result) => {
@@ -44,41 +46,41 @@ const ViewProfile = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.upcont}>
                         <View style={styles.titlebar}>
-                            <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                                <AntDesign name="left" size={35} color="black" />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>navigation.navigate("Message")}>
-                                <AntDesign name="message1" size={32} color="black" />
-                            </TouchableOpacity>
-                        </View>
+                          <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
+                              <AntDesign name="left" size={35} color="black" />
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={()=>navigation.navigate("Message")}>
+                              <AntDesign name="message1" size={32} color="black" />
+                          </TouchableOpacity>
+                      </View>
+                    <View style={styles.upcont}>
                         <View style={{alignSelf:"center"}}>
                             <View style={styles.profileimage}>
                                 <Image source={{uri:image}} style={styles.image} resizeMode="center"></Image>
                             </View>
                         </View>
-                        <View style={styles.add}>  
+                            <View style={styles.text}>
+                                <Text style={styles.text}>{name}</Text>
+                            </View>
+                            <View style={styles.ButtonCont}>   
+                                <TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
+                                <AntDesign name="edit" size={25} color="blue"></AntDesign>
+                                <Text style={styles.text3}>Edit Profile Details</Text>
+                                </TouchableOpacity>
+                            </View>  
+                            <View style={styles.ButtonCont1}>
+                               <TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
+                               <AntDesign name="isv" size={25} color="blue"></AntDesign>
+                               <Text style={styles.text3}>Your Post</Text>
+                            </TouchableOpacity>
+                               </View>
                     </View>
-                        <View style={styles.text}>
-                            <Text style={styles.text}>{name}</Text>
-                        </View>
                     
-                    </View>
                         <View style={styles.textset}>
                             <AntDesign name="user" size={25} color="black"></AntDesign>
                             <Text style={styles.text1}>Postion As:</Text>
                             <Text style={styles.text2}>Farmer</Text>
-                        </View>
-                        <View style={styles.textset}>
-                            <AntDesign name="carryout" size={25} color="black"></AntDesign>
-                            <Text style={styles.text1}>Worked At:</Text>
-                            <Text style={styles.text2}>Amarasena Farmers</Text>
-                        </View>
-                        <View style={styles.textset}>
-                            <AntDesign name="tags" size={25} color="black"></AntDesign>
-                            <Text style={styles.text1}>Location:</Text>
-                            <Text style={styles.text2}>NuwaraEliya</Text>
                         </View>
                         <View style={styles.textset}>
                             <AntDesign name="home" size={25} color="black"></AntDesign>
@@ -89,20 +91,12 @@ const ViewProfile = ({ navigation }) => {
                             <AntDesign name="phone" size={25} color="black"></AntDesign>
                             <Text style={styles.text1}>Phone Number:</Text>
                     <Text style={styles.text2}>{contact}</Text>
-                        </View> 
-                        <View style={styles.ButtonCont1}>
-                            <TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
-                                <AntDesign name="isv" size={25} color="blue"></AntDesign>
-                            <Text style={styles.text3}>Your Post</Text>
-                            </TouchableOpacity>
                         </View>
-
-                        <View style={styles.ButtonCont}>   
-                            <TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
-                                <AntDesign name="edit" size={25} color="blue"></AntDesign>
-                                <Text style={styles.text3}>Edit Profile Details</Text>
-                            </TouchableOpacity>
+                        <View style={styles.textset}>
+                            <AntDesign name="tags" size={25} color="black"></AntDesign>
+                            <Text style={styles.text1}>Location:</Text>
                         </View>
+                        <MapView style={styles.map} ></MapView>
             </ScrollView>        
       </SafeAreaView>
   )
@@ -115,14 +109,18 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     upcont: {
-        backgroundColor:'#48d1cc'
+        backgroundColor: '#a9a9a9',
+        borderRadius: 40,
+        paddingTop: 10,
+        padding:15
     },
 
     titlebar: {
         flexDirection: 'row',
-        marginTop: 45,
+        marginTop: 35,
         justifyContent: 'space-between',
-        marginHorizontal:15
+        marginHorizontal: 15,
+        paddingBottom:10
     },
     image: {
         flex:1,
@@ -182,7 +180,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingTop: 30,
+        paddingTop: 5,
         
 
     },
@@ -190,7 +188,12 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop: 55,
+        paddingTop: 10,
         
+    },
+    map: {
+        width:300,
+        height: 150,
+        alignSelf:'center'
     }
 })

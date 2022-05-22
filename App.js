@@ -14,7 +14,7 @@ import Profile from './Screens/Profile';
 import DrawerContainer from './Screens/DrawerContainer';
 import ViewProfile from './Screens/ViewProfile';
 import ViewPost from './components/ViewPost';
-import Orders from './Screens/Orders';
+
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
 
@@ -42,7 +42,6 @@ export default function App() {
         <stack.Screen name='DrawerContainer' component={DrawerContainer} />
         <stack.Screen name='ViewProfile' component={ViewProfile} />
         <stack.Screen name="ViewPost" component={ViewPost}/>
-        <stack.Screen name="Orders" component={Orders} />
         <stack.Screen name="Contacts" component={Contacts} />
       </stack.Navigator>
     </NavigationContainer>

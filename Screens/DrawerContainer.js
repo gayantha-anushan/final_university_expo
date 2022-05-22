@@ -6,6 +6,7 @@ import CreatePost from './CreatePost'
 import Message from './Message'
 import Draweri from './Drawer'
 import ViewProfile from './ViewProfile'
+import Orders from './Orders';
 
 const Drawer = createDrawerNavigator()
 
@@ -15,6 +16,7 @@ const DrawerContainer = () => {
         <Drawer.Screen name="Interface" component={Interface} />
         <Drawer.Screen name="CreatePost" component={CreatePost}/>
       <Drawer.Screen name="Message" component={Message} />
+      <Drawer.Screen name="Orders" component={Orders} />
       <Drawer.Screen name="ViewProfile" component={ViewProfile}/>
     </Drawer.Navigator>
   )
