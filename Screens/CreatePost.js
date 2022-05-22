@@ -1,10 +1,11 @@
-import { StyleSheet, KeyboardAvoidingView,Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, KeyboardAvoidingView,Text, View, TouchableOpacity, Image } from 'react-native'
 import React,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import { TextInput } from 'react-native'
 import * as ImagePicker from  'expo-image-picker'
 import { getConnection } from '../Connection'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Checkbox from 'expo-checkbox'
 
 const CreatePost = ({navigation}) => {
 
@@ -15,7 +16,7 @@ const CreatePost = ({navigation}) => {
     const [customer, setCustomer] = useState("")
     const [image, setImage] = useState(null)
     const [name, setName] = useState(null)
-    const [type, setType] = useState(null)
+    const [isChecked, setIsChecked] = useState(false)
 
     useEffect(() => {
         AsyncStorage.getItem("current_profile",(error,result)=>{
@@ -58,10 +59,18 @@ const CreatePost = ({navigation}) => {
     }
 
     const uploadContent = () => {
+
+        if (isChecked) {
+            var type = "Auction"
+        } else {
+            var type = "Direct Sell"
+        }
+
         var formdata = new FormData();
         formdata.append('title',title)
         formdata.append('quantity',quantity)
-        formdata.append('profile_id',authToken)
+        formdata.append('profile_id', authToken)
+        formdata.append('type',type)
         formdata.append('wholeseller',wholeSeller)
         formdata.append('localseller',localSeller)
         formdata.append('date',new Date().toISOString())
@@ -88,19 +97,28 @@ const CreatePost = ({navigation}) => {
             <Header navigation={navigation}/>
             <View style={styles.container}>
                 <TextInput value={title} onChangeText={setTitle} style={styles.inputStyler} placeholder='Title' />
-                <TextInput value={quantity} onChangeText={setQuantity} style={styles.inputStyler} placeholder='Available Quantity' keyboardType='numeric'/>
+                <TextInput value={quantity} onChangeText={setQuantity} style={styles.inputStyler} placeholder='Available Quantity' keyboardType='numeric' />
+                  <View style={styles.auctionContainer}>
+                      <Checkbox style={ styles.auctionChecker} value={isChecked} onValueChange={setIsChecked} />
+                      <Text>Set As Auction</Text>
+                </View>  
                 <Text style={styles.priceChooser}>Price</Text>
                 <View style={styles.container2}>
                     <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric'/>
                     <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
                     <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
-                </View>
-                <TouchableOpacity onPress={()=>openImagePickerAsync()}>
-                    <Text>Add Image</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>uploadContent()} style={styles.buttonCover}>
-                    <Text style={styles.buttonText}>Create Post</Text>
-                </TouchableOpacity>
+                  </View>
+                  <View style={ styles.disBottom}>
+                      {
+                      image ? (<Image source={{ uri: image.localUri }} resizeMode="center" style={styles.imagine}/>):null
+                        }
+                        <TouchableOpacity style={ styles.imagePickerBtn} onPress={()=>openImagePickerAsync()}>
+                            <Text style={ styles.imagePickerText}>Add Image</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>uploadContent()} style={styles.buttonCover}>
+                            <Text style={styles.buttonText}>Create Post</Text>
+                        </TouchableOpacity>
+                  </View>
             </View>
         </KeyboardAvoidingView>
     </View>
@@ -116,6 +134,24 @@ const styles = StyleSheet.create({
     },
     container:{
         margin:10
+    },
+    imagePickerBtn: {
+        backgroundColor:'green',
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        height:40,
+        width:150,
+        borderRadius:20,
+        marginTop:10,
+        marginLeft:8
+    },
+    imagine: {
+        height: 150,
+        width:'50%'
+    },
+    imagePickerText: {
+        color:'#fff'
     },
     container2:{
         display:'flex',
@@ -133,8 +169,24 @@ const styles = StyleSheet.create({
         marginTop:10,
         marginLeft:8
     },
+    auctionContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        margin: 3,
+        alignItems:'center'
+    },
+    disBottom: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems:'center'
+    },
     buttonText:{
         color:'#ffffff'
+    },
+    auctionChecker: {
+        margin: 5,
+        marginRight:15
     },
     inputStyler:{
         backgroundColor:'#e9e9e9',

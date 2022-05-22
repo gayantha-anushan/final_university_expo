@@ -58,10 +58,7 @@ const ViewProfile = ({ navigation }) => {
                                 <Image source={{uri:image}} style={styles.image} resizeMode="center"></Image>
                             </View>
                         </View>
-                        <View style={styles.add}>
-                            <TouchableOpacity>
-                                <AntDesign name="pluscircle" size={50} color="black" style={{ marginTop: 200, marginLeft: 200 }}></AntDesign>
-                            </TouchableOpacity>  
+                        <View style={styles.add}>  
                     </View>
                         <View style={styles.text}>
                             <Text style={styles.text}>{name}</Text>
