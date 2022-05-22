@@ -51,8 +51,8 @@ const Drawer = (props) => {
                 <View>
                     {TabButton(currentTab, setCurrentTab, "Home", home, props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Profile", profile,props.navigation)}
-                    {TabButton(currentTab, setCurrentTab, "Orders", orders)}
-                    {TabButton(currentTab, setCurrentTab, "Contacts", contacts)}
+                    {TabButton(currentTab, setCurrentTab, "Orders", orders , props.navigation)}
+                    {TabButton(currentTab, setCurrentTab, "Contacts", contacts , props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Settings", settings)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
                 </View>
@@ -69,6 +69,12 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                     break;
                 case "Profile":
                     navigation.navigate("ViewProfile");
+                    break;
+                case "Orders":
+                    navigation.navigate("Orders");
+                    break;
+                case "Contacts":
+                    navigation.navigate("Contacts");
                     break;
                 case "Logout":
                     AsyncStorage.clear();
