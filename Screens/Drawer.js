@@ -54,8 +54,7 @@ const Drawer = (props) => {
                     {TabButton(currentTab, setCurrentTab, "Profile", profile,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Orders", orders,props.navigation)}
                     {TabButton(currentTab,setCurrentTab,"Stocks",stocks)}
-                    {TabButton(currentTab, setCurrentTab, "Contacts", contacts)}
-                    {TabButton(currentTab, setCurrentTab, "Settings", settings)}
+                    {TabButton(currentTab, setCurrentTab, "Settings", settings,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
                 </View>
             </View>
@@ -65,7 +64,6 @@ const Drawer = (props) => {
 const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
     return (
         <TouchableOpacity onPress={() => {
-            console.log("called")
             switch (title) {
                 case "Home":
                     navigation.navigate("Interface");
@@ -74,11 +72,13 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                     navigation.navigate("ViewProfile");
                     break;
                 case "Orders":
-                    console.log("called")
                     navigation.navigate("Orders");
                     break;
                 case "Contacts":
                     navigation.navigate("Contacts");
+                    break;
+                case "Settings":
+                    navigation.navigate("Settings");
                     break;
                 case "Logout":
                     AsyncStorage.clear();

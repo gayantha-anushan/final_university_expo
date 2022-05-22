@@ -3,7 +3,7 @@ import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,Ke
 import * as React from 'react';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
+const LeftContent = props =><Avatar.Icon {...props} icon="folder" />
 
 const Order = () => {
     return (
@@ -22,7 +22,7 @@ const Order = () => {
 
 const styles = StyleSheet.create({
     orderContainer : {
-        margin : 10
+        margin: 10,
     }
 })
 
