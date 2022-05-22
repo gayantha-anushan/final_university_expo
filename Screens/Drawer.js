@@ -6,6 +6,7 @@ import orders from '../assets/clipboard.png';
 import contacts from '../assets/contact-book.png';
 import settings from '../assets/settings.png';
 import logout from '../assets/logout.png';
+import stocks from '../assets/risk.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Connection from '../Connection'
 
@@ -52,6 +53,7 @@ const Drawer = (props) => {
                     {TabButton(currentTab, setCurrentTab, "Home", home, props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Profile", profile,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Orders", orders)}
+                    {TabButton(currentTab,setCurrentTab,"Stocks",stocks)}
                     {TabButton(currentTab, setCurrentTab, "Contacts", contacts)}
                     {TabButton(currentTab, setCurrentTab, "Settings", settings)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
@@ -89,13 +91,13 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                 <Image style={{
                     width: 40,
                     height: 40,
-                    tintColor: currentTab == title ? "#5359D1" : "white"
+                    tintColor: currentTab == title ? "#6b8e23" : "white"
                 }} source={image}></Image>
                 <Text style={{
                     fontSize: 25,
                     fontWeight: 'bold',
                     paddingLeft: 15,
-                    color: currentTab == title ? "#5359D1" : "white"
+                    color: currentTab == title ? "#6b8e23" : "white"
                 }}>{title}</Text>
             </View>
         </TouchableOpacity>
@@ -105,7 +107,7 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#5359D1',
+        backgroundColor: '#6b8e23',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         paddingTop: 50
