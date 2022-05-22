@@ -17,6 +17,7 @@ const CreatePost = ({navigation}) => {
     const [image, setImage] = useState(null)
     const [name, setName] = useState(null)
     const [isChecked, setIsChecked] = useState(false)
+    const [type, setType] = useState(null)
 
     useEffect(() => {
         AsyncStorage.getItem("current_profile",(error,result)=>{
@@ -61,16 +62,18 @@ const CreatePost = ({navigation}) => {
     const uploadContent = () => {
 
         if (isChecked) {
-            var type = "Auction"
+            var typei = "Auction"
         } else {
-            var type = "Direct Sell"
+            var typei = "Direct Sell"
         }
+
+        console.log("Pressed")
 
         var formdata = new FormData();
         formdata.append('title',title)
         formdata.append('quantity',quantity)
         formdata.append('profile_id', authToken)
-        formdata.append('type',type)
+        formdata.append('type',typei)
         formdata.append('wholeseller',wholeSeller)
         formdata.append('localseller',localSeller)
         formdata.append('date',new Date().toISOString())
@@ -78,7 +81,7 @@ const CreatePost = ({navigation}) => {
         formdata.append('image',{type:type,uri:image.localUri,name:name})
 
         fetch(getConnection()+'/api/posts/createpost',{
-            method:'POST',
+            method: 'POST',
             body:formdata
         }).then((response)=>response.text()).then((responseText)=>{
             console.log("Responded by server")
@@ -88,6 +91,8 @@ const CreatePost = ({navigation}) => {
             setLocalSeller("")
             setCustomer("")
             console.log(responseText)
+        }).catch((error) => {
+            console.log(error)
         })
     }
 

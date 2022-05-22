@@ -3,8 +3,9 @@ import React,{useState,useEffect} from 'react'
 import strawberry from '../assets/strawberry.jpg'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AntDesign } from '@expo/vector-icons';
+import { getConnection } from '../Connection';
 
-const Post = ({username,postdate,title,quantity,price,type,image}) => {
+const Post = ({username,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
@@ -23,13 +24,13 @@ const Post = ({username,postdate,title,quantity,price,type,image}) => {
   return (
     <View style={styles.card}>
         <View style={styles.container2}>
-            <View style={styles.container1}>
-                <Image source={strawberry} style={styles.userImage} />
+              <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", {uid:authid})} style={styles.container1}>
+                <Image source={{uri:getConnection() + "/profile/"+authimg}} style={styles.userImage} />
                 <View>
                     <Text style={styles.user}>{username}</Text>
                     <Text>{postdate}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
               <TouchableOpacity style={styles.btn1}>
                   <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
                 <Text>Add To Cart</Text>

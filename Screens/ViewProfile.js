@@ -11,35 +11,70 @@ const ViewProfile = ({ route,navigation }) => {
     const [name, setName] = useState("")
     const [Address, setAddress] = useState("")
     const [contact, setContact] = useState("")
+    const [location, setLocation] = useState(null)
+
+    const { uid} = route.params
 
 
     useEffect(() => {
-        AsyncStorage.getItem("auth_code", (error, result) => {
-            if (error) {
-                console.log(error)
-            } else {
-                console.log(result)
-                fetch(Connection.getConnection() + "/api/auth/profile-data", {
-                    method: 'POST',
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type":"application/json"
-                    },
-                    body: JSON.stringify({
-                        token:result
-                    })
-                }).then((response) => response.json()).then((responsejson) => {
-                    console.log(responsejson);
-                    setImage(getConnection() + "/profile/" + responsejson.data.image);
-                    setName(responsejson.data.firstname + " " + responsejson.data.lastname)
-                    setType(responsejson.data.type)
-                    setAddress(responsejson.data.address);
-                    setContact(responsejson.data.contact)
-                }).catch((error) => {
+        console.log("uid "+uid)
+        if (uid == null) {
+            AsyncStorage.getItem("auth_code", (error, result) => {
+                if (error) {
                     console.log(error)
+                } else {
+                    console.log(result)
+                    fetch(Connection.getConnection() + "/api/auth/profile-data", {
+                        method: 'POST',
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            token: result
+                        })
+                    }).then((response) => response.json()).then((responsejson) => {
+                        console.log(responsejson);
+                        setImage(getConnection() + "/profile/" + responsejson.data.image);
+                        setName(responsejson.data.firstname + " " + responsejson.data.lastname)
+                        setType(responsejson.data.type)
+                        setAddress(responsejson.data.address);
+                        setContact(responsejson.data.contact)
+                        setLocation({
+                            latitude: responsejson.data.latitude,
+                            longitude: responsejson.data.longitude,
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01
+                        })
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }
+            })
+        } else {
+            fetch(Connection.getConnection() + "/api/auth/get-profile/" + uid, {
+                method: 'GET',
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type":"application/json"
+                }
+            }).then((response) => response.json()).then((responsejson) => {
+                console.log(responsejson);
+                setImage(getConnection() + "/profile/" + responsejson.image);
+                setName(responsejson.firstname + " " + responsejson.lastname)
+                setType(responsejson.type)
+                setAddress(responsejson.address);
+                setContact(responsejson.contact)
+                setLocation({
+                    latitude: responsejson.latitude,
+                    longitude: responsejson.longitude,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.01
                 })
-            }
-        })
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
     }, [])
     
     
@@ -57,7 +92,7 @@ const ViewProfile = ({ route,navigation }) => {
                     <View style={styles.upcont}>
                         <View style={{alignSelf:"center"}}>
                             <View style={styles.profileimage}>
-                                <Image source={{uri:image}} style={styles.image} resizeMode="center"></Image>
+                                <Image source={{uri:image}} style={styles.image} resizeMode="cover"></Image>
                             </View>
                         </View>
                             <View style={styles.text}>
@@ -96,7 +131,7 @@ const ViewProfile = ({ route,navigation }) => {
                             <AntDesign name="tags" size={25} color="black"></AntDesign>
                             <Text style={styles.text1}>Location:</Text>
                         </View>
-                        <MapView style={styles.map} ></MapView>
+                    <MapView style={styles.map} region={location} onRegionChange={ setLocation} ></MapView>
             </ScrollView>        
       </SafeAreaView>
   )

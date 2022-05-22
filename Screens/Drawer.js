@@ -71,7 +71,7 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                     navigation.navigate("Interface");
                     break;
                 case "Profile":
-                    navigation.navigate("ViewProfile");
+                    navigation.navigate("ViewProfile", {uid:null});
                     break;
                 case "Orders":
                     console.log("called")
