@@ -17,20 +17,24 @@ const Header = ({navigation}) => {
         </View>
         <TextInput style={styles.Input} placeholder='Search here......' />
           <View style={styles.mainCont1}>
-                <TouchableOpacity onPress={()=>navigation.openDrawer()}>
+            <TouchableOpacity onPress={()=>navigation.openDrawer()}>
                   <AntDesign name="bars" size={30} color="black" />
-              </TouchableOpacity>
+            </TouchableOpacity>
               
             <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
                 <AntDesign name="home" size={30} color="black" />
-              </TouchableOpacity>
+            </TouchableOpacity>
               
             <TouchableOpacity onPress={()=>navigation.navigate("CreatePost")}>
                 <AntDesign name="gift" size={30} color="black" />
-              </TouchableOpacity>
+            </TouchableOpacity>
               
             <AntDesign name="shoppingcart" size={30} color="black" />
-            <AntDesign name="notification" size={30} color="black" />
+            
+            <TouchableOpacity onPress={()=>navigation.navigate("Notifications")}>
+                <AntDesign name="notification" size={30} color="black" />
+            </TouchableOpacity>
+            
             <TouchableOpacity onPress={()=>navigation.navigate('Message')}>
                 <AntDesign name="message1" size={30} color="black" />
             </TouchableOpacity>

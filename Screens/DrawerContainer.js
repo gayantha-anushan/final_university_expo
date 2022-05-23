@@ -6,6 +6,7 @@ import CreatePost from './CreatePost'
 import Message from './Message'
 import Draweri from './Drawer'
 import ViewProfile from './ViewProfile'
+import Notifications from './Notifications'
 
 const Drawer = createDrawerNavigator()
 
@@ -16,6 +17,7 @@ const DrawerContainer = () => {
         <Drawer.Screen name="CreatePost" component={CreatePost}/>
       <Drawer.Screen name="Message" component={Message} />
       <Drawer.Screen name="ViewProfile" component={ViewProfile}/>
+      <Drawer.Screen name="Notifications" component={Notifications}/>
     </Drawer.Navigator>
   )
 }

@@ -5,21 +5,21 @@ const Login = ({ navigation })=> {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <ScrollView>
-            <View style={styles.mainCont}>
-                <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                <Text style={styles.headerText}>Vege Sup</Text>
-            </View>
-                <Image style={styles.backImage} source={require('../assets/Farmer.png')} />
-            <View style={styles.ButtonCont}>
-                <TouchableOpacity style={styles.Touchable}  onPress={()=>navigation.navigate('Login')}>
-                    <Text style={styles.Text}>Get Started</Text>
-                </TouchableOpacity>
+            <ScrollView>
+                <View style={styles.mainCont}>
+                    <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+                    <Text style={styles.headerText}>Vege Sup</Text>
+                </View>
                 
-            </View>
+                <Image style={styles.backImage} source={require('../assets/Farmer.png')} />
+            
+                <View style={styles.ButtonCont}>
+                    <TouchableOpacity style={styles.Touchable}  onPress={()=>navigation.navigate('Login')}>
+                        <Text style={styles.Text}>Get Started</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
             </TouchableWithoutFeedback>
-        
         </KeyboardAvoidingView>
     )
 }
