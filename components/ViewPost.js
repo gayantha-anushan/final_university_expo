@@ -1,4 +1,4 @@
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View,KeyboardAvoidingView,TouchableWithoutFeedback,FlatList,Keyboard } from 'react-native'
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View,KeyboardAvoidingView,TouchableWithoutFeedback,FlatList,Keyboard ,ScrollView} from 'react-native'
 import React,{useState,useEffect} from 'react'
 import { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -51,7 +51,7 @@ const ViewPost = ({username,postdate,title,quantity,price,type,image,navigation}
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <View style={styles.maincont}>
-                <TouchableOpacity onPress={()=>navigation.navigate("ViewProfile")}>
+                <TouchableOpacity onPress={()=>navigation.navigate("ViewProfile",{uid:null})}>
                     <AntDesign name="left" size={30} color="black"></AntDesign>
                 </TouchableOpacity>
 
@@ -59,10 +59,11 @@ const ViewPost = ({username,postdate,title,quantity,price,type,image,navigation}
                         </View>
             
             <View style={styles.mainCont}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <FlatList refreshing={listRefreshing} onRefresh={()=>loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
-           
-                </TouchableWithoutFeedback>
+                <ScrollView>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <FlatList refreshing={listRefreshing} onRefresh={()=>loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
+                    </TouchableWithoutFeedback>
+                </ScrollView>
             </View>
             
             </KeyboardAvoidingView>
@@ -87,12 +88,12 @@ const styles = StyleSheet.create({
     },
     maincont: {
         paddingTop: 40,
-        padding: 15,
+        padding: 10,
         flexDirection: 'row',
         backgroundColor: '#40e0d0',
         justifyContent: 'space-between'
     },
     mainCont: {
-        paddingTop:10
+        paddingTop:4
     }
 })

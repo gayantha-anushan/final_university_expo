@@ -75,7 +75,7 @@ const ViewProfile = ({ route,navigation }) => {
                 console.log(error)
             })
         }
-    }, [])
+    }, [uid])
     
     
     return (
@@ -85,9 +85,11 @@ const ViewProfile = ({ route,navigation }) => {
                           <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
                               <AntDesign name="left" size={35} color="black" />
                           </TouchableOpacity>
-                          <TouchableOpacity onPress={()=>navigation.navigate("Message")}>
+                    {
+                        uid ? (<TouchableOpacity onPress={()=>navigation.navigate("Message")}>
                               <AntDesign name="message1" size={32} color="black" />
-                          </TouchableOpacity>
+                          </TouchableOpacity>) : null
+                          }
                       </View>
                     <View style={styles.upcont}>
                         <View style={{alignSelf:"center"}}>
@@ -99,17 +101,21 @@ const ViewProfile = ({ route,navigation }) => {
                                 <Text style={styles.text}>{name}</Text>
                             </View>
                             <View style={styles.ButtonCont}>   
-                                <TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
-                                <AntDesign name="edit" size={25} color="blue"></AntDesign>
-                                <Text style={styles.text3}>Edit Profile Details</Text>
-                                </TouchableOpacity>
+                            {
+                                uid ? null:(<TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
+                                    <AntDesign name="edit" size={25} color="blue"></AntDesign>
+                                    <Text style={styles.text3}>Edit Profile Details</Text>
+                                    </TouchableOpacity>)
+                            }
                             </View>  
                             <View style={styles.ButtonCont1}>
-                               <TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
+                            {
+                                uid ? null :(<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
                                <AntDesign name="isv" size={25} color="blue"></AntDesign>
                                <Text style={styles.text3}>Your Post</Text>
-                            </TouchableOpacity>
-                               </View>
+                            </TouchableOpacity>)
+                            }
+                            </View>
                     </View>
                     
                         <View style={styles.textset}>

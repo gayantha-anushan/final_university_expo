@@ -7,7 +7,7 @@ import { getConnection } from '../Connection';
 
 const Interface = ({navigation }) => {
     
-    const renderItem = ({ item }) => <Post authimg={ item.authimg} navigation={navigation}  username={item.username} authid={ item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
+    const renderItem = ({ item }) => <Post postid={ item.postid} authimg={ item.authimg} navigation={navigation}  username={item.username} authid={ item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     
 
     const [data, setData] = useState([])
@@ -31,14 +31,17 @@ const Interface = ({navigation }) => {
         }).then((response)=>response.json()).then((responseJson)=>{
             var datas = []
             for (var i = 0; i < responseJson.length; i++){
+                //console.log(responseJson[i]);
                 datas.push({
-                    authimg:responseJson[i].author.image,
+                    authimg: responseJson[i].author.image,
+                    postid:responseJson[i]._id,
                     authid:responseJson[i].author._id,
                     username:responseJson[i].author.firstname + " "+responseJson[i].author.lastname,
                     date:responseJson[i].date,
                     title:responseJson[i].title,
                     price:responseJson[i].price.customer,
-                    quantity:responseJson[i].quantity,
+                    quantity: responseJson[i].quantity,
+                    type:responseJson[i].type,
                     image:getConnection()+"/post-img/"+responseJson[i].image
                 })
             }
