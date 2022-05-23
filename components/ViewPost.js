@@ -51,7 +51,7 @@ const ViewPost = ({username,postdate,title,quantity,price,type,image,navigation}
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <View style={styles.maincont}>
-                <TouchableOpacity onPress={()=>navigation.navigate("ViewProfile")}>
+                <TouchableOpacity onPress={()=>navigation.navigate("ViewProfile",{uid:null})}>
                     <AntDesign name="left" size={30} color="black"></AntDesign>
                 </TouchableOpacity>
 
