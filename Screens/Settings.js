@@ -15,7 +15,7 @@ const Settings = ({ navigation }) => {
       <ReactNativeSettingsPage>
             <View style={styles.container}>
                 <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                    <AntDesign name="left" size={30}></AntDesign>
+                    <AntDesign name="arrowleft" size={30}></AntDesign>
                 </TouchableOpacity>
                 
                <Text style={styles.text}>Settings</Text>

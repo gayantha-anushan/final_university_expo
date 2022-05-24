@@ -11,7 +11,7 @@ const Message = ({navigation}) => {
         <ScrollView>
                     <View style={styles.maincont}>
                         <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                            <AntDesign name="left" size={40} color="black"></AntDesign>
+                            <AntDesign name="arrowleft" size={30} color="black"></AntDesign>
                         </TouchableOpacity>
                         
                         <Image source={require('../assets/profile.jpg')} style={styles.image}></Image>
