@@ -29,7 +29,7 @@ const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,n
                 <Image source={{uri:getConnection() + "/profile/"+authimg}} style={styles.userImage} />
                 <View>
                     <Text style={styles.user}>{username}</Text>
-                    <Text>{postdate}</Text>
+                    <Text>{postdate.substring(0,10)}</Text>
                 </View>
               </TouchableOpacity>
               {
