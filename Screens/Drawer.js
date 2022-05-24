@@ -67,22 +67,27 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
             switch (title) {
                 case "Home":
                     navigation.navigate("Interface");
+                    setCurrentTab("Home")
                     break;
                 case "Profile":
-                    navigation.navigate("ViewProfile", {uid:null});
+                    navigation.navigate("ViewProfile", { uid: null });
+                    setCurrentTab("Profile")
                     break;
                 case "Orders":
                     navigation.navigate("Orders");
+                    setCurrentTab("Orders")
                     break;
                 case "Contacts":
                     navigation.navigate("Contacts");
                     break;
                 case "Settings":
                     navigation.navigate("Settings");
+                    setCurrentTab("Settings")
                     break;
                 case "Logout":
                     AsyncStorage.clear();
                     navigation.navigate("Login");
+                    setCurrentTab("Logout")
                     break;
             }
         }}>
