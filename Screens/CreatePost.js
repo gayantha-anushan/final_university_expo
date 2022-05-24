@@ -16,6 +16,7 @@ const CreatePost = ({navigation}) => {
     const [wholeSeller, setWholeSeller] = useState("")
     const [localSeller, setLocalSeller] = useState("")
     const [customer, setCustomer] = useState("")
+    const[description,setdescription]=useState("")
     const [image, setImage] = useState(null)
     const [name, setName] = useState(null)
     const [isChecked, setIsChecked] = useState(false)
@@ -125,6 +126,7 @@ const CreatePost = ({navigation}) => {
             setWholeSeller("")
             setLocalSeller("")
             setCustomer("")
+            setdescription("")
             console.log(responseText)
         }).catch((error) => {
             console.log(error)
@@ -148,6 +150,8 @@ const CreatePost = ({navigation}) => {
                     <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
                     <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
                   </View>
+                  <Text style={styles.priceChooser}>Description</Text>
+                  <TextInput value={description} onChangeText={setdescription} style={styles.inputStyler} placeholder='Description' />
                   <View style={ styles.disBottom}>
                       {
                       image ? (<Image source={{ uri: image.localUri }} resizeMode="center" style={styles.imagine}/>):null

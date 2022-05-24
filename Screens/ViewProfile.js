@@ -91,11 +91,11 @@ const ViewProfile = ({ route,navigation }) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                         <View style={styles.titlebar}>
                           <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                              <AntDesign name="left" size={35} color="black" />
+                              <AntDesign name="arrowleft" size={30} color="black" />
                           </TouchableOpacity>
                     {
                         uid ? (<TouchableOpacity onPress={()=>navigation.navigate("Message")}>
-                              <AntDesign name="message1" size={32} color="black" />
+                              <AntDesign name="message1" size={30} color="black" />
                           </TouchableOpacity>) : null
                           }
                       </View>

@@ -42,7 +42,6 @@ export default function App() {
         <stack.Screen name='DrawerContainer' component={DrawerContainer} />
         <stack.Screen name='ViewProfile' component={ViewProfile} />
         <stack.Screen name="ViewPost" component={ViewPost}/>
-        <stack.Screen name="Contacts" component={Contacts} />
       </stack.Navigator>
     </NavigationContainer>
     </PaperProvider> 

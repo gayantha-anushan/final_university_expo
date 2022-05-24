@@ -53,7 +53,8 @@ const Drawer = (props) => {
                     {TabButton(currentTab, setCurrentTab, "Home", home, props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Profile", profile,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Orders", orders,props.navigation)}
-                    {TabButton(currentTab,setCurrentTab,"Stocks",stocks)}
+                    {TabButton(currentTab, setCurrentTab, "Stocks", stocks, props.navigation)}
+                    {TabButton(currentTab,setCurrentTab,"Contacts",contacts,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Settings", settings,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
                 </View>
