@@ -9,9 +9,11 @@ const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,n
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
+    const [authUri, setAuthUri] = useState(null)
 
     useEffect(() => {
         console.log(postid)
+        setAuthUri(getConnection() + "/profile/" + authimg);
         if(type == "Direct Sell"){
             setTypeName("Direct Sell")
             setIsDirect(true)
@@ -26,7 +28,9 @@ const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,n
     <View style={styles.card}>
         <View style={styles.container2}>
               <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", {uid:authid})} style={styles.container1}>
-                <Image source={{uri:getConnection() + "/profile/"+authimg}} style={styles.userImage} />
+                  {
+                      authUri ? (<Image source={{uri:authUri}} style={styles.userImage} />):null
+                }
                 <View>
                     <Text style={styles.user}>{username}</Text>
                     <Text>{postdate.substring(0,10)}</Text>

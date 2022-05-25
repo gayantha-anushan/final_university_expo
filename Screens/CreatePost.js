@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Checkbox from 'expo-checkbox'
 import * as Location from 'expo-location'
 import MapView, { Marker} from 'react-native-maps';
+import { ProgressDialog } from 'react-native-simple-dialogs'
 
 const CreatePost = ({navigation}) => {
 
@@ -21,16 +22,9 @@ const CreatePost = ({navigation}) => {
     const [name, setName] = useState(null)
     const [isChecked, setIsChecked] = useState(false)
     const [type, setType] = useState(null)
-    const [location, setLocation] = useState({
-        latitude: 0,
-        longitude: 0,
-        latitudeDelta: 0.01,
-        longitudeDelta:0.01
-    })
-    const [point, setPoint] = useState({
-        latitude: 0,
-        longitude:0
-    })
+    const [location, setLocation] = useState(null)
+    const [point, setPoint] = useState(null)
+    const [isProgress, setIsProgress] = useState(false);
 
     useEffect(() => {
         AsyncStorage.getItem("current_profile",(error,result)=>{
@@ -54,8 +48,8 @@ const CreatePost = ({navigation}) => {
         setLocation({
             latitude:locations.coords.latitude,
             longitude:locations.coords.longitude,
-            latitudeDelta:0.01,
-            longitudeDelta:0.01
+            latitudeDelta:0,
+            longitudeDelta:0
         })
         setPoint({
             latitude:locations.coords.latitude,
@@ -94,7 +88,7 @@ const CreatePost = ({navigation}) => {
     }
 
     const uploadContent = () => {
-
+        setIsProgress(true)
         if (isChecked) {
             var typei = "Auction"
         } else {
@@ -108,7 +102,8 @@ const CreatePost = ({navigation}) => {
         formdata.append('quantity',quantity)
         formdata.append('profile_id', authToken)
         formdata.append('type',typei)
-        formdata.append('wholeseller',wholeSeller)
+        formdata.append('wholeseller', wholeSeller)
+        formdata.append("description",description)
         formdata.append('localseller',localSeller)
         formdata.append('date',new Date().toISOString())
         formdata.append('customer', customer)
@@ -128,6 +123,7 @@ const CreatePost = ({navigation}) => {
             setCustomer("")
             setdescription("")
             console.log(responseText)
+            setIsProgress(false)
         }).catch((error) => {
             console.log(error)
         })
@@ -163,9 +159,14 @@ const CreatePost = ({navigation}) => {
                             <Text style={styles.buttonText}>Create Post</Text>
                       </TouchableOpacity>
                   </View>
-                  <MapView initialRegion={location} style={styles.mapStyler}>
-                      <Marker coordinate={point} draggable onDragEnd={(e)=>setPoint(e.nativeEvent.coordinate)} title="Place Your Product" description='Locate your product for more customer engage to your product' />
-                  </MapView>
+                  {
+                      location ? (<MapView initialRegion={location} style={styles.mapStyler}>
+                            {
+                              point ? (<Marker coordinate={point} draggable onDragEnd={(e)=>setPoint(e.nativeEvent.coordinate)} title="Place Your Product" description='Locate your product for more customer engage to your product' />):null
+                            }
+                        </MapView>):null
+                  }
+                  <ProgressDialog activityIndicatorSize="small" activityIndicatorColor="gray" visible={isProgress} title="Uploading Post" message='Please wait moment....' />
             </View>
         </KeyboardAvoidingView>
     </View>

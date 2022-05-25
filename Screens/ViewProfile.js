@@ -6,16 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
 
 const ViewProfile = ({ route,navigation }) => {
-    const [image, setImage] = useState("")
+    const [image, setImage] = useState(null)
     const [type, setType] = useState("")
     const [name, setName] = useState("")
     const [Address, setAddress] = useState("")
     const [contact, setContact] = useState("")
     const [location, setLocation] = useState(null)
-    const [point, setPoint] = useState({
-        latitude: 0,
-        longitude:0
-    })
+    const [point, setPoint] = useState(null)
 
     const { uid} = route.params
 
@@ -102,7 +99,9 @@ const ViewProfile = ({ route,navigation }) => {
                     <View style={styles.upcont}>
                         <View style={{alignSelf:"center"}}>
                             <View style={styles.profileimage}>
-                                <Image source={{uri:image}} style={styles.image} resizeMode="cover"></Image>
+                            {
+                                image ? (<Image source={{uri:image}} style={styles.image} resizeMode="cover"></Image>):null
+                                }
                             </View>
                         </View>
                             <View style={styles.text}>
@@ -145,9 +144,13 @@ const ViewProfile = ({ route,navigation }) => {
                             <AntDesign name="tags" size={25} color="black"></AntDesign>
                             <Text style={styles.text1}>Location:</Text>
                         </View>
-                    <MapView style={styles.map} initialRegion={location} onRegionChange={setLocation} >
-                            <Marker coordinate={point} title="Your Location" description='Selected location that you added as your location'/>
-                    </MapView>
+                    {
+                        location ? (<MapView style={styles.map} initialRegion={location} onRegionChange={setLocation} >
+                            {
+                                point ? (<Marker coordinate={point} title="Your Location" description='Selected location that you added as your location'/>):null
+                            }
+                        </MapView>):null
+                    }
             </ScrollView>        
       </SafeAreaView>
   )

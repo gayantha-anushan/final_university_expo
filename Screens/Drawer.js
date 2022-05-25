@@ -12,7 +12,7 @@ import Connection from '../Connection'
 
 const Drawer = (props) => {
     const [currentTab, setCurrentTab] = useState("Home");
-    const [image, setImage] = useState("")
+    const [image, setImage] = useState(null)
     const [name, setName] = useState("")
 
     useEffect(() => {
@@ -44,8 +44,10 @@ const Drawer = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.cont}>
-                <Image style={styles.image} source={{uri:image}}>
-                </Image>
+                {
+                    image?(<Image style={styles.image} source={{uri:image}}>
+                </Image>):null
+                }
                 <Text style={styles.text}>
                     { name}
                 </Text>
