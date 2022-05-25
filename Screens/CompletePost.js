@@ -3,7 +3,6 @@ import React, { useEffect,useState} from 'react'
 import { getConnection } from '../Connection'
 import { AntDesign } from '@expo/vector-icons';
 import NumericInput from 'react-native-numeric-input'
-import { TextInput } from 'react-native-gesture-handler';
 
 
 const CompletePost = ({ route,navigation}) => {

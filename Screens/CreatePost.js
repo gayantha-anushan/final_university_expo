@@ -1,4 +1,4 @@
-import { StyleSheet, KeyboardAvoidingView,Text, View, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, KeyboardAvoidingView,Text, View, TouchableOpacity, Image ,TouchableWithoutFeedback,Keyboard,ScrollView} from 'react-native'
 import React,{useState,useEffect} from 'react'
 import Header from '../components/Header'
 import { TextInput } from 'react-native'
@@ -7,7 +7,10 @@ import { getConnection } from '../Connection'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Checkbox from 'expo-checkbox'
 import * as Location from 'expo-location'
-import MapView, { Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
+import NumericInput from 'react-native-numeric-input'
+import { AntDesign } from '@expo/vector-icons';
+import Textarea from 'react-native-textarea';
 
 const CreatePost = ({navigation}) => {
 
@@ -135,40 +138,56 @@ const CreatePost = ({navigation}) => {
 
   return (
     <View>
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
-            <Header navigation={navigation}/>
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
+              <Header navigation={navigation}/>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                  <ScrollView>
+            
             <View style={styles.container}>
                 <TextInput value={title} onChangeText={setTitle} style={styles.inputStyler} placeholder='Title' />
                 <TextInput value={quantity} onChangeText={setQuantity} style={styles.inputStyler} placeholder='Available Quantity' keyboardType='numeric' />
                   <View style={styles.auctionContainer}>
                       <Checkbox style={ styles.auctionChecker} value={isChecked} onValueChange={setIsChecked} />
                       <Text>Set As Auction</Text>
-                </View>  
-                <Text style={styles.priceChooser}>Price</Text>
+                  </View> 
+                  <View style={styles.num}>
+                        <Text style={styles.priceChooser}>Expire in Days:</Text>
+                        <NumericInput type='plus-minus' onChange={value => console.log(value)} minValue={0} totalWidth={100} totalHeight={50} iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#EA3788' leftButtonBackgroundColor='#E56B70' />
+                    </View>
+                <Text style={styles.priceChooser}>Price:</Text>
                 <View style={styles.container2}>
                     <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric'/>
                     <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
                     <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
                   </View>
-                  <Text style={styles.priceChooser}>Description</Text>
-                  <TextInput value={description} onChangeText={setdescription} style={styles.inputStyler} placeholder='Description' />
+                  <Text style={styles.priceChooser}>Description:</Text>
+                          <Textarea style={{height:170,borderRadius:10,backgroundColor:'#e9e9e9'}} maxLength={120} placeholder={'Description'} placeholderTextColor={'#c7c7c7'}/>
+                  
                   <View style={ styles.disBottom}>
                       {
                       image ? (<Image source={{ uri: image.localUri }} resizeMode="center" style={styles.imagine}/>):null
-                        }
-                        <TouchableOpacity style={ styles.imagePickerBtn} onPress={()=>openImagePickerAsync()}>
-                            <Text style={ styles.imagePickerText}>Add Image</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>uploadContent()} style={styles.buttonCover}>
-                            <Text style={styles.buttonText}>Create Post</Text>
-                      </TouchableOpacity>
+                      }
+                      <View style={styles.icon}>
+                          <TouchableOpacity style={styles.imagePickerBtn} onPress={() => openImagePickerAsync()}>
+                                <AntDesign name={'picture'} size={20} color="white"></AntDesign>
+                                <Text style={ styles.imagePickerText}>Add Image</Text>
+                            </TouchableOpacity>
+                        </View>
                   </View>
+                    <TouchableOpacity onPress={() => uploadContent()} style={styles.buttonCover}>
+                        <AntDesign name={'checkcircle'} size={20} color="white"></AntDesign>
+                        <Text style={styles.buttonText}>Create Post</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.priceChooser}>Location:</Text>
                   <MapView initialRegion={location} style={styles.mapStyler}>
                       <Marker coordinate={point} draggable onDragEnd={(e)=>setPoint(e.nativeEvent.coordinate)} title="Place Your Product" description='Locate your product for more customer engage to your product' />
                   </MapView>
-            </View>
-        </KeyboardAvoidingView>
-    </View>
+                      </View>
+                      </ScrollView>
+              </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </View>
+    
   )
 }
 
@@ -183,7 +202,7 @@ const styles = StyleSheet.create({
         margin:10
     },
     imagePickerBtn: {
-        backgroundColor:'green',
+        backgroundColor:'#ff7f50',
         display:'flex',
         justifyContent:'center',
         alignItems:'center',
@@ -191,11 +210,13 @@ const styles = StyleSheet.create({
         width:150,
         borderRadius:20,
         marginTop:10,
-        marginLeft:8
+        marginLeft: 8,
+        flexDirection:'row'
     },
     imagine: {
         height: 150,
-        width:'50%'
+        width: '50%',
+        marginLeft:40
     },
     imagePickerText: {
         color:'#fff'
@@ -213,11 +234,11 @@ const styles = StyleSheet.create({
         height:40,
         width:150,
         borderRadius:20,
-        marginTop:10,
-        marginLeft:8
+        marginLeft: 100,
+        flexDirection:'row'
     },
     mapStyler: {
-        height: 300,
+        height: 250,
         width:'100%'
     },
     auctionContainer: {
@@ -230,7 +251,8 @@ const styles = StyleSheet.create({
     disBottom: {
         display: 'flex',
         justifyContent: 'center',
-        alignItems:'center'
+        alignItems: 'center',
+        flexDirection:'row'
     },
     buttonText:{
         color:'#ffffff'
@@ -251,5 +273,11 @@ const styles = StyleSheet.create({
         marginLeft:5,
         fontWeight:'bold',
         fontSize:16
+    },
+    num: {
+        flexDirection:'row'
+    },
+    icon: {
+        flexDirection:'row'
     }
 })
