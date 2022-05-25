@@ -5,13 +5,14 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { AntDesign } from '@expo/vector-icons';
 import { getConnection } from '../Connection';
 
-const Post = ({username,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
+const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
 
     useEffect(() => {
-        if(type == "DIRECT"){
+        console.log(postid)
+        if(type == "Direct Sell"){
             setTypeName("Direct Sell")
             setIsDirect(true)
         }else{
@@ -28,13 +29,18 @@ const Post = ({username,postdate,title,quantity,price,type,image,authid,navigati
                 <Image source={{uri:getConnection() + "/profile/"+authimg}} style={styles.userImage} />
                 <View>
                     <Text style={styles.user}>{username}</Text>
-                    <Text>{postdate}</Text>
+                    <Text>{postdate.substring(0,10)}</Text>
                 </View>
-            </TouchableOpacity>
-              <TouchableOpacity style={styles.btn1}>
-                  <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
-                <Text>Add To Cart</Text>
-            </TouchableOpacity>
+              </TouchableOpacity>
+              {
+                  isDirect ? (<TouchableOpacity style={styles.btn1}>
+                        <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
+                        <Text>Add To Cart</Text>
+                    </TouchableOpacity>):(<TouchableOpacity style={styles.btn1}>
+                        <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
+                        <Text>Bid Now</Text>
+                    </TouchableOpacity>)
+              }
         </View>
         <ImageBackground source={{uri:image}} style={styles.image}>
             <LinearGradient
@@ -45,13 +51,13 @@ const Post = ({username,postdate,title,quantity,price,type,image,authid,navigati
         </ImageBackground>
         <View style={styles.container2}>
             <View>
-                <Text style={styles.typeBtn}>{typeName}</Text>
+                  <Text style={styles.typeBtn}>{ typeName}</Text>
                 <View style={styles.container1}>
                       <TouchableOpacity style={styles.btn1}>
                           <AntDesign name="enviroment" size={20} color="black"></AntDesign>
                         <Text>Location</Text>
                     </TouchableOpacity>
-                      <TouchableOpacity style={styles.btn1}>
+                      <TouchableOpacity onPress={()=>navigation.navigate("CompletePost",{id:postid})} style={styles.btn1}>
                           <AntDesign name="eye" size={20} color="black"></AntDesign>
                         <Text>View</Text>
                     </TouchableOpacity>
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
         borderColor:'#000000',
         borderRadius:10,
         borderWidth:1,
-        margin:5
+        margin: 5
     },
     user:{
         fontWeight:'bold'

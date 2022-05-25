@@ -6,6 +6,8 @@ import * as ImagePicker from  'expo-image-picker'
 import { getConnection } from '../Connection'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Checkbox from 'expo-checkbox'
+import * as Location from 'expo-location'
+import MapView, { Marker} from 'react-native-maps';
 
 const CreatePost = ({navigation}) => {
 
@@ -14,10 +16,21 @@ const CreatePost = ({navigation}) => {
     const [wholeSeller, setWholeSeller] = useState("")
     const [localSeller, setLocalSeller] = useState("")
     const [customer, setCustomer] = useState("")
+    const[description,setdescription]=useState("")
     const [image, setImage] = useState(null)
     const [name, setName] = useState(null)
     const [isChecked, setIsChecked] = useState(false)
     const [type, setType] = useState(null)
+    const [location, setLocation] = useState({
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0.01,
+        longitudeDelta:0.01
+    })
+    const [point, setPoint] = useState({
+        latitude: 0,
+        longitude:0
+    })
 
     useEffect(() => {
         AsyncStorage.getItem("current_profile",(error,result)=>{
@@ -28,7 +41,28 @@ const CreatePost = ({navigation}) => {
                 setAuthToken(result)
             }
         })
+        getLocation()
     }, [])
+
+    const getLocation = async() =>{
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if(status !== "granted"){
+            console.log("Not Permission Granted!");
+            return;
+        }
+        let locations = await Location.getCurrentPositionAsync()
+        setLocation({
+            latitude:locations.coords.latitude,
+            longitude:locations.coords.longitude,
+            latitudeDelta:0.01,
+            longitudeDelta:0.01
+        })
+        setPoint({
+            latitude:locations.coords.latitude,
+            longitude:locations.coords.longitude
+        })
+        console.log(location)
+    }
 
     const [authToken, setAuthToken] = useState(null)
 
@@ -77,7 +111,9 @@ const CreatePost = ({navigation}) => {
         formdata.append('wholeseller',wholeSeller)
         formdata.append('localseller',localSeller)
         formdata.append('date',new Date().toISOString())
-        formdata.append('customer',customer)
+        formdata.append('customer', customer)
+        formdata.append('latitude', point.latitude)
+        formdata.append('longitude',point.longitude)
         formdata.append('image',{type:type,uri:image.localUri,name:name})
 
         fetch(getConnection()+'/api/posts/createpost',{
@@ -90,6 +126,7 @@ const CreatePost = ({navigation}) => {
             setWholeSeller("")
             setLocalSeller("")
             setCustomer("")
+            setdescription("")
             console.log(responseText)
         }).catch((error) => {
             console.log(error)
@@ -113,6 +150,8 @@ const CreatePost = ({navigation}) => {
                     <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
                     <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
                   </View>
+                  <Text style={styles.priceChooser}>Description</Text>
+                  <TextInput value={description} onChangeText={setdescription} style={styles.inputStyler} placeholder='Description' />
                   <View style={ styles.disBottom}>
                       {
                       image ? (<Image source={{ uri: image.localUri }} resizeMode="center" style={styles.imagine}/>):null
@@ -122,8 +161,11 @@ const CreatePost = ({navigation}) => {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={()=>uploadContent()} style={styles.buttonCover}>
                             <Text style={styles.buttonText}>Create Post</Text>
-                        </TouchableOpacity>
+                      </TouchableOpacity>
                   </View>
+                  <MapView initialRegion={location} style={styles.mapStyler}>
+                      <Marker coordinate={point} draggable onDragEnd={(e)=>setPoint(e.nativeEvent.coordinate)} title="Place Your Product" description='Locate your product for more customer engage to your product' />
+                  </MapView>
             </View>
         </KeyboardAvoidingView>
     </View>
@@ -173,6 +215,10 @@ const styles = StyleSheet.create({
         borderRadius:20,
         marginTop:10,
         marginLeft:8
+    },
+    mapStyler: {
+        height: 300,
+        width:'100%'
     },
     auctionContainer: {
         display: 'flex',

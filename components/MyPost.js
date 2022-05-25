@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
         borderColor:'#000000',
         borderRadius:10,
         borderWidth:1,
-        margin:5
+        margin: 5,
+        marginBottom:15
     },
     user:{
         fontWeight:'bold'

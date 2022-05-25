@@ -1,8 +1,8 @@
 import React,{useState,useEffect} from 'react'
 import { View,Dimensions,Text,StyleSheet,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard,Image, TextInput, TouchableOpacity } from 'react-native'
 import RadioGroup from 'react-native-radio-buttons-group';
-import MapView from 'react-native-maps';
-import Connection from '../Connection';
+import MapView, { Marker} from 'react-native-maps';
+import Connection, { getConnection } from '../Connection';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location'
@@ -46,13 +46,17 @@ const Profile = ({route,navigation}) => {
     const [image, setImage] = useState(null)
     const [name, setName] = useState(null)
     const [type, setType] = useState(null)
+    const [point, setPoint] = useState({
+        latitude: 0,
+        longitude:0
+    })
 
     const { state} = route.params
 
     useEffect(() => {
         getLocation();
         if(state == "NEW"){
-            //
+            
         }else{
             AsyncStorage.getItem("current_profile",(error,result)=>{
                 if(error){
@@ -60,10 +64,41 @@ const Profile = ({route,navigation}) => {
                 }else{
                     console.log(result)
                     setProfileID(result);
+                    loadPreviousDetails(result);
                 }
             })
         }
     }, [])
+
+    const loadPreviousDetails = (id) => {
+        var url = getConnection() + "/api/auth/get-profile/" + id
+        console.log(url);
+        fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept":"application/json"
+            }
+        }).then((response) => response.json()).then((jsonresult) => {
+            console.log(jsonresult);
+            setFirstName(jsonresult.firstname)
+            setLastName(jsonresult.lastname)
+            setAddress(jsonresult.address)
+            setContact(jsonresult.contact)
+            setLocation({
+                latitude:jsonresult.latitude,
+                longitude:jsonresult.longitude,
+                latitudeDelta:0.01,
+                longitudeDelta:0.01
+            })
+            setPoint({
+                latitude: jsonresult.latitude,
+                longitude:jsonresult.longitude
+            })
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
 
     const getLocation = async() =>{
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -75,8 +110,12 @@ const Profile = ({route,navigation}) => {
         setLocation({
             latitude:locations.coords.latitude,
             longitude:locations.coords.longitude,
-            latitudeDelta:0.1,
-            longitudeDelta:0.1
+            latitudeDelta:0.01,
+            longitudeDelta:0.01
+        })
+        setPoint({
+            latitude:locations.coords.latitude,
+            longitude:locations.coords.longitude
         })
         console.log(location)
     }
@@ -142,8 +181,8 @@ const Profile = ({route,navigation}) => {
                         formdata.append('profile', profileID)
                         formdata.append('address', address)
                         formdata.append('contact', contact)
-                        formdata.append('latitude', location.latitude)
-                        formdata.append('longitude', location.longitude)
+                        formdata.append('latitude', point.latitude)
+                        formdata.append('longitude', point.longitude)
                         formdata.append('type', selectedUserType)
                         formdata.append('image', { type: type, uri: image.localUrl, name: name })
                         fetch(Connection.getConnection() + "/api/auth/update-profile", {
@@ -206,8 +245,8 @@ const Profile = ({route,navigation}) => {
                         formdata.append('lastname', lastName)
                         formdata.append('address', address)
                         formdata.append('contact', contact)
-                        formdata.append('latitude', location.latitude)
-                        formdata.append('longitude', location.longitude)
+                        formdata.append('latitude', point.latitude)
+                        formdata.append('longitude', point.longitude)
                         formdata.append('type', selectedUserType)
                         AsyncStorage.getItem("auth_code", (error, result) => {
                             if (error) {
@@ -249,6 +288,9 @@ const Profile = ({route,navigation}) => {
                         <Text style={styles.Text}>Address</Text>
                         <TextInput value={address} onChangeText={setAddress} style={styles.input1} />
                     <Text style={styles.Text}>Profile Picture</Text>
+                    {
+                        image?(<Image source={{ uri: image.localUri }} resizeMode="contain" style={ styles.imagine} />):null
+                    }
                     <View style={styles.ButtonCont1}>
                         <TouchableOpacity onPress={()=>openImagePicker()} style={styles.Touchable}><Text style={styles.Text}>Choose the Photo</Text></TouchableOpacity>
                     </View> 
@@ -257,15 +299,17 @@ const Profile = ({route,navigation}) => {
                         <Text style={styles.Text}>Type</Text>
                         <View style={styles.container}>
                             <RadioGroup radioButtons={radioButtons} onPress={onPressRadioButton} layout="column"/>
+                        {/* <SegmentedControl values={["Farmer", "Wholeseller", "Local Seller", "Customer"]} selectedIndex={index}  onChange={ (e)=>setIndex(e.nativeEvent.selectedSegmentIndex)} /> */}
                     </View>
                     <Text style={styles.Text}>Location</Text>
                         <View style={styles.container1}>
-                        <MapView style={styles.map} region={location} onRegionChange={setLocation} >
+                        <MapView style={styles.map} initialRegion={location} onRegionChange={setLocation} >
+                            <Marker coordinate={point} onDragEnd={(e)=>setPoint(e.nativeEvent.coordinate)} title="Selected Location" draggable  description='You Selected your location as here' />
                         </MapView>
                     </View>
                     <View style={styles.ButtonCont1}>
                     <TouchableOpacity style={styles.Touchable1} onPress={()=>getAction()}>
-                            <Text style={styles.Text}>Submit</Text>
+                            <Text style={styles.Text}>Submit</Text> 
                     </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -315,6 +359,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderColor: '#696969',
         justifyContent: "center",
+    },
+    imagine: {
+        height: 150,
+        width:'50%'
     },
     Text: {
         fontSize: 15,

@@ -3,7 +3,7 @@ import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import Connection, { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 const ViewProfile = ({ route,navigation }) => {
     const [image, setImage] = useState("")
@@ -12,6 +12,10 @@ const ViewProfile = ({ route,navigation }) => {
     const [Address, setAddress] = useState("")
     const [contact, setContact] = useState("")
     const [location, setLocation] = useState(null)
+    const [point, setPoint] = useState({
+        latitude: 0,
+        longitude:0
+    })
 
     const { uid} = route.params
 
@@ -46,6 +50,10 @@ const ViewProfile = ({ route,navigation }) => {
                             latitudeDelta: 0.01,
                             longitudeDelta: 0.01
                         })
+                        setPoint({
+                            latitude: responsejson.data.latitude,
+                            longitude: responsejson.data.longitude
+                        })
                     }).catch((error) => {
                         console.log(error)
                     })
@@ -68,14 +76,14 @@ const ViewProfile = ({ route,navigation }) => {
                 setLocation({
                     latitude: responsejson.latitude,
                     longitude: responsejson.longitude,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01
+                    latitudeDelta: 0.0001,
+                    longitudeDelta: 0.0001
                 })
             }).catch((error) => {
                 console.log(error)
             })
         }
-    }, [])
+    }, [uid])
     
     
     return (
@@ -83,11 +91,13 @@ const ViewProfile = ({ route,navigation }) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                         <View style={styles.titlebar}>
                           <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                              <AntDesign name="left" size={35} color="black" />
+                              <AntDesign name="arrowleft" size={30} color="black" />
                           </TouchableOpacity>
-                          <TouchableOpacity onPress={()=>navigation.navigate("Message")}>
-                              <AntDesign name="message1" size={32} color="black" />
-                          </TouchableOpacity>
+                    {
+                        uid ? (<TouchableOpacity onPress={()=>navigation.navigate("Message")}>
+                              <AntDesign name="message1" size={30} color="black" />
+                          </TouchableOpacity>) : null
+                          }
                       </View>
                     <View style={styles.upcont}>
                         <View style={{alignSelf:"center"}}>
@@ -99,17 +109,21 @@ const ViewProfile = ({ route,navigation }) => {
                                 <Text style={styles.text}>{name}</Text>
                             </View>
                             <View style={styles.ButtonCont}>   
-                                <TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
-                                <AntDesign name="edit" size={25} color="blue"></AntDesign>
-                                <Text style={styles.text3}>Edit Profile Details</Text>
-                                </TouchableOpacity>
+                            {
+                                uid ? null:(<TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
+                                    <AntDesign name="edit" size={25} color="blue"></AntDesign>
+                                    <Text style={styles.text3}>Edit Profile Details</Text>
+                                    </TouchableOpacity>)
+                            }
                             </View>  
                             <View style={styles.ButtonCont1}>
-                               <TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
+                            {
+                                uid ? null :(<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
                                <AntDesign name="isv" size={25} color="blue"></AntDesign>
                                <Text style={styles.text3}>Your Post</Text>
-                            </TouchableOpacity>
-                               </View>
+                            </TouchableOpacity>)
+                            }
+                            </View>
                     </View>
                     
                         <View style={styles.textset}>
@@ -131,7 +145,9 @@ const ViewProfile = ({ route,navigation }) => {
                             <AntDesign name="tags" size={25} color="black"></AntDesign>
                             <Text style={styles.text1}>Location:</Text>
                         </View>
-                    <MapView style={styles.map} region={location} onRegionChange={ setLocation} ></MapView>
+                    <MapView style={styles.map} initialRegion={location} onRegionChange={setLocation} >
+                            <Marker coordinate={point} title="Your Location" description='Selected location that you added as your location'/>
+                    </MapView>
             </ScrollView>        
       </SafeAreaView>
   )
