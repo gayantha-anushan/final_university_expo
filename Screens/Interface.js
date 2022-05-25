@@ -7,7 +7,8 @@ import { getConnection } from '../Connection';
 
 const Interface = ({navigation }) => {
     
-    const renderItem = ({item}) => <Post username={item.username} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type}/>
+    const renderItem = ({ item }) => <Post authimg={ item.authimg} navigation={navigation}  username={item.username} authid={ item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
+    
 
     const [data, setData] = useState([])
     const [listRefreshing, setListRefreshing] = useState(false)
@@ -21,12 +22,18 @@ const Interface = ({navigation }) => {
         setListRefreshing(true)
         //Loading Data
         fetch(getConnection()+'/api/posts/',{
-            method:'GET'
+            method:'GET',
+            headers:{
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+                'Cache-Control':'no-cache',
+            }
         }).then((response)=>response.json()).then((responseJson)=>{
-            //setData(responseJson)
             var datas = []
-            for(var i = 0 ; i < responseJson.length ; i++){
+            for (var i = 0; i < responseJson.length; i++){
                 datas.push({
+                    authimg:responseJson[i].author.image,
+                    authid:responseJson[i].author._id,
                     username:responseJson[i].author.firstname + " "+responseJson[i].author.lastname,
                     date:responseJson[i].date,
                     title:responseJson[i].title,
@@ -45,7 +52,8 @@ const Interface = ({navigation }) => {
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation} />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <FlatList refreshing={listRefreshing} onRefresh={()=>loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
+                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
+                
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     );

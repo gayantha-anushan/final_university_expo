@@ -3,9 +3,8 @@ import React,{useState,useEffect} from 'react'
 import strawberry from '../assets/strawberry.jpg'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AntDesign } from '@expo/vector-icons';
-import { getConnection } from '../Connection';
 
-const Post = ({username,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
+const MyPost = ({username,postdate,title,quantity,price,type,image}) => {
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
@@ -24,13 +23,13 @@ const Post = ({username,postdate,title,quantity,price,type,image,authid,navigati
   return (
     <View style={styles.card}>
         <View style={styles.container2}>
-              <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", {uid:authid})} style={styles.container1}>
-                <Image source={{uri:getConnection() + "/profile/"+authimg}} style={styles.userImage} />
+            <View style={styles.container1}>
+                <Image source={strawberry} style={styles.userImage} />
                 <View>
                     <Text style={styles.user}>{username}</Text>
                     <Text>{postdate}</Text>
                 </View>
-            </TouchableOpacity>
+            </View>
               <TouchableOpacity style={styles.btn1}>
                   <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
                 <Text>Add To Cart</Text>
@@ -48,8 +47,8 @@ const Post = ({username,postdate,title,quantity,price,type,image,authid,navigati
                 <Text style={styles.typeBtn}>{typeName}</Text>
                 <View style={styles.container1}>
                       <TouchableOpacity style={styles.btn1}>
-                          <AntDesign name="enviroment" size={20} color="black"></AntDesign>
-                        <Text>Location</Text>
+                          <AntDesign name="edit" size={20} color="black"></AntDesign>
+                        <Text>Edit Details</Text>
                     </TouchableOpacity>
                       <TouchableOpacity style={styles.btn1}>
                           <AntDesign name="eye" size={20} color="black"></AntDesign>
@@ -66,7 +65,7 @@ const Post = ({username,postdate,title,quantity,price,type,image,authid,navigati
   )
 }
 
-export default Post
+export default MyPost
 
 const styles = StyleSheet.create({
     card:{
