@@ -33,6 +33,7 @@ const Interface = ({navigation }) => {
             for (var i = 0; i < responseJson.length; i++){
                 //console.log(responseJson[i]);
                 datas.push({
+                    key:responseJson[i]._id,
                     authimg: responseJson[i].author.image,
                     postid:responseJson[i]._id,
                     authid:responseJson[i].author._id,
@@ -55,7 +56,7 @@ const Interface = ({navigation }) => {
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation} />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
+                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item.key} />
                 
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

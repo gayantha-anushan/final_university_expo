@@ -17,7 +17,7 @@ const Notifications = ({navigation}) => {
                             <Text>2022/05/16</Text>
                         </View>
                         <View>
-                            <Text>Direct Sell</Text>
+                            <Text style={styles.txt}>Direct Sell</Text>
                         </View>
                     </View>
                     <View style={styles.container2}>
@@ -45,21 +45,19 @@ const styles = StyleSheet.create({
         margin:5,
     },
     container1:{
-        margin:10,
         display:'flex',
         justifyContent:'space-between',
         flexDirection:'row',
         alignItems:'center'
     },
     container2:{
-        margin:5,
         alignItems:'center'
     },
     userImage:{
         height:50,
         width:50,
         margin:5,
-        borderRadius:25
+        borderRadius:25,        
     },
     user:{
         fontWeight:'bold',
@@ -73,13 +71,15 @@ const styles = StyleSheet.create({
         height:40,
         width:150,
         borderRadius:20,
-        marginTop:10,
-        marginLeft:8
+        marginBottom:5
     },
     btntxt:{
         color:'white',
         fontWeight:'bold',
         fontSize:20
+    },
+    txt:{
+        padding:7,
     }
 })
   

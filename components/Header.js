@@ -32,8 +32,10 @@ const Header = ({ navigation }) => {
             <TouchableOpacity onPress={()=>navigation.navigate("CreatePost")}>
                 <AntDesign name="gift" size={30} color="black" />
             </TouchableOpacity>
-              
-            <AntDesign name="shoppingcart" size={30} color="black" />
+
+            <TouchableOpacity onPress={()=>navigation.navigate("Cart")}> 
+                <AntDesign name="shoppingcart" size={30} color="black" />
+            </TouchableOpacity>
             
             <TouchableOpacity onPress={()=>navigation.navigate("Notifications")}>
                 <AntDesign name="notification" size={30} color="black" />
