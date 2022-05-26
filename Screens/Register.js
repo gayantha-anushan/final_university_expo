@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderColor: '#696969',
         justifyContent: "center",
-        width:375
+        width: 375,
+        fontSize:18
     
     },
     Text: {
