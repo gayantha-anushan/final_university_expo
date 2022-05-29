@@ -40,15 +40,15 @@ const CompletePost = ({ route,navigation}) => {
                 <Image style={styles.image} source={require('../assets/strawberry.jpg')}></Image>
                 <View style={styles.textcont}>
                     <View style={styles.iconset}>
-                        <AntDesign name="codepen-circle" size={30}></AntDesign>
+                        <Image style={styles.icon} source={require('../assets/grid.png')} />
                         <Text style={styles.text1}>Direct Sell</Text>
                     </View>
                     <View style={styles.iconset}>
-                        <AntDesign  name="inbox" size={30}></AntDesign>
+                        <Image style={styles.icon} source={require('../assets/package.png')} />
                         <Text style={styles.text1}>1000kg</Text>
                     </View>
                     <View style={styles.iconset}>
-                        <AntDesign name="wallet" size={30}></AntDesign>
+                        <Image style={styles.icon} source={require('../assets/price-tag.png')} />
                         <Text style={styles.text1}>Rs.3000</Text>
                     </View>
                 </View>
@@ -57,29 +57,29 @@ const CompletePost = ({ route,navigation}) => {
             <View style={styles.des}>
                 <Text style={{ fontSize: 25, fontWeight: 'bold', alignItems: 'center', marginLeft: 120 }}>Strawberry</Text>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Description:</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Description:</Text>
                     <Text style={{fontSize:15,marginEnd:93}}>The garden strawberry (or simply strawberry; Fragaria × ananassa) is a widely grown hybrid species of the genus Fragaria, collectively known as the strawberries, which are cultivated worldwide for their fruit.</Text>
                 </View>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Expiry in:</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Expiry in:</Text>
                     <Text style={{fontSize:15,marginStart:20,fontWeight:'bold'}}>07 Days</Text>
                 </View>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Contacts:</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Contacts:</Text>
                     <Text style={{fontSize:15,marginStart:20,}}>0334523675</Text>
                 </View>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Quantity(kg):</Text>
-                    <NumericInput type='up-down' onChange={value => console.log(value)} totalWidth={100} totalHeight={50}
-                        iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#EA3788' leftButtonBackgroundColor='#E56B70'/>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Quantity(kg):</Text>
+                    <NumericInput type='plus-minus' onChange={value => console.log(value)} totalWidth={100} totalHeight={50} minValue={0}
+                        iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#4d8aeb' leftButtonBackgroundColor='#4d8aeb'/>
                 </View>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Amount(Rs):</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Amount(Rs):</Text>
                     <Text style={{fontSize:15,marginStart:8,fontWeight:'bold'}}>2500</Text>
                 </View>
 
                 <TouchableOpacity style={styles.btn1}>
-                    <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                    <Image style={styles.icon} source={require('../assets/add-cart.png')} />
                     <Text style={styles.text2}>Add To Cart</Text>
                 </TouchableOpacity>
             </View>
@@ -138,11 +138,13 @@ const styles = StyleSheet.create({
     },
     iconset: {
         flexDirection: 'row',
-        margin:8
+        margin: 8,
+        justifyContent:'space-between'
     },
     description: {
-        flexDirection: 'row',
-        margin:2
+        flexDirection:'row',
+        margin: 7,
+        
     },
     btn1:{
         backgroundColor:'#c4c4c4',

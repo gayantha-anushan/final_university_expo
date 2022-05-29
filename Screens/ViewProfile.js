@@ -92,7 +92,7 @@ const ViewProfile = ({ route,navigation }) => {
                           </TouchableOpacity>
                     {
                         uid ? (<TouchableOpacity onPress={()=>navigation.navigate("Message")}>
-                              <AntDesign name="message1" size={30} color="black" />
+                              <Image style={styles.icon} source={require('../assets/chat.png')} />
                           </TouchableOpacity>) : null
                           }
                       </View>
@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#a9a9a9',
         borderRadius: 40,
         paddingTop: 10,
-        padding:15
+        padding: 15,
+        margin:8
     },
 
     titlebar: {

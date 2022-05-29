@@ -38,11 +38,11 @@ const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,n
               </TouchableOpacity>
               {
                   isDirect ? (<TouchableOpacity style={styles.btn1}>
-                        <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
-                        <Text>Add To Cart</Text>
+                        <Image style={styles.icon} source={require('../assets/add-cart.png')} />
+                        <Text style={{color:'white',fontWeight:'bold'}}>Add To Cart</Text>
                     </TouchableOpacity>):(<TouchableOpacity style={styles.btn1}>
-                        <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
-                        <Text>Bid Now</Text>
+                        <Image style={styles.icon} source={require('../assets/bid.png')} />
+                        <Text style={{color:'white',fontWeight:'bold'}}>Bid Now</Text>
                     </TouchableOpacity>)
               }
         </View>
@@ -57,19 +57,19 @@ const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,n
             <View>
                   <Text style={styles.typeBtn}>{ typeName}</Text>
                 <View style={styles.container1}>
-                      <TouchableOpacity style={styles.btn1}>
-                          <AntDesign name="enviroment" size={20} color="black"></AntDesign>
-                        <Text>Location</Text>
+                      <TouchableOpacity style={styles.btn2}>
+                          <Image style={styles.icon} source={require('../assets/location.png')} />
+                        <Text style={{color:'white',fontWeight:'bold'}}>Location</Text>
                     </TouchableOpacity>
-                      <TouchableOpacity onPress={()=>navigation.navigate("CompletePost",{id:postid})} style={styles.btn1}>
-                          <AntDesign name="eye" size={20} color="black"></AntDesign>
-                        <Text>View</Text>
+                      <TouchableOpacity onPress={()=>navigation.navigate("CompletePost",{id:postid})} style={styles.btn2}>
+                          <Image style={styles.icon} source={require('../assets/view.png')} />
+                        <Text style={{color:'white',fontWeight:'bold'}}>View</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <View>
-                <Text>{quantity} kg</Text>
-                <Text>Rs : {price}</Text>
+            <View style={{margin:10}}>
+                <Text style={{fontSize:17}}>{quantity} kg</Text>
+                <Text style={{fontSize:17}}>Rs :{price}</Text>
             </View>
         </View>
     </View>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         borderColor:'#000000',
         borderRadius:10,
         borderWidth:1,
-        margin: 5
+        margin: 8
     },
     user:{
         fontWeight:'bold'
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     btn1:{
-        backgroundColor:'#c4c4c4',
+        backgroundColor:'#4d8aeb',
         display:'flex',
         justifyContent:'center',
         alignItems:'center',
@@ -138,5 +138,21 @@ const styles = StyleSheet.create({
         paddingHorizontal:10,
         borderRadius: 8,
         flexDirection:'row'
+    },
+    btn2:{
+        backgroundColor:'#6B8E23',
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        padding:5,
+        margin:8,
+        paddingHorizontal:10,
+        borderRadius: 8,
+        flexDirection:'row'
+    },
+    icon: {
+        height: 25,
+        width: 25,
+        tintColor:'white'
     }
 })

@@ -77,7 +77,7 @@ const Login = ({ navigation }) => {
                 <ScrollView>
                 <View style={styles.mainCont}>
                     <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                    <Text style={styles.headerText}>Login</Text>
+                    <Text style={styles.headerText}>Vege Sup</Text>
                     </View>
                          <ImageBackground style={styles.backImage} source={require('../assets/Login.png')}>
                         </ImageBackground> 
@@ -95,18 +95,17 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.ButtonCont1}>
-                        <TouchableOpacity style={styles.Touchable1} >
-                            <AntDesign name="google" size={26} color="white"/>
-                            <Text style={styles.Text1}>Sign in with Google</Text>
-                            
-                    </TouchableOpacity>
-                    </View>
-                    <View style={styles.ButtonCont}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('Register')}>
-                            <Text style={styles.text2}>To Register your Account?</Text>
+                        <Text style={styles.text3}>Don't have an Account?</Text>
+                        <TouchableOpacity  onPress={()=>navigation.navigate('Register')}>
+                            <Text style={styles.text2}>Sign Up</Text>
                         </TouchableOpacity>
-                        
                     </View>
+                    <View style={styles.ButtonCont1}>
+                        <TouchableOpacity>
+                        <Text style={{color:'red',fontSize:18,fontWeight:'bold'}}>Forgot Password?</Text>
+                        </TouchableOpacity>
+                    </View>
+
                 </ScrollView>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
@@ -127,15 +126,15 @@ const styles = StyleSheet.create({
     logo: {
         width:120,
         height: 120,
-        
         display: 'flex',
+        justifyContent:'flex-start'
     },
     headerText: {
-        fontSize: 36,
-        color: '#59E64C',
+        fontSize: 30,
+        color: '#6B8E23',
         fontWeight: 'bold',
-        marginLeft: 50,
         paddingTop: 20,
+        alignItems:'center'
         
     },
     backImage: {
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
     
     },
     Touchable: {
-        backgroundColor: '#59E64C',
+        backgroundColor: '#6B8E23',
         padding: 15,
         borderRadius: 20,
         paddingHorizontal: 40,  
@@ -165,14 +164,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop:2
-
+        paddingTop: 2,
+        paddingTop:30
     },
     ButtonCont1: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
         paddingTop: 10,
+        justifyContent:'center'
         
         
     },
@@ -200,15 +199,18 @@ const styles = StyleSheet.create({
     },
     container: {
         display:'flex',
-        justifyContent: 'space-around',
-        
-
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     text2: {
+        color: '#4d8aeb',
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontStyle:'italic'
+    },
+    text3: {
         color: 'black',
         fontSize: 18,
-        paddingTop: 10,
-        color: 'blue',
         fontWeight:'bold'
     }
 

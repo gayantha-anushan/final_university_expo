@@ -48,9 +48,11 @@ const Register = ({ navigation }) => {
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <ScrollView>
-                <View style={styles.mainCont}>
-                    <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                    <Text style={styles.headerText}>Register</Text>
+                    <View style={styles.mainCont}>
+                        <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+                        <View style={styles.htext}>
+                            <Text style={styles.headerText}>Vege Sup</Text>
+                        </View>
                     </View>
                         <ImageBackground style={styles.backImage} source={require('../assets/Register.png')}>
                         </ImageBackground>
@@ -62,18 +64,15 @@ const Register = ({ navigation }) => {
                         
                        </View> 
                     <View style={styles.ButtonCont}>
-                        <TouchableOpacity style={styles.Touchable2} onPress={()=>navigation.navigate('Login')}>
-                <Text style={styles.Text}>Login</Text>
-                         </TouchableOpacity>
                         <TouchableOpacity style={styles.Touchable} onPress={()=>registerNow()}>
-                <Text style={styles.Text}>Register</Text>
+                            <Text style={styles.Text}>Register For New Account</Text>
                         </TouchableOpacity>      
                     </View>
                     <View style={styles.ButtonCont1}>
-                            <TouchableOpacity style={styles.Touchable1}>
-                                <AntDesign name="google" size={26} color="white"/>
-                                <Text style={styles.Text1}>Sign Up with Google</Text>
-                            </TouchableOpacity>
+                        <Text style={styles.text3}>Have an Account?</Text>
+                        <TouchableOpacity  onPress={()=>navigation.navigate('Login')}>
+                            <Text style={styles.text2}>Sign In</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </TouchableWithoutFeedback>
@@ -99,12 +98,15 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
     headerText: {
-        fontSize: 36,
-        color: '#46e85b',
+        fontSize: 30,
+        color: '#6B8E23',
         fontWeight: 'bold',
-        marginLeft: 38,
-        paddingTop: 20,
+        justifyContent: 'center',
+        alignContent:'center',
         
+    },
+    htext: {
+        justifyContent:'center'
     },
     backImage: {
         width:380,
@@ -112,10 +114,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     Touchable: {
-        backgroundColor: '#59E64C',
+        backgroundColor: '#6B8E23',
         padding: 15,
         borderRadius: 20,
-        paddingHorizontal: 40,  
+        paddingHorizontal: 60,  
     },
     Touchable1: {
         backgroundColor: '#4d8aeb',
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
         flexDirection:'row'
     },
     Touchable2: {
-        backgroundColor: '#03a9fc',
+        backgroundColor: '#6B8E23',
         padding: 15,
         borderRadius: 20,
         paddingHorizontal: 40,  
@@ -141,8 +143,8 @@ const styles = StyleSheet.create({
     ButtonCont1: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        paddingTop: 10,   
+        paddingTop: 10,  
+        justifyContent:'center'
     },
     input: {
         margin: 10,
@@ -157,7 +159,7 @@ const styles = StyleSheet.create({
     
     },
     Text: {
-        fontSize: 15,
+        fontSize: 18,
         fontWeight: 'bold',
         color:'white'
     },
@@ -166,11 +168,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize:18
     },
-    container: {
-        
-        
+    text2: {
+        color: '#4d8aeb',
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontStyle: 'italic'
+    },
+    text3: {
+        color: 'black',
+        fontSize: 18,
+        fontWeight:'bold'
+}
 
-    }
 
     
 });

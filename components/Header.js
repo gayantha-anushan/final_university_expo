@@ -9,10 +9,18 @@ const Header = ({ navigation }) => {
   return (
     <View>
         <View style={styles.topContent}>
-            <View style={styles.mainCont}>
-                <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                <Text style={styles.headerText}>Vege Sup</Text>   
-            </View>
+              <View style={styles.mainCont}>
+                  <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
+                      <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+                      </TouchableOpacity>
+                  <View style={styles.htext}>
+                      <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
+                          <Text style={styles.headerText}>Vege Sup</Text>  
+                          </TouchableOpacity>
+                    </View>
+                    
+              </View>
+              
             <TouchableOpacity style={styles.Touchable}>
                 <AntDesign name="search1" onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
             </TouchableOpacity>
@@ -22,27 +30,27 @@ const Header = ({ navigation }) => {
         }
           <View style={styles.mainCont1}>
             <TouchableOpacity onPress={()=>navigation.openDrawer()}>
-                  <AntDesign name="bars" size={30} color="black" />
+                  <Image style={styles.icon} source={require('../assets/menu.png')} />
             </TouchableOpacity>
               
             <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                <AntDesign name="home" size={30} color="black" />
+                <Image style={styles.icon} source={require('../assets/home-1.png')} />
             </TouchableOpacity>
               
             <TouchableOpacity onPress={()=>navigation.navigate("CreatePost")}>
-                <AntDesign name="gift" size={30} color="black" />
+                <Image style={styles.icon} source={require('../assets/add-to-cart.png')} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={()=>navigation.navigate("Cart")}> 
-                <AntDesign name="shoppingcart" size={30} color="black" />
+                <Image style={styles.icon} source={require('../assets/add-cart.png')} />
             </TouchableOpacity>
             
             <TouchableOpacity onPress={()=>navigation.navigate("Notifications")}>
-                <AntDesign name="notification" size={30} color="black" />
+                <Image style={styles.icon} source={require('../assets/notification.png')} />
             </TouchableOpacity>
             
             <TouchableOpacity onPress={()=>navigation.navigate('Message')}>
-                <AntDesign name="message1" size={30} color="black" />
+                <Image style={styles.icon} source={require('../assets/chat.png')} />
             </TouchableOpacity>
             
         </View>
@@ -59,10 +67,13 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 28,
-        color: '#59E64C',
+        color: '#6B8E23',
         fontWeight: 'bold',
-        marginLeft: 10,
-    
+    },
+    htext: {
+        justifyContent: 'center',
+        textAlign: 'center',
+        alignContent:'center'
     },
     Touchable:{
         marginEnd:10
@@ -74,21 +85,21 @@ const styles = StyleSheet.create({
         justifyContent:'space-between'
     },
     mainCont: {
-        paddingTop: 10,
+        paddingTop: 15,
         display: 'flex',
         flexDirection: 'row',
-        alignItems:'center'
+        alignItems: 'center',
     },
     icon: {
-        marginLeft: 170,
-        paddingTop:4, 
+        paddingTop: 4, 
+        
     },
     mainCont1: {
         paddingTop: 2,
         display: 'flex',
         flexDirection: 'row',
         justifyContent:'space-around',
-        
+        paddingBottom:10
     },
     Input: {
         backgroundColor: "white",
