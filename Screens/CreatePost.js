@@ -28,6 +28,7 @@ const CreatePost = ({navigation}) => {
     const [location, setLocation] = useState(null)
     const [point, setPoint] = useState(null)
     const [isProgress, setIsProgress] = useState(false);
+    const [expirity, setExpirity] = useState(0)
 
     useEffect(() => {
         AsyncStorage.getItem("current_profile",(error,result)=>{
@@ -98,14 +99,13 @@ const CreatePost = ({navigation}) => {
             var typei = "Direct Sell"
         }
 
-        console.log("Pressed")
-
         var formdata = new FormData();
         formdata.append('title',title)
         formdata.append('quantity',quantity)
         formdata.append('profile_id', authToken)
         formdata.append('type',typei)
         formdata.append('wholeseller', wholeSeller)
+        formdata.append('expirity',expirity)
         formdata.append("description",description)
         formdata.append('localseller',localSeller)
         formdata.append('date',new Date().toISOString())
@@ -148,7 +148,7 @@ const CreatePost = ({navigation}) => {
                   </View> 
                   <View style={styles.num}>
                         <Text style={styles.priceChooser}>Expire in Days:</Text>
-                        <NumericInput type='plus-minus' onChange={value => console.log(value)} minValue={0} totalWidth={100} totalHeight={50} iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#EA3788' leftButtonBackgroundColor='#E56B70' />
+                        <NumericInput type='plus-minus' value={expirity} onChange={value => setExpirity(value)} minValue={0} totalWidth={100} totalHeight={50} iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#EA3788' leftButtonBackgroundColor='#E56B70' />
                     </View>
                 <Text style={styles.priceChooser}>Price:</Text>
                 <View style={styles.container2}>
@@ -157,7 +157,7 @@ const CreatePost = ({navigation}) => {
                     <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
                   </View>
                   <Text style={styles.priceChooser}>Description:</Text>
-                          <Textarea style={{height:170,borderRadius:10,backgroundColor:'#e9e9e9'}} maxLength={120} placeholder={'Description'} placeholderTextColor={'#c7c7c7'}/>
+                          <Textarea style={{ height: 170, borderRadius: 10, backgroundColor: '#e9e9e9' }} maxLength={120} value={description} onChangeText={setdescription} placeholder={'Description'} placeholderTextColor={'#c7c7c7'}/>
                   
                   <View style={ styles.disBottom}>
                       {

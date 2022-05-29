@@ -59,11 +59,9 @@ const ViewPost = ({username,postdate,title,quantity,price,type,image,navigation}
                         </View>
             
             <View style={styles.mainCont}>
-                <ScrollView>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <FlatList refreshing={listRefreshing} onRefresh={()=>loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
+                    <FlatList style={ styles.stylingit} refreshing={listRefreshing} onRefresh={()=>loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
                     </TouchableWithoutFeedback>
-                </ScrollView>
             </View>
             
             </KeyboardAvoidingView>
@@ -72,6 +70,9 @@ const ViewPost = ({username,postdate,title,quantity,price,type,image,navigation}
 export default ViewPost
 
 const styles = StyleSheet.create({
+    stylingit: {
+        marginBottom:150
+    },
     user:{
         fontWeight: 'bold',
         alignItems: 'center',

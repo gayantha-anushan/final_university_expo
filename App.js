@@ -10,6 +10,7 @@ import Profile from './Screens/Profile';
 // import Interface from './Screens/Interface';
 // import Message from './Screens/Message';
 // import CreatePost from './Screens/CreatePost';
+import CompletePost from './Screens/CompletePost';
 //import Drawer from './Screens/Drawer';
 import DrawerContainer from './Screens/DrawerContainer';
 import ViewProfile from './Screens/ViewProfile';
@@ -26,8 +27,8 @@ export default function App() {
     roundness: 2,
     colors: {
       ...DefaultTheme.colors,
-      primary: '#74FB42',
-      accent: '#f1c40f',
+      primary: '#6b8e23',
+      accent: '#6b8e23',
     },
   };
 
@@ -38,7 +39,8 @@ export default function App() {
         <stack.Screen name="Home" component={Home}/>
         <stack.Screen name="Login" component={Login} />
         <stack.Screen name="Register" component={Register} />
-        <stack.Screen name="Profile" component={Profile} />
+          <stack.Screen name="Profile" component={Profile} />
+          {/* <stack.Screen name="CompletePost" component={CompletePost}/> */}
         <stack.Screen name='DrawerContainer' component={DrawerContainer} />
         <stack.Screen name='ViewProfile' component={ViewProfile} />
         <stack.Screen name="ViewPost" component={ViewPost}/>
