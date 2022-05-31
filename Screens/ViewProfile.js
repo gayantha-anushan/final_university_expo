@@ -126,22 +126,22 @@ const ViewProfile = ({ route,navigation }) => {
                     </View>
                     
                         <View style={styles.textset}>
-                            <AntDesign name="user" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/user-1.png')} />
                             <Text style={styles.text1}>Postion As:</Text>
                             <Text style={styles.text2}>Farmer</Text>
                         </View>
                         <View style={styles.textset}>
-                            <AntDesign name="home" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/home-address.png')} />
                             <Text style={styles.text1}>Address:</Text>
                     <Text style={styles.text2}>{ Address}</Text>
                         </View>     
                         <View style={styles.textset}>
-                            <AntDesign name="phone" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/phone-call.png')} />
                             <Text style={styles.text1}>Phone Number:</Text>
                     <Text style={styles.text2}>{contact}</Text>
                         </View>
                         <View style={styles.textset}>
-                            <AntDesign name="tags" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/location.png')} />
                             <Text style={styles.text1}>Location:</Text>
                         </View>
                     {

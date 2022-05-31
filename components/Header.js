@@ -33,25 +33,25 @@ const Header = ({ navigation }) => {
                   <Image style={styles.icon} source={require('../assets/application.png')} />
             </TouchableHighlight>
               
-              <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='red' style={{backgroundColor:'#6B8E23'}}>
+              <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='#6B8E23'>
                 <Image style={styles.icon} source={require('../assets/home-1.png')} />
             </TouchableHighlight>
               
-            <TouchableOpacity onPress={()=>navigation.navigate("CreatePost")}>
+            <TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
                 <Image style={styles.icon} source={require('../assets/add.png')} />
-            </TouchableOpacity>
+            </TouchableHighlight>
 
-            <TouchableOpacity onPress={()=>navigation.navigate("Cart")}> 
+            <TouchableHighlight onPress={()=>navigation.navigate("Cart")} activeOpacity={0.2} underlayColor='#6B8E23'> 
                 <Image style={styles.icon} source={require('../assets/add-cart.png')} />
-            </TouchableOpacity>
+            </TouchableHighlight>
             
-            <TouchableOpacity onPress={()=>navigation.navigate("Notifications")}>
+            <TouchableHighlight onPress={()=>navigation.navigate("Notifications")} activeOpacity={0.2} underlayColor='#6B8E23'>
                 <Image style={styles.icon} source={require('../assets/notification.png')} />
-            </TouchableOpacity>
+            </TouchableHighlight>
             
-            <TouchableOpacity onPress={()=>navigation.navigate('Message')}>
+            <TouchableHighlight onPress={()=>navigation.navigate('Message')} activeOpacity={0.2} underlayColor='#6B8E23'>
                 <Image style={styles.icon} source={require('../assets/chat.png')} />
-            </TouchableOpacity>
+            </TouchableHighlight>
             
         </View>
     </View>
