@@ -110,7 +110,7 @@ const ViewProfile = ({ route,navigation }) => {
                             <View style={styles.ButtonCont}>   
                             {
                                 uid ? null:(<TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
-                                    <AntDesign name="edit" size={25} color="blue"></AntDesign>
+                                    <Image style={styles.icon} source={require('../assets/writing.png')} />
                                     <Text style={styles.text3}>Edit Profile Details</Text>
                                     </TouchableOpacity>)
                             }
@@ -118,8 +118,8 @@ const ViewProfile = ({ route,navigation }) => {
                             <View style={styles.ButtonCont1}>
                             {
                                 uid ? null :(<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
-                               <AntDesign name="isv" size={25} color="blue"></AntDesign>
-                               <Text style={styles.text3}>Your Post</Text>
+                               <Image style={styles.icon} source={require('../assets/products.png')} />
+                               <Text style={styles.text3}>Your Products</Text>
                             </TouchableOpacity>)
                             }
                             </View>
@@ -250,5 +250,8 @@ const styles = StyleSheet.create({
         width:300,
         height: 150,
         alignSelf:'center'
+    },
+    icon: {
+        tintColor:'white'
     }
 })

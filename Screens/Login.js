@@ -1,12 +1,14 @@
 import React,{useState} from 'react'
-import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
+import{Image,ImageBackground,StyleSheet,View,Text, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from '@react-native-async-storage/async-storage'
 import { AntDesign } from '@expo/vector-icons';
 import Connection from '../Connection'
+import {TextInput} from 'react-native-paper'
 const Login = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(true);
     
 
     const loginNow = () => {
@@ -83,8 +85,9 @@ const Login = ({ navigation }) => {
                         </ImageBackground> 
                         
                     <View style={styles.container}>
-                        <TextInput value={email} onChangeText={setemail} style={styles.input} placeholder="Email" />
-                        <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" secureTextEntry={true} />
+                        <TextInput value={email} onChangeText={setemail} style={styles.input} placeholder="Email" theme={{colors:{underlineColor:'transparent',primary:'#6B8E23'}}}/>
+                        <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" secureTextEntry={passwordVisible} right={<TextInput.Icon name={passwordVisible ? "eye" : "eye-off"} onPress={() => setPasswordVisible(!passwordVisible)} />}
+                            theme={{colors:{underlineColor:'transparent',primary:'#6B8E23'}}} />
                     </View> 
                     <View style={styles.ButtonCont}>
                         <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Home')}>
@@ -176,15 +179,15 @@ const styles = StyleSheet.create({
         
     },
     input: {
-        margin:15,
-        marginHorizontal:5,
+        margin:10,
         borderWidth: 2,
-        padding: 13,
-        borderRadius: 20,
-        borderColor: '#696969',
+        padding: 2,
+        borderRadius: 15,
         justifyContent: "center",
         width: 375,
-        fontSize:18
+        fontSize: 18,
+        height: 60,
+        backgroundColor:'white'
     
     },
     Text: {

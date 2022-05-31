@@ -1,14 +1,16 @@
 import React,{useState} from 'react'
-import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
+import{Image,ImageBackground,StyleSheet,View,Text,TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from '@react-native-async-storage/async-storage'
-import { AntDesign } from '@expo/vector-icons';
 import Connection from '../Connection'
+import {TextInput} from 'react-native-paper'
 
 const Register = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
-    const [ReTypepassword, Resetpassword] =useState('');
+    const [ReTypepassword, Resetpassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(true);
+    const [RepasswordVisible, ResetPasswordVisible] = useState(true);
 
     const registerNow = () => {
         //Registration process goes here
@@ -58,9 +60,11 @@ const Register = ({ navigation }) => {
                         </ImageBackground>
                     <View style={styles.container}>
                         
-                            <TextInput value={email} onChangeText={setemail}  style={styles.input} placeholder="Email"  /> 
-                            <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" secureTextEntry={true} />
-                            <TextInput value={ReTypepassword} onChangeText={Resetpassword}  style={styles.input} placeholder="ReType-Password" secureTextEntry={true} />
+                            <TextInput value={email} onChangeText={setemail}  style={styles.input} placeholder="Email" theme={{colors:{primary:'#6B8E23'}}} /> 
+                        <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" secureTextEntry={passwordVisible}
+                            right={<TextInput.Icon name={passwordVisible ? "eye" : "eye-off"} onPress={() => setPasswordVisible(!passwordVisible)} />} theme={{colors:{primary:'#6B8E23'}}} />
+                        <TextInput value={ReTypepassword} onChangeText={Resetpassword} style={styles.input} placeholder="ReType-Password"
+                            secureTextEntry={RepasswordVisible} right={<TextInput.Icon name={RepasswordVisible ? "eye" : "eye-off"} onPress={() => ResetPasswordVisible(!RepasswordVisible)} />} theme={{colors:{primary:'#6B8E23'}}}  />
                         
                        </View> 
                     <View style={styles.ButtonCont}>
@@ -147,15 +151,15 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     input: {
-        margin: 10,
-        marginHorizontal:5,
+        margin:5,
         borderWidth: 2,
-        padding: 13,
-        borderRadius: 20,
-        borderColor: '#696969',
+        padding: 2,
+        borderRadius: 15,
         justifyContent: "center",
         width: 375,
-        fontSize:18
+        fontSize: 18,
+        height: 60,
+        backgroundColor:'white'
     
     },
     Text: {
@@ -178,7 +182,12 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 18,
         fontWeight:'bold'
-}
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent:'center'
+    }
 
 
     

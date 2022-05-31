@@ -30,7 +30,7 @@ const Header = ({ navigation }) => {
         }
           <View style={styles.mainCont1}>
             <TouchableOpacity onPress={()=>navigation.openDrawer()}>
-                  <Image style={styles.icon} source={require('../assets/menu.png')} />
+                  <Image style={styles.icon} source={require('../assets/application.png')} />
             </TouchableOpacity>
               
             <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>

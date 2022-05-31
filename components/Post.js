@@ -37,7 +37,7 @@ const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,n
                 </View>
               </TouchableOpacity>
               {
-                  isDirect ? (<TouchableOpacity style={styles.btn1}>
+                  isDirect ? (<TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
                         <Image style={styles.icon} source={require('../assets/add-cart.png')} />
                         <Text style={{color:'white',fontWeight:'bold'}}>Add To Cart</Text>
                     </TouchableOpacity>):(<TouchableOpacity style={styles.btn1}>

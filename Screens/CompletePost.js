@@ -78,7 +78,7 @@ const CompletePost = ({ route,navigation}) => {
                     <Text style={{fontSize:15,marginStart:8,fontWeight:'bold'}}>2500</Text>
                 </View>
 
-                <TouchableOpacity style={styles.btn1}>
+                <TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
                     <Image style={styles.icon} source={require('../assets/add-cart.png')} />
                     <Text style={styles.text2}>Add To Cart</Text>
                 </TouchableOpacity>
