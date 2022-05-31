@@ -40,15 +40,15 @@ const CompletePost = ({ route,navigation}) => {
                 <Image style={styles.image} source={require('../assets/strawberry.jpg')}></Image>
                 <View style={styles.textcont}>
                     <View style={styles.iconset}>
-                        <Image style={styles.icon} source={require('../assets/grid.png')} />
+                        <Image source={require('../assets/grid.png')} />
                         <Text style={styles.text1}>Direct Sell</Text>
                     </View>
                     <View style={styles.iconset}>
-                        <Image style={styles.icon} source={require('../assets/package.png')} />
+                        <Image source={require('../assets/package.png')} />
                         <Text style={styles.text1}>1000kg</Text>
                     </View>
                     <View style={styles.iconset}>
-                        <Image style={styles.icon} source={require('../assets/price-tag.png')} />
+                        <Image source={require('../assets/price-tag.png')} />
                         <Text style={styles.text1}>Rs.3000</Text>
                     </View>
                 </View>
@@ -79,7 +79,7 @@ const CompletePost = ({ route,navigation}) => {
                 </View>
 
                 <TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
-                    <Image style={styles.icon} source={require('../assets/add-cart.png')} />
+                    <Image style={styles.icon1} source={require('../assets/add-cart.png')} />
                     <Text style={styles.text2}>Add To Cart</Text>
                 </TouchableOpacity>
             </View>
@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
     },
     text2: {
         fontSize: 20,
-        fontWeight:'bold'
+        fontWeight: 'bold',
+        color:'white'
     },
     textcont: {
         padding: 12,
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
         
     },
     btn1:{
-        backgroundColor:'#c4c4c4',
+        backgroundColor:'#6B8E23',
         display:'flex',
         justifyContent:'center',
         alignItems:'center',
@@ -157,5 +158,8 @@ const styles = StyleSheet.create({
         margin:5,
         flexDirection: 'row',
         borderColor:'black'
-}
+    },
+    icon1: {
+        tintColor:'white'
+    }
 })

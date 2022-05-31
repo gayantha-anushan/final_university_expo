@@ -1,4 +1,4 @@
-import { StyleSheet, View,Image,Text,TouchableOpacity } from 'react-native'
+import { StyleSheet, View,Image,Text,TouchableHighlight,TouchableOpacity } from 'react-native'
 import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
@@ -29,16 +29,16 @@ const Header = ({ navigation }) => {
               searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' />):null
         }
           <View style={styles.mainCont1}>
-            <TouchableOpacity onPress={()=>navigation.openDrawer()}>
+            <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>
                   <Image style={styles.icon} source={require('../assets/application.png')} />
-            </TouchableOpacity>
+            </TouchableHighlight>
               
-            <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
+              <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='red' style={{backgroundColor:'#6B8E23'}}>
                 <Image style={styles.icon} source={require('../assets/home-1.png')} />
-            </TouchableOpacity>
+            </TouchableHighlight>
               
             <TouchableOpacity onPress={()=>navigation.navigate("CreatePost")}>
-                <Image style={styles.icon} source={require('../assets/add-to-cart.png')} />
+                <Image style={styles.icon} source={require('../assets/add.png')} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={()=>navigation.navigate("Cart")}> 

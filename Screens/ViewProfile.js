@@ -92,7 +92,7 @@ const ViewProfile = ({ route,navigation }) => {
                           </TouchableOpacity>
                     {
                         uid ? (<TouchableOpacity onPress={()=>navigation.navigate("Message")}>
-                              <Image style={styles.icon} source={require('../assets/chat.png')} />
+                              <Image style={styles.icon1} source={require('../assets/chat.png')} />
                           </TouchableOpacity>) : null
                           }
                       </View>
@@ -253,5 +253,8 @@ const styles = StyleSheet.create({
     },
     icon: {
         tintColor:'white'
+    },
+    icon1: {
+        tintColor:'black'
     }
 })
