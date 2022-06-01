@@ -92,7 +92,7 @@ const ViewProfile = ({ route,navigation }) => {
                           </TouchableOpacity>
                     {
                         uid ? (<TouchableOpacity onPress={()=>navigation.navigate("Message")}>
-                              <AntDesign name="message1" size={30} color="black" />
+                              <Image style={styles.icon1} source={require('../assets/chat.png')} />
                           </TouchableOpacity>) : null
                           }
                       </View>
@@ -110,7 +110,7 @@ const ViewProfile = ({ route,navigation }) => {
                             <View style={styles.ButtonCont}>   
                             {
                                 uid ? null:(<TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
-                                    <AntDesign name="edit" size={25} color="blue"></AntDesign>
+                                    <Image style={styles.icon} source={require('../assets/writing.png')} />
                                     <Text style={styles.text3}>Edit Profile Details</Text>
                                     </TouchableOpacity>)
                             }
@@ -118,30 +118,30 @@ const ViewProfile = ({ route,navigation }) => {
                             <View style={styles.ButtonCont1}>
                             {
                                 uid ? null :(<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
-                               <AntDesign name="isv" size={25} color="blue"></AntDesign>
-                               <Text style={styles.text3}>Your Post</Text>
+                               <Image style={styles.icon} source={require('../assets/products.png')} />
+                               <Text style={styles.text3}>Your Products</Text>
                             </TouchableOpacity>)
                             }
                             </View>
                     </View>
                     
                         <View style={styles.textset}>
-                            <AntDesign name="user" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/user-1.png')} />
                             <Text style={styles.text1}>Postion As:</Text>
                             <Text style={styles.text2}>Farmer</Text>
                         </View>
                         <View style={styles.textset}>
-                            <AntDesign name="home" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/home-address.png')} />
                             <Text style={styles.text1}>Address:</Text>
                     <Text style={styles.text2}>{ Address}</Text>
                         </View>     
                         <View style={styles.textset}>
-                            <AntDesign name="phone" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/phone-call.png')} />
                             <Text style={styles.text1}>Phone Number:</Text>
                     <Text style={styles.text2}>{contact}</Text>
                         </View>
                         <View style={styles.textset}>
-                            <AntDesign name="tags" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/location.png')} />
                             <Text style={styles.text1}>Location:</Text>
                         </View>
                     {
@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#a9a9a9',
         borderRadius: 40,
         paddingTop: 10,
-        padding:15
+        padding: 15,
+        margin:8
     },
 
     titlebar: {
@@ -249,5 +250,11 @@ const styles = StyleSheet.create({
         width:300,
         height: 150,
         alignSelf:'center'
+    },
+    icon: {
+        tintColor:'white'
+    },
+    icon1: {
+        tintColor:'black'
     }
 })

@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         paddingTop: 50,
         display: 'flex',
         flexDirection: 'row',
+        alignContent:'center'
     },
     logo: {
         width:120,
@@ -41,31 +42,34 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 36,
-        color: '#46e85b',
+        color: '#6B8E23',
         fontWeight: 'bold',
-        marginLeft: 25,
         paddingTop: 20,
+        textAlign: 'center',
+        alignContent: 'center',
+        justifyContent:'center'
         
     },
     backImage: {
         width:370,
-        height: 400,        
+        height: 400,  
+        borderRadius:10
     },
     Touchable: {
-        backgroundColor: '#43e864',
+        backgroundColor: '#6B8E23',
         padding: 15,
         borderRadius: 20,
-        paddingHorizontal: 40,  
+        paddingHorizontal: 50,  
     },
     ButtonCont: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop:70
+        paddingTop:80
 
     },
     Text: {
-        fontSize: 15,
+        fontSize: 20,
         fontWeight: 'bold',
         color:'white'
     }

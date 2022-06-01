@@ -30,10 +30,6 @@ const MyPost = ({username,postdate,title,quantity,price,type,image}) => {
                     <Text>{postdate}</Text>
                 </View>
             </View>
-              <TouchableOpacity style={styles.btn1}>
-                  <AntDesign name="shoppingcart" size={20} color="black"></AntDesign>
-                <Text>Add To Cart</Text>
-            </TouchableOpacity>
         </View>
         <ImageBackground source={{uri:image}} style={styles.image}>
             <LinearGradient
@@ -72,8 +68,8 @@ const styles = StyleSheet.create({
         borderColor:'#000000',
         borderRadius:10,
         borderWidth:1,
-        margin: 5,
-        marginBottom:15
+        margin: 10,
+        marginBottom:2
     },
     user:{
         fontWeight:'bold'

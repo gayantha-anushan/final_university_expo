@@ -10,7 +10,10 @@ import Notifications from './Notifications'
 import Orders from './Orders';
 import Settings from './Settings'
 import Cart from './Cart'
+<<<<<<< HEAD
 import ViewBids from './ViewBids'
+=======
+>>>>>>> fbfcaed07e6fa53f53a38fcddfc32ee6db0b045c
 import CompletePost from './CompletePost'
 
 const Drawer = createDrawerNavigator()
@@ -25,7 +28,7 @@ const DrawerContainer = () => {
       <Drawer.Screen name="Notifications" component={Notifications} />
       <Drawer.Screen name="CompletePost" component={CompletePost}/>
       <Drawer.Screen name="Cart" component={Cart}/>
-      <Drawer.Screen name="Orders" component={Orders} />
+      <Drawer.Screen name="Orders" component={Orders} /> 
       <Drawer.Screen name="Settings" component={Settings} />
       <Drawer.Screen name="ViewBids" component={ViewBids}/>
     </Drawer.Navigator>

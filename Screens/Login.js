@@ -1,12 +1,14 @@
 import React,{useState} from 'react'
-import{Image,ImageBackground,StyleSheet,View,Text,TextInput, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
+import{Image,ImageBackground,StyleSheet,View,Text, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from '@react-native-async-storage/async-storage'
 import { AntDesign } from '@expo/vector-icons';
 import Connection from '../Connection'
+import {TextInput} from 'react-native-paper'
 const Login = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(true);
     
 
     const loginNow = () => {
@@ -77,14 +79,15 @@ const Login = ({ navigation }) => {
                 <ScrollView>
                 <View style={styles.mainCont}>
                     <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                    <Text style={styles.headerText}>Login</Text>
+                    <Text style={styles.headerText}>Vege Sup</Text>
                     </View>
                          <ImageBackground style={styles.backImage} source={require('../assets/Login.png')}>
                         </ImageBackground> 
                         
                     <View style={styles.container}>
-                        <TextInput value={email} onChangeText={setemail} style={styles.input} placeholder="Email" />
-                        <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" secureTextEntry={true} />
+                        <TextInput value={email} onChangeText={setemail} style={styles.input} placeholder="Email" theme={{colors:{underlineColor:'transparent',primary:'#6B8E23'}}}/>
+                        <TextInput value={password} onChangeText={setpassword} style={styles.input} placeholder="Password" secureTextEntry={passwordVisible} right={<TextInput.Icon name={passwordVisible ? "eye" : "eye-off"} onPress={() => setPasswordVisible(!passwordVisible)} />}
+                            theme={{colors:{underlineColor:'transparent',primary:'#6B8E23'}}} />
                     </View> 
                     <View style={styles.ButtonCont}>
                         <TouchableOpacity style={styles.Touchable} onPress={()=>navigation.navigate('Home')}>
@@ -95,18 +98,17 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.ButtonCont1}>
-                        <TouchableOpacity style={styles.Touchable1} >
-                            <AntDesign name="google" size={26} color="white"/>
-                            <Text style={styles.Text1}>Sign in with Google</Text>
-                            
-                    </TouchableOpacity>
-                    </View>
-                    <View style={styles.ButtonCont}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('Register')}>
-                            <Text style={styles.text2}>To Register your Account?</Text>
+                        <Text style={styles.text3}>Don't have an Account?</Text>
+                        <TouchableOpacity  onPress={()=>navigation.navigate('Register')}>
+                            <Text style={styles.text2}>Sign Up</Text>
                         </TouchableOpacity>
-                        
                     </View>
+                    <View style={styles.ButtonCont1}>
+                        <TouchableOpacity>
+                        <Text style={{color:'red',fontSize:18,fontWeight:'bold'}}>Forgot Password?</Text>
+                        </TouchableOpacity>
+                    </View>
+
                 </ScrollView>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
@@ -127,15 +129,15 @@ const styles = StyleSheet.create({
     logo: {
         width:120,
         height: 120,
-        
         display: 'flex',
+        justifyContent:'flex-start'
     },
     headerText: {
-        fontSize: 36,
-        color: '#59E64C',
+        fontSize: 30,
+        color: '#6B8E23',
         fontWeight: 'bold',
-        marginLeft: 50,
         paddingTop: 20,
+        alignItems:'center'
         
     },
     backImage: {
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
     
     },
     Touchable: {
-        backgroundColor: '#59E64C',
+        backgroundColor: '#6B8E23',
         padding: 15,
         borderRadius: 20,
         paddingHorizontal: 40,  
@@ -165,27 +167,27 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop:2
-
+        paddingTop: 2,
+        paddingTop:30
     },
     ButtonCont1: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
         paddingTop: 10,
+        justifyContent:'center'
         
         
     },
     input: {
-        margin:15,
-        marginHorizontal:5,
+        margin:10,
         borderWidth: 2,
-        padding: 13,
-        borderRadius: 20,
-        borderColor: '#696969',
+        padding: 2,
+        borderRadius: 15,
         justifyContent: "center",
         width: 375,
-        fontSize:18
+        fontSize: 18,
+        height: 60,
+        backgroundColor:'white'
     
     },
     Text: {
@@ -200,15 +202,18 @@ const styles = StyleSheet.create({
     },
     container: {
         display:'flex',
-        justifyContent: 'space-around',
-        
-
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     text2: {
+        color: '#4d8aeb',
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontStyle:'italic'
+    },
+    text3: {
         color: 'black',
         fontSize: 18,
-        paddingTop: 10,
-        color: 'blue',
         fontWeight:'bold'
     }
 

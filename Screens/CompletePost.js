@@ -104,15 +104,15 @@ const CompletePost = ({ route,navigation}) => {
                 }
                 <View style={styles.textcont}>
                     <View style={styles.iconset}>
-                        <AntDesign name="codepen-circle" size={30}></AntDesign>
+                        <Image source={require('../assets/grid.png')} />
                         <Text style={styles.text1}>{ type}</Text>
                     </View>
                     <View style={styles.iconset}>
-                        <AntDesign  name="inbox" size={30}></AntDesign>
-                        <Text style={styles.text1}>{Amount }kg</Text>
+                        <Image source={require('../assets/package.png')} />
+                        <Text style={styles.text1}>{Amount } Kg</Text>
                     </View>
                     <View style={styles.iconset}>
-                        <AntDesign name="wallet" size={30}></AntDesign>
+                        <Image source={require('../assets/price-tag.png')} />
                         <Text style={styles.text1}>Rs.{ price}</Text>
                     </View>
                 </View>
@@ -148,7 +148,7 @@ const CompletePost = ({ route,navigation}) => {
                 </TouchableOpacity><TouchableOpacity onPress={()=>navigation.navigate("ViewBids",{id:id})} style={styles.btn1}>
                     <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
                     <Text style={styles.text2}>All Bids</Text>
-                </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1}>
+                </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
                     <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
                     <Text style={styles.text2}>Add To Cart</Text>
                 </TouchableOpacity>)
@@ -240,7 +240,8 @@ const styles = StyleSheet.create({
     },
     text2: {
         fontSize: 20,
-        fontWeight:'bold'
+        fontWeight: 'bold',
+        color:'white'
     },
     textcont: {
         padding: 12,
@@ -250,14 +251,16 @@ const styles = StyleSheet.create({
     },
     iconset: {
         flexDirection: 'row',
-        margin:8
+        margin: 8,
+        justifyContent:'space-between'
     },
     description: {
-        flexDirection: 'row',
-        margin:2
+        flexDirection:'row',
+        margin: 7,
+        
     },
     btn1:{
-        backgroundColor:'#c4c4c4',
+        backgroundColor:'#6B8E23',
         display:'flex',
         justifyContent:'center',
         alignItems:'center',
@@ -267,5 +270,8 @@ const styles = StyleSheet.create({
         margin:5,
         flexDirection: 'row',
         borderColor:'black'
-}
+    },
+    icon1: {
+        tintColor:'white'
+    }
 })
