@@ -10,10 +10,7 @@ import Notifications from './Notifications'
 import Orders from './Orders';
 import Settings from './Settings'
 import Cart from './Cart'
-<<<<<<< HEAD
 import ViewBids from './ViewBids'
-=======
->>>>>>> fbfcaed07e6fa53f53a38fcddfc32ee6db0b045c
 import CompletePost from './CompletePost'
 
 const Drawer = createDrawerNavigator()
