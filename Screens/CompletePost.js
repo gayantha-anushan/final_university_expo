@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View,TouchableOpacity,Image,ScrollView, TextInput } from 'react-native'
+import { StyleSheet, Text, View,TouchableOpacity,Image,ScrollView, TextInput, ToastAndroid } from 'react-native'
 import React, { useEffect,useState} from 'react'
 import { getConnection } from '../Connection'
 import { AntDesign } from '@expo/vector-icons';
@@ -62,7 +62,7 @@ const CompletePost = ({ route,navigation}) => {
                     'Content-Type': 'application/json',
                     'Accept':'application/json'
                 },
-                body: {
+                body:JSON.stringify({
                     post: id,
                     bidder: profileId,
                     amount: bidAmount,
@@ -70,11 +70,20 @@ const CompletePost = ({ route,navigation}) => {
                     buy_after: buyDate,
                     value: orderPrice,
                     timestamp: Date.now()
-                }
+                })
             }).then((response) => response.json()).then((jsonResponse) => {
-                console.log(jsonResponse)
+                if (jsonResponse.status == "SUCCESS") {
+                    ToastAndroid.show("Successfully Added!", ToastAndroid.SHORT);
+                } else {
+                    ToastAndroid.show("Internal Error Occured!", ToastAndroid.SHORT);
+                }
+                setBidAmount("");
+                setOrderAmount(0);
+                setBuyDate("");
+                setOrderPrice(0)
+                setIsShow(false)
             }).catch((error) => {
-                console.log(error)
+                ToastAndroid.show("Error Occured!", ToastAndroid.SHORT);
             })
         }
     }

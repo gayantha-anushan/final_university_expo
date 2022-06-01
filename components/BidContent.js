@@ -3,13 +3,13 @@ import React from 'react'
 import strawberry from '../assets/strawberry.jpg'
 import { FontAwesome } from '@expo/vector-icons';
 
-const BidContent = () => {
+const BidContent = ({authorname,amount,quantity,buydays }) => {
   return (
       <View style={ styles.cardCover}>
           <View style={ styles.cardHeader}>
             <Image source={strawberry} style={styles.imgStyle} />
             <View>
-                  <Text style={ styles.title}>Gayan Anush</Text>
+                  <Text style={styles.title}>{ authorname}</Text>
                 <View style={ styles.ratingContainer}>
                     <FontAwesome name="star" size={24} color="gold" />
                     <FontAwesome name="star" size={24} color="gold" />
@@ -19,9 +19,9 @@ const BidContent = () => {
                 </View>
               </View>
           </View>
-          <Text>Amount(RS) : 200.00</Text>
-          <Text>Quantity : 1000. Kg</Text>
-          <Text>Buy After 1 Day(s)</Text>
+          <Text>Amount(RS) : { amount}</Text>
+          <Text>Quantity : { quantity} Kg</Text>
+          <Text>Buy within { buydays} Day(s) after Approval</Text>
     </View>
   )
 }
