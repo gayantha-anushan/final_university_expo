@@ -35,7 +35,9 @@ const Item = ({name, qty, price}) => (
     </View>
 );
 
-const BidItem = ({name, qty, price,image}) => (
+const BidItem = ({ id, name, qty, price, image, accepted,cancelBid }) => {
+
+    return (
     <View style={{
         display: 'flex',
         justifyContent: 'center',
@@ -62,40 +64,57 @@ const BidItem = ({name, qty, price,image}) => (
                 alignItems: 'center',
                 marginHorizontal:10
             }}>
-                <TouchableOpacity style={{
-                    backgroundColor: '#6B8E23',
+                    <TouchableOpacity disabled={ accepted} style={{
+                    backgroundColor: accepted ? '#a4a4a4' : '#6B8E23',
                     padding: 5,
                     paddingHorizontal: 15,
-                    borderRadius:15
-                }} >
+                    borderRadius: 15
+                }} onPress={ ()=>cancelBid(id)}>
                     <Text>Cancel Bid</Text>
                 </TouchableOpacity>
                 <View>
                     <Text>Qty: {qty}Kg</Text>
                     <Text>Bid Price: Rs.{price}</Text>
                     <Text style={{
-                        backgroundColor: '#0080ff',
+                        backgroundColor: accepted ? '#0080ff':'#ff1100',
                         textAlign: 'center',
                         padding: 2,
                         color: '#fff',
                         borderRadius:15
-                    }}>Accepted</Text>
+                    }}>{
+                            accepted ? "Accepted":"Not Accepted"
+                    }</Text>
                 </View>
             </View>
         </View>
     </View>
 );
+}
 
 
 
 const Cart = ({ navigation }) => {
 
     useEffect(() => {
+        AsyncStorage.getItem('auth_code', (error, result) => {
+            if (error) {
+                console.log(error)
+            } else {
+                setAuthCode(result)
+            }
+        })
         AsyncStorage.getItem("current_profile", (error, result) => {
             if (error) {
                 console.log(error)
             } else {
-                fetch(getConnection() + "/api/auction/bidder-bids/" + result, {
+                loadBids(result)
+                setProfile(result)
+            }
+        })
+    }, [])
+
+    const loadBids = (result) => {
+        fetch(getConnection() + "/api/auction/bidder-bids/" + result, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -119,20 +138,36 @@ const Cart = ({ navigation }) => {
                 }).catch((error) => {
                     console.log(error)
                 })
+    }
+
+    const cancelBid = (id) => {
+        fetch(getConnection() + "/api/auction/deletebid/" + id, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'token': authCode,
+                'profile':profile
             }
+        }).then((result) => result.json()).then((jres) => {
+            console.log(jres);
+            loadBids(profile)
+        }).catch((error) => {
+            console.log(error)
         })
-    }, [])
+    }
     
     
     const [isDirect, setIsDirect] = useState(true);
     const [bidList, setBidList] = useState([]);
     const [orderList, setOrderList] = useState([]);
+    const [authCode, setAuthCode] = useState(null);
+    const [profile, setProfile] = useState(null)
 
     const renderItem = ({ item }) => (
         <Item name={item.name} qty={item.qty} price={item.price}/>
     );
 
-    const bidRenderItem = ({ item }) => (<BidItem name={item.title} qty={item.quantity} image={ item.image} price={ item.amount} />)
+    const bidRenderItem = ({ item }) => (<BidItem cancelBid={ cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={ item.image} price={ item.amount} />)
     
     return (
 
