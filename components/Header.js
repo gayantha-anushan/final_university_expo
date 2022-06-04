@@ -38,11 +38,11 @@ const Header = ({ navigation }) => {
             </TouchableHighlight>
               
             <TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                <Image style={styles.icon} source={require('../assets/add.png')} />
+                <Image style={styles.icon} source={require('../assets/add-to-cart.png')} />
             </TouchableHighlight>
 
             <TouchableHighlight onPress={()=>navigation.navigate("Cart")} activeOpacity={0.2} underlayColor='#6B8E23'> 
-                <Image style={styles.icon} source={require('../assets/add-cart.png')} />
+                <Image style={styles.icon} source={require('../assets/checklist.png')} />
             </TouchableHighlight>
             
             <TouchableHighlight onPress={()=>navigation.navigate("Notifications")} activeOpacity={0.2} underlayColor='#6B8E23'>

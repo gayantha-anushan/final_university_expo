@@ -151,7 +151,7 @@ const CreatePost = ({navigation}) => {
                     </View> 
                     <View style={styles.num}>
                         <Text style={styles.priceChooser}>Expire in Days:</Text>
-                        <NumericInput type='plus-minus' value={expirity} onChange={value => setExpirity(value)} minValue={0} totalWidth={100} totalHeight={50} iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#EA3788' leftButtonBackgroundColor='#E56B70' />
+                        <NumericInput type='plus-minus' value={expirity} onChange={value => setExpirity(value)} minValue={0} totalWidth={100} totalHeight={50} iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#4d8aeb' leftButtonBackgroundColor='#4d8aeb' />
                     </View>
                 <Text style={styles.priceChooser}>Price:</Text>
                 <View style={styles.container2}>

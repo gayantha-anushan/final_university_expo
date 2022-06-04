@@ -1,7 +1,8 @@
 import {FlatList, StyleSheet, View, KeyboardAvoidingView, Text, Image, TouchableOpacity} from 'react-native'
-import React from 'react'
+import React,{ useEffect,useState } from 'react'
 import Header from '../components/Header'
 import strawberry from '../assets/strawberry.jpg'
+import { getConnection } from '../Connection';
 
 const DATA = [
     {
@@ -36,7 +37,28 @@ const Item = ({name, qty, price}) => (
 
 
 
-const Cart = ({navigation}) => {
+const Cart = ({ navigation }) => {
+    const [price, setPrice] = useState("");
+    const [qty, setQty] = useState("");
+
+    const cart = () => {
+        fetch(getConnection() + '/api/cart/' + id, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        }).then((response) => response.json()).then((responseJson) => {
+                console.log(responseJson)
+                setTitle(responseJson.title);
+                setQty(responseJson.quantity)
+                setPrice(responseJson.price)
+            
+            
+        }).catch((error) => {
+            console.log(error)
+})
+    }
     const renderItem = ({ item }) => (
         <Item name={item.name} qty={item.qty} price={item.price}/>
     );

@@ -7,6 +7,7 @@ import contacts from '../assets/contact-book.png';
 import settings from '../assets/settings.png';
 import logout from '../assets/logout.png';
 import stocks from '../assets/risk.png';
+import records from '../assets/medical-record.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Connection from '../Connection'
 
@@ -56,7 +57,8 @@ const Drawer = (props) => {
                     {TabButton(currentTab, setCurrentTab, "Profile", profile,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Orders", orders,props.navigation)}
                     {TabButton(currentTab,setCurrentTab,"Contacts",contacts,props.navigation)}
-                    {TabButton(currentTab,setCurrentTab,"Stocks",stocks)}
+                    {TabButton(currentTab, setCurrentTab, "Stocks", stocks)}
+                    {TabButton(currentTab, setCurrentTab, "Records", records)}
 
                     {TabButton(currentTab, setCurrentTab, "Settings", settings,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
@@ -83,6 +85,9 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                     break;
                 case "Contacts":
                     navigation.navigate("Contacts");
+                    break;
+                case "Records":
+                    navigation.navigate("");
                     break;
                 case "Settings":
                     navigation.navigate("Settings");

@@ -5,6 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import NumericInput from 'react-native-numeric-input'
 import { Dialog } from 'react-native-simple-dialogs'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ProgressDialog } from 'react-native-simple-dialogs'
 
 const CompletePost = ({ route,navigation}) => {
 
@@ -22,6 +23,7 @@ const CompletePost = ({ route,navigation}) => {
     const [bidAmount, setBidAmount] = useState(0)
     const [buyDate, setBuyDate] = useState("")
     const [profileId, setProfileId] = useState(null)
+    const [isProgress, setIsProgress] = useState(false);
 
     const { id } = route.params
     AsyncStorage.getItem('current_profile', (error, result) => {
@@ -87,6 +89,29 @@ const CompletePost = ({ route,navigation}) => {
             })
         }
     }
+    const order = () => {
+        fetch(getConnection() + '/api/cart/addtocart', {
+            method: "POST",
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+            },
+            body: JSON.stringify({
+                postId:id,
+                price:price,
+                qty:orderAmount
+            })
+            
+        }).then((response) => response.text()).then((responseText) => {
+            console.log("Data insert");
+            console.log(responseText);
+            setIsProgress(false);
+
+    
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
 
     const selectAmount = (value) => {
         if (Number(value) > Number(Amount)) {
@@ -130,36 +155,36 @@ const CompletePost = ({ route,navigation}) => {
             <View style={styles.des}>
                 <Text style={{ fontSize: 25, fontWeight: 'bold', alignItems: 'center', marginLeft: 120 }}>{ title}</Text>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Description:</Text>
-                    <Text style={{ fontSize: 15, marginEnd: 93 }}>{ description}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Description:</Text>
+                    <Text style={{ fontSize: 15, marginEnd: 93 }}>{description}</Text>
                 </View>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Expiry in:</Text>
-                    <Text style={{ fontSize: 15, marginStart: 20, fontWeight: 'bold' }}>{ expirity} Days</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Expiry in:</Text>
+                    <Text style={{ fontSize: 15, marginStart: 20, fontWeight: 'bold' }}>{expirity} Days</Text>
                 </View>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Contacts:</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Contacts:</Text>
                     <Text style={{ fontSize: 15, marginStart: 20, }}>{ contact}</Text>
                 </View>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Quantity(kg):</Text>
-                    <NumericInput type='up-down' onChange={value => selectAmount(value)} value={ orderAmount} totalWidth={100} totalHeight={50}
-                        iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#EA3788' leftButtonBackgroundColor='#E56B70'/>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Quantity(kg):</Text>
+                    <NumericInput type='plus-minus' onChange={value => selectAmount(value)} value={ orderAmount} totalWidth={100} totalHeight={50}
+                        iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#4d8aeb' leftButtonBackgroundColor='#4d8aeb' minValue={0}/>
                 </View>
                 <View style={styles.description}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'blue' }}>Amount(Rs):</Text>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#6B8E23' }}>Amount(Rs):</Text>
                     <Text style={{ fontSize: 15, marginStart: 8, fontWeight: 'bold' }}>{ orderPrice}</Text>
                 </View>
                 {
-                    type == "Auction" ? (<View style={ styles.auctionButtonContainer}><TouchableOpacity onPress={()=>setIsShow(true)} style={styles.btn1}>
-                    <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                    type == "Auction" ? (<View style={ styles.auctionButtonContainer}><TouchableOpacity onPress={()=>setIsShow(true)} style={styles.btn2}>
+                    <Image style={styles.icon} source={require('../assets/bid.png')} />
                     <Text style={styles.text2}>Bid Now</Text>
-                </TouchableOpacity><TouchableOpacity onPress={()=>navigation.navigate("ViewBids",{id:id})} style={styles.btn1}>
-                    <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                </TouchableOpacity><TouchableOpacity onPress={()=>navigation.navigate("ViewBids",{id:id})} style={styles.btn2}>
+                    <AntDesign name="shoppingcart" size={30} color="white"></AntDesign>
                     <Text style={styles.text2}>All Bids</Text>
-                </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
-                    <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
-                    <Text style={styles.text2}>Add To Cart</Text>
+                </TouchableOpacity></View>):( <TouchableOpacity style={styles.btn1} onPress={()=>order()}>
+                    <AntDesign name="shoppingcart" size={30} color="white"></AntDesign>
+                    <Text style={styles.text2}>Create an Order</Text>
                 </TouchableOpacity>)
                 }
                 {/* if type is bid then this is place to implement all bids list in list */}
@@ -180,6 +205,7 @@ const CompletePost = ({ route,navigation}) => {
                     </View>
                 </Dialog>
             </View>
+            <ProgressDialog activityIndicatorSize="small" activityIndicatorColor="gray" visible={isProgress} title="Processing Order" message='Please wait moment....' />
         </ScrollView>
   )
 }
@@ -206,7 +232,9 @@ const styles = StyleSheet.create({
         padding:10,
         backgroundColor: '#6b8e23',
         borderRadius:20,
-        paddingHorizontal:20
+        paddingHorizontal: 20,
+        flexDirection: 'row',
+        
     },
     btn3: {
         padding: 10,
@@ -280,7 +308,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderColor:'black'
     },
-    icon1: {
+    icon: {
         tintColor:'white'
     }
 })
