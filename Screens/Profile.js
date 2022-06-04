@@ -42,7 +42,6 @@ const Profile = ({route,navigation}) => {
     const [radioButtons, setRadioButtons] = useState(radioButtonsData);
     const [profileID, setProfileID] = useState(null)
     const [location, setLocation] = useState(null)
-    const [selectedUserType, setSelectedUserType] = useState(null)
     const [image, setImage] = useState(null)
     const [name, setName] = useState(null)
     const [type, setType] = useState(null)
@@ -150,22 +149,26 @@ const Profile = ({route,navigation}) => {
       setType(type)
   }
 
-  const getAction = () => {
+    const getAction = () => {
+      
+        var vali = null;
 
     for(var i = 0; i < radioButtons.length ; i++){
         if(radioButtons[i].selected == true){
-            setSelectedUserType(radioButtons[i].value);
+            vali = radioButtons[i].value;
         }
-    }
+        }
+        if (vali != null) {
 
-      if(state == "NEW"){
-          uploadProfileData();
-      }else{
-          updateProfileData();
-      }
+            if (state == "NEW") {
+                uploadProfileData(vali);
+            } else {
+                updateProfileData(vali);
+            }
+        }
   }
 
-    const updateProfileData = () => {
+    const updateProfileData = (vali) => {
         if (formVerifier()) {
             try {
                 console.log("ok")
@@ -183,7 +186,7 @@ const Profile = ({route,navigation}) => {
                         formdata.append('contact', contact)
                         formdata.append('latitude', point.latitude)
                         formdata.append('longitude', point.longitude)
-                        formdata.append('type', selectedUserType)
+                        formdata.append('type', vali)
                         formdata.append('image', { type: type, uri: image.localUrl, name: name })
                         fetch(Connection.getConnection() + "/api/auth/update-profile", {
                             method: "POST",
@@ -231,7 +234,7 @@ const Profile = ({route,navigation}) => {
         }
     }
 
-    const uploadProfileData = () => {
+    const uploadProfileData = (vali) => {
         if (formVerifier()) {
             try {
                 AsyncStorage.getItem("auth_code", (error, result) => {
@@ -247,7 +250,7 @@ const Profile = ({route,navigation}) => {
                         formdata.append('contact', contact)
                         formdata.append('latitude', point.latitude)
                         formdata.append('longitude', point.longitude)
-                        formdata.append('type', selectedUserType)
+                        formdata.append('type', vali)
                         AsyncStorage.getItem("auth_code", (error, result) => {
                             if (error) {
                                 console.log(error)
@@ -260,13 +263,13 @@ const Profile = ({route,navigation}) => {
                                     //post action after setup url
                                     console.log(responseJson.id)
                                     AsyncStorage.setItem("current_profile", responseJson.id)
+                                    AsyncStorage.setItem("type",responseJson.type)
                                     navigation.navigate('DrawerContainer')
                                 })
                             }
                         })
                     }
-                });
-      
+                }); 
             } catch (error) {
                 console.log(error);
             }

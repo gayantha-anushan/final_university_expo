@@ -33,7 +33,7 @@ const ViewBids = ({ route, navigation }) => {
         }).catch((error) => {
             console.log(error)
         })
-    }, [])
+    }, [id])
     
 
     const renderItem = ({ item }) => <BidContent buydays={ item.buydate} authorname={item.authorname} amount={item.amount} quantity={ item.quantity} />

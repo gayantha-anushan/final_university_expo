@@ -10,10 +10,7 @@ import Notifications from './Notifications'
 import Orders from './Orders';
 import Settings from './Settings'
 import Cart from './Cart'
-<<<<<<< HEAD
 import ViewBids from './ViewBids'
-=======
->>>>>>> fbfcaed07e6fa53f53a38fcddfc32ee6db0b045c
 import CompletePost from './CompletePost'
 
 const Drawer = createDrawerNavigator()
@@ -21,8 +18,8 @@ const Drawer = createDrawerNavigator()
 const DrawerContainer = () => {
   return (
     <Drawer.Navigator drawerContent={props=><Draweri {...props} />} initialRouteName='Interface' screenOptions={{ headerShown:false}}>
-        <Drawer.Screen name="Interface" component={Interface} />
-        <Drawer.Screen name="CreatePost" component={CreatePost}/>
+       <Drawer.Screen name="Interface" component={Interface} />
+      <Drawer.Screen name="CreatePost" component={CreatePost}/>
       <Drawer.Screen name="Message" component={Message} />
       <Drawer.Screen name="ViewProfile" component={ViewProfile}/>
       <Drawer.Screen name="Notifications" component={Notifications} />

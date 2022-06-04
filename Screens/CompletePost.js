@@ -22,6 +22,7 @@ const CompletePost = ({ route,navigation}) => {
     const [bidAmount, setBidAmount] = useState(0)
     const [buyDate, setBuyDate] = useState("")
     const [profileId, setProfileId] = useState(null)
+    const [userType, setUserType] = useState(null)
 
     const { id } = route.params
     AsyncStorage.getItem('current_profile', (error, result) => {
@@ -32,6 +33,13 @@ const CompletePost = ({ route,navigation}) => {
         }
     })
     useEffect(() => {
+        AsyncStorage.getItem("type", (error, result) => {
+            if (error) {
+                ToastAndroid.show(error, ToastAndroid.SHORT);
+            } else {
+                setUserType(result)
+            }
+        })
         fetch(getConnection() + "/api/posts/singlepost/" + id, {
             method: "GET",
             headers: {
@@ -151,18 +159,21 @@ const CompletePost = ({ route,navigation}) => {
                     <Text style={{ fontSize: 15, marginStart: 8, fontWeight: 'bold' }}>{ orderPrice}</Text>
                 </View>
                 {
+                    userType != "farmer" ? ( <View>
+                    {
                     type == "Auction" ? (<View style={ styles.auctionButtonContainer}><TouchableOpacity onPress={()=>setIsShow(true)} style={styles.btn1}>
-                    <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
-                    <Text style={styles.text2}>Bid Now</Text>
-                </TouchableOpacity><TouchableOpacity onPress={()=>navigation.navigate("ViewBids",{id:id})} style={styles.btn1}>
-                    <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
-                    <Text style={styles.text2}>All Bids</Text>
-                </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
-                    <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
-                    <Text style={styles.text2}>Add To Cart</Text>
-                </TouchableOpacity>)
-                }
-                {/* if type is bid then this is place to implement all bids list in list */}
+                        <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                        <Text style={styles.text2}>Bid Now</Text>
+                    </TouchableOpacity><TouchableOpacity onPress={()=>navigation.navigate("ViewBids",{id:id})} style={styles.btn1}>
+                        <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                        <Text style={styles.text2}>All Bids</Text>
+                    </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
+                        <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                        <Text style={styles.text2}>Add To Cart</Text>
+                    </TouchableOpacity>)
+                    }
+                </View>):null
+               }
                 <Dialog visible={isShow} title="Bid Now!" onTouchOutside={() => setIsShow(false)} >
                     <View>
                         <Text>Days</Text>

@@ -128,7 +128,7 @@ const ViewProfile = ({ route,navigation }) => {
                         <View style={styles.textset}>
                             <Image style={styles.icon1} source={require('../assets/user-1.png')} />
                             <Text style={styles.text1}>Postion As:</Text>
-                            <Text style={styles.text2}>Farmer</Text>
+                            <Text style={styles.text2}>{ type}</Text>
                         </View>
                         <View style={styles.textset}>
                             <Image style={styles.icon1} source={require('../assets/home-address.png')} />

@@ -1,10 +1,23 @@
-import { StyleSheet, View,Image,Text,TouchableHighlight,TouchableOpacity } from 'react-native'
+import { StyleSheet, View,Image,Text,TouchableHighlight,TouchableOpacity, ToastAndroid } from 'react-native'
 import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Header = ({ navigation }) => {
     const [searchComponent, setSearchComponent] = useState(false)
+    const [typw, setTypw] = useState("");
+
+    useEffect(() => {
+        AsyncStorage.getItem("type", (error, result) => {
+            if (error) {
+                ToastAndroid.show(error, ToastAndroid.SHORT);
+            } else {
+                setTypw(result);
+            }
+        })
+    }, [])
+    
 
   return (
     <View>
@@ -34,16 +47,20 @@ const Header = ({ navigation }) => {
             </TouchableHighlight>
               
               <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                <Image style={styles.icon} source={require('../assets/home-1.png')} />
+             <Image style={styles.icon} source={require('../assets/home-1.png')} />
             </TouchableHighlight>
               
-            <TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
+              {
+                  typw != "customer"?(<TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
                 <Image style={styles.icon} source={require('../assets/add.png')} />
-            </TouchableHighlight>
+            </TouchableHighlight>):null
+            }
 
-            <TouchableHighlight onPress={()=>navigation.navigate("Cart")} activeOpacity={0.2} underlayColor='#6B8E23'> 
+              {
+                  typw != "farmer" ? (<TouchableHighlight onPress={()=>navigation.navigate("Cart")} activeOpacity={0.2} underlayColor='#6B8E23'> 
                 <Image style={styles.icon} source={require('../assets/add-cart.png')} />
-            </TouchableHighlight>
+            </TouchableHighlight>):null
+            }
             
             <TouchableHighlight onPress={()=>navigation.navigate("Notifications")} activeOpacity={0.2} underlayColor='#6B8E23'>
                 <Image style={styles.icon} source={require('../assets/notification.png')} />
@@ -62,7 +79,7 @@ export default Header
 
 const styles = StyleSheet.create({
     logo: {
-        width:90,
+        width: 90,
         height: 90,
     },
     headerText: {
