@@ -18,8 +18,8 @@ const Drawer = createDrawerNavigator()
 const DrawerContainer = () => {
   return (
     <Drawer.Navigator drawerContent={props=><Draweri {...props} />} initialRouteName='Interface' screenOptions={{ headerShown:false}}>
-        <Drawer.Screen name="Interface" component={Interface} />
-        <Drawer.Screen name="CreatePost" component={CreatePost}/>
+       <Drawer.Screen name="Interface" component={Interface} />
+      <Drawer.Screen name="CreatePost" component={CreatePost}/>
       <Drawer.Screen name="Message" component={Message} />
       <Drawer.Screen name="ViewProfile" component={ViewProfile}/>
       <Drawer.Screen name="Notifications" component={Notifications} />

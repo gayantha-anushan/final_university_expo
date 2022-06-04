@@ -9,7 +9,8 @@ const Header = ({title , navigation}) => {
 
   return (
     <Appbar.Header >
-      <Appbar.BackAction onPress={_goBack} />
+      {/* <Appbar.BackAction onPress={_goBack} /> */}
+      <Appbar.Action onPress={()=>navigation.openDrawer()} icon="view-list" />
       <Appbar.Content title={title}  />
       <Appbar.Action icon="magnify" onPress={_handleSearch} />
     </Appbar.Header>

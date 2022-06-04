@@ -64,7 +64,8 @@ const Login = ({ navigation }) => {
                     state:"NEW"
                 })
             }else{
-                AsyncStorage.setItem("current_profile",responseJson.data._id)
+                AsyncStorage.setItem("current_profile", responseJson.data._id)
+                AsyncStorage.setItem("type", responseJson.data.type);
                 navigation.navigate('DrawerContainer')
             }
         })
