@@ -163,73 +163,70 @@ const Cart = ({ navigation }) => {
     const [authCode, setAuthCode] = useState(null);
     const [profile, setProfile] = useState(null)
 
-    const Cart = ({ navigation }) => {
-        const [price, setPrice] = useState("");
-        const [qty, setQty] = useState("");
+    const [price, setPrice] = useState("");
+    const [qty, setQty] = useState("");
 
-        const cart = () => {
-            fetch(getConnection() + '/api/cart/' + id, {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            }).then((response) => response.json()).then((responseJson) => {
-                console.log(responseJson)
-                setTitle(responseJson.title);
-                setQty(responseJson.quantity)
-                setPrice(responseJson.price)
-            
-            
-            }).catch((error) => {
-                console.log(error)
-            })
-        }
-        const renderItem = ({ item }) => (
-            <Item name={item.name} qty={item.qty} price={item.price} />
-        );
-
-        const bidRenderItem = ({ item }) => (<BidItem cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)
-    
-        return (
-
-            <View>
-                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
-                    <Header navigation={navigation} />
-                    <View style={styles.buttonBar}>
-                        <TouchableOpacity onPress={() => setIsDirect(true)} style={{
-                            backgroundColor: isDirect ? '#6B8E23' : '#a4a4a4',
-                            width: '50%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                            paddingVertical: 10
-                        }}>
-                            <Text>Direct Buy</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setIsDirect(false)} style={{
-                            backgroundColor: isDirect ? '#a4a4a4' : '#6B8E23',
-                            width: '50%',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                            paddingVertical: 10
-                        }}>
-                            <Text>Bid Status</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {
-                        isDirect ? (<FlatList data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />) :
-                            (<FlatList data={bidList} renderItem={bidRenderItem} keyExtractor={item => item.id} />)
-                    }
-                </KeyboardAvoidingView>
-            </View>
+    const getCart = () => {
+        fetch(getConnection() + '/api/cart/' + id, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        }).then((response) => response.json()).then((responseJson) => {
+            console.log(responseJson)
+            setTitle(responseJson.title);
+            setQty(responseJson.quantity)
+            setPrice(responseJson.price)
         
-
-        )
+        
+        }).catch((error) => {
+            console.log(error)
+        })
     }
+    const renderItem = ({ item }) => (
+        <Item name={item.name} qty={item.qty} price={item.price} />
+    );
+
+    const bidRenderItem = ({ item }) => (<BidItem cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)
+    
+    return (
+
+        <View>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
+                <Header navigation={navigation} />
+                <View style={styles.buttonBar}>
+                    <TouchableOpacity onPress={() => setIsDirect(true)} style={{
+                        backgroundColor: isDirect ? '#6B8E23' : '#a4a4a4',
+                        width: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        paddingVertical: 10
+                    }}>
+                        <Text>Direct Buy</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setIsDirect(false)} style={{
+                        backgroundColor: isDirect ? '#a4a4a4' : '#6B8E23',
+                        width: '50%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        paddingVertical: 10
+                    }}>
+                        <Text>Bid Status</Text>
+                    </TouchableOpacity>
+                </View>
+                {
+                    isDirect ? (<FlatList data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />) :
+                        (<FlatList data={bidList} renderItem={bidRenderItem} keyExtractor={item => item.id} />)
+                }
+            </KeyboardAvoidingView>
+        </View>
+    )
+    
 }
     export default Cart
 
