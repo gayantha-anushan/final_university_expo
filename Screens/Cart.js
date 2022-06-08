@@ -19,9 +19,9 @@ const DATA = [
     },
 ];
 
-const Item = ({name, qty, price}) => (
+const Item = ({name, qty, price,image}) => (
     <View style={styles.card}>
-        <Image source={strawberry} style={styles.itemImage}/>
+        <Image source={{uri:image}} style={styles.itemImage}/>
         <View style={styles.container}>
             <Text style={styles.item}>{name}</Text>
             <Text>Qty: {qty}Kg</Text>
@@ -95,23 +95,54 @@ const BidItem = ({ id, name, qty, price, image, accepted,cancelBid }) => {
 
 const Cart = ({ navigation }) => {
 
+    // useEffect(() => {
+
+    // }, [])
+
     useEffect(() => {
-        AsyncStorage.getItem('auth_code', (error, result) => {
-            if (error) {
-                console.log(error)
-            } else {
-                setAuthCode(result)
-            }
+        const unsybscribe = navigation.addListener('focus', () => {
+            AsyncStorage.getItem('auth_code', (error, result) => {
+                if (error) {
+                    console.log(error)
+                } else {
+                    setAuthCode(result)
+                }
+            })
+            AsyncStorage.getItem("current_profile", (error, result) => {
+                if (error) {
+                    console.log(error)
+                } else {
+                    loadBids(result)
+                    setProfile(result)
+                    loadCartItems(result);
+                }
+            })
         })
-        AsyncStorage.getItem("current_profile", (error, result) => {
-            if (error) {
-                console.log(error)
-            } else {
-                loadBids(result)
-                setProfile(result)
-            }
-        })
+        console.log("USe Effext Called");
     }, [])
+    
+    const loadCartItems = (result) => {
+        fetch(getConnection() + "/api/cart/" + result, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        }).then((response) => response.json()).then((jsonResult) => {
+            var datas = []
+            for (var i = 0; i < jsonResult.length; i++){
+                datas = datas.concat({
+                    id: jsonResult[i]._id,
+                    title:jsonResult[i].postId.title,
+                    quantity: jsonResult[i].qty,
+                    price: jsonResult[i].price,
+                    image:getConnection()+ '/post-img/' +jsonResult[i].postId.image
+                })
+            }
+            setCartItems(datas);
+            console.log(datas);
+        })
+    };
 
     const loadBids = (result) => {
         fetch(getConnection() + "/api/auction/bidder-bids/" + result, {
@@ -134,7 +165,7 @@ const Cart = ({ navigation }) => {
                 }
                 datas = datas.concat(dd);
             }
-            setBidList(datas);
+            setBidList(datas)
         }).catch((error) => {
             console.log(error)
         })
@@ -162,30 +193,11 @@ const Cart = ({ navigation }) => {
     const [orderList, setOrderList] = useState([]);
     const [authCode, setAuthCode] = useState(null);
     const [profile, setProfile] = useState(null)
-
+    const [CartItems, setCartItems] = useState([]);
     const [price, setPrice] = useState("");
     const [qty, setQty] = useState("");
-
-    const getCart = () => {
-        fetch(getConnection() + '/api/cart/' + id, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        }).then((response) => response.json()).then((responseJson) => {
-            console.log(responseJson)
-            setTitle(responseJson.title);
-            setQty(responseJson.quantity)
-            setPrice(responseJson.price)
-        
-        
-        }).catch((error) => {
-            console.log(error)
-        })
-    }
     const renderItem = ({ item }) => (
-        <Item name={item.name} qty={item.qty} price={item.price} />
+        <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} />
     );
 
     const bidRenderItem = ({ item }) => (<BidItem cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)
@@ -220,7 +232,7 @@ const Cart = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 {
-                    isDirect ? (<FlatList data={DATA} renderItem={renderItem} keyExtractor={item => item.id} />) :
+                    isDirect ? (<FlatList data={CartItems} onRefresh={() => loadCartItems(profile)} refreshing={ false} renderItem={renderItem} keyExtractor={item => item.id} />) :
                         (<FlatList data={bidList} renderItem={bidRenderItem} keyExtractor={item => item.id} />)
                 }
             </KeyboardAvoidingView>

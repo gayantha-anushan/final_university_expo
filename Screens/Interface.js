@@ -16,12 +16,14 @@ const Interface = ({navigation }) => {
 
     useEffect(() => {
         //startup functions
-        AsyncStorage.getItem("type", (error, result) => {
-            if (error) {
-                ToastAndroid.show(error,ToastAndroid.SHORT)
-            } else {
-                loaddata(result)
-            }
+        const unsubscribe = navigation.addListener('focus', () => {
+            AsyncStorage.getItem("type", (error, result) => {
+                if (error) {
+                    ToastAndroid.show(error,ToastAndroid.SHORT)
+                } else {
+                    loaddata(result)
+                }
+            })
         })
     }, [])
 

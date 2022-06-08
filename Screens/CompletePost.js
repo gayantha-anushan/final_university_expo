@@ -24,7 +24,8 @@ const CompletePost = ({ route,navigation}) => {
     const [buyDate, setBuyDate] = useState("")
     const [profileId, setProfileId] = useState(null)
     const [isProgress, setIsProgress] = useState(false);
-    const [userType, setUserType] = useState(null)
+    const [userType, setUserType] = useState(null);
+    const [authorId, setAuthorId] = useState("")
 
     const { id } = route.params
     AsyncStorage.getItem('current_profile', (error, result) => {
@@ -58,6 +59,7 @@ const CompletePost = ({ route,navigation}) => {
             setDescription(responseJson.description)
             setExpirity(responseJson.expirity)
             setContact(responseJson.author.contact)
+            setAuthorId(responseJson.author._id)
             console.log(image)
         }).catch((error) => {
             console.log(error)
@@ -97,6 +99,7 @@ const CompletePost = ({ route,navigation}) => {
             })
         }
     }
+    
     const order = () => {
         fetch(getConnection() + '/api/cart/addtocart', {
             method: "POST",
@@ -105,7 +108,9 @@ const CompletePost = ({ route,navigation}) => {
                 'Content-Type':'application/json',
             },
             body: JSON.stringify({
-                postId:id,
+                postId: id,
+                buyerId:profileId,
+                sellerId:authorId,
                 price:price,
                 qty:orderAmount
             })
@@ -114,7 +119,7 @@ const CompletePost = ({ route,navigation}) => {
             console.log("Data insert");
             console.log(responseText);
             setIsProgress(false);
-
+            navigation.navigate("Cart")
     
         }).catch((error) => {
             console.log(error)
@@ -192,7 +197,7 @@ const CompletePost = ({ route,navigation}) => {
                     </TouchableOpacity><TouchableOpacity onPress={()=>navigation.navigate("ViewBids",{id:id})} style={styles.btn1}>
                         <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
                         <Text style={styles.text2}>All Bids</Text>
-                    </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
+                    </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1} onPress={()=>order()}>
                         <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
                         <Text style={styles.text2}>Add To Cart</Text>
                     </TouchableOpacity>)
