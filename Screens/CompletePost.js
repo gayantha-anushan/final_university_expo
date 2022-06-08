@@ -194,7 +194,7 @@ const CompletePost = ({ route,navigation}) => {
                         <Text style={styles.text2}>All Bids</Text>
                     </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
                         <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
-                        <Text style={styles.text2}>Add To Cart</Text>
+                        <Text style={styles.text2}>Create an Order</Text>
                     </TouchableOpacity>)
                     }
                 </View>):null

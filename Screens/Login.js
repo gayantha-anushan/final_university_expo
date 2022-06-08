@@ -80,7 +80,7 @@ const Login = ({ navigation }) => {
                 <ScrollView>
                 <View style={styles.mainCont}>
                     <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                    <Text style={styles.headerText}>Vege Sup</Text>
+                    <Text style={styles.headerText}>Govi Saviya</Text>
                     </View>
                          <ImageBackground style={styles.backImage} source={require('../assets/Login.png')}>
                         </ImageBackground> 
@@ -134,11 +134,12 @@ const styles = StyleSheet.create({
         justifyContent:'flex-start'
     },
     headerText: {
-        fontSize: 30,
+        fontSize: 36,
         color: '#6B8E23',
         fontWeight: 'bold',
         paddingTop: 20,
-        alignItems:'center'
+        alignItems: 'center',
+        fontFamily:'sans-serif-medium'
         
     },
     backImage: {

@@ -8,7 +8,7 @@ const Login = ({ navigation })=> {
             <ScrollView>
                 <View style={styles.mainCont}>
                     <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                    <Text style={styles.headerText}>Vege Sup</Text>
+                    <Text style={styles.headerText}>Govi Saviya</Text>
                 </View>
                 
                 <Image style={styles.backImage} source={require('../assets/Farmer.png')} />
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
         paddingTop: 50,
         display: 'flex',
         flexDirection: 'row',
-        alignContent:'center'
+        alignContent: 'center',
+        
     },
     logo: {
         width:120,
@@ -47,7 +48,8 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         textAlign: 'center',
         alignContent: 'center',
-        justifyContent:'center'
+        justifyContent: 'center',
+        fontFamily:'sans-serif-medium'  
         
     },
     backImage: {

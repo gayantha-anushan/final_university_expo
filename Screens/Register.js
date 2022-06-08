@@ -53,7 +53,7 @@ const Register = ({ navigation }) => {
                     <View style={styles.mainCont}>
                         <Image style={styles.logo} source={require('../assets/logo.jpg')} />
                         <View style={styles.htext}>
-                            <Text style={styles.headerText}>Vege Sup</Text>
+                            <Text style={styles.headerText}>Govi Saviya</Text>
                         </View>
                     </View>
                         <ImageBackground style={styles.backImage} source={require('../assets/Register.png')}>
@@ -91,22 +91,22 @@ const styles = StyleSheet.create({
         height:'100%',
     },
     mainCont: {
-        paddingTop: 50,
+        paddingTop: 35,
         display: 'flex',
         flexDirection: 'row',
     },
     logo: {
         width:120,
         height: 120,
-        
         display: 'flex',
     },
     headerText: {
-        fontSize: 30,
+        fontSize: 36,
         color: '#6B8E23',
         fontWeight: 'bold',
         justifyContent: 'center',
-        alignContent:'center',
+        alignContent: 'center',
+        fontFamily:'sans-serif-medium'
         
     },
     htext: {

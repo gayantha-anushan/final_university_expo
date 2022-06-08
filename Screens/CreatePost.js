@@ -179,18 +179,8 @@ const CreatePost = ({navigation}) => {
                                 <AntDesign name={'checkcircle'} size={20} color="white"></AntDesign>
                                 <Text style={styles.buttonText}>Create Post</Text>
                             </View>
-                        </TouchableOpacity>
-                        <Text style={styles.priceChooser}>Location:</Text>
-                          
-                    </View>
-    
-                  {
-                      location ? (<MapView initialRegion={location} style={styles.mapStyler}>
-                            {
-                              point ? (<Marker coordinate={point} draggable onDragEnd={(e)=>setPoint(e.nativeEvent.coordinate)} title="Place Your Product" description='Locate your product for more customer engage to your product' />):null
-                            }
-                        </MapView>):null
-                  }
+                        </TouchableOpacity> 
+                    </View>          
                   <ProgressDialog activityIndicatorSize="small" activityIndicatorColor="gray" visible={isProgress} title="Uploading Post" message='Please wait moment....' />
             
                   </ScrollView>

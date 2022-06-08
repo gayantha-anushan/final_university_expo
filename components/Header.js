@@ -29,7 +29,7 @@ const Header = ({ navigation }) => {
                       </TouchableOpacity>
                   <View style={styles.htext}>
                       <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                          <Text style={styles.headerText}>Vege Sup</Text>  
+                          <Text style={styles.headerText}>Govi Saviya</Text>  
                           </TouchableOpacity>
                     </View>
                     
@@ -45,15 +45,15 @@ const Header = ({ navigation }) => {
           <View style={styles.mainCont1}>
             <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>
                   <FontAwesome name="ellipsis-v" size={30} />
+                  
             </TouchableHighlight>
-              
               <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='#6B8E23'>
              <FontAwesome name="home" size={30}  />
             </TouchableHighlight>
               
               {
                   typw != "customer"?(<TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                <FontAwesome name="file-upload" size={30} />
+                <FontAwesome name="plus-square" size={30} />
             </TouchableHighlight>):null
             }
 
@@ -71,7 +71,7 @@ const Header = ({ navigation }) => {
                 <FontAwesome name="comments" size={30}  />
             </TouchableHighlight>
             
-        </View>
+          </View>
     </View>
   )
 }
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: '#6B8E23',
         fontWeight: 'bold',
+        fontFamily:'sans-serif-medium'
     },
     htext: {
         justifyContent: 'center',
