@@ -2,7 +2,8 @@ import { StyleSheet, View,Image,Text,TouchableHighlight,TouchableOpacity, ToastA
 import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Header = ({ navigation }) => {
     const [searchComponent, setSearchComponent] = useState(false)
@@ -43,31 +44,31 @@ const Header = ({ navigation }) => {
         }
           <View style={styles.mainCont1}>
             <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>
-                  <Image style={styles.icon} source={require('../assets/application.png')} />
+                  <FontAwesome name="ellipsis-v" size={30} />
             </TouchableHighlight>
               
               <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='#6B8E23'>
-             <Image style={styles.icon} source={require('../assets/home-1.png')} />
+             <FontAwesome name="home" size={30}  />
             </TouchableHighlight>
               
               {
                   typw != "customer"?(<TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                <Image style={styles.icon} source={require('../assets/add.png')} />
+                <FontAwesome name="file-upload" size={30} />
             </TouchableHighlight>):null
             }
 
               {
                   typw != "farmer" ? (<TouchableHighlight onPress={()=>navigation.navigate("Cart")} activeOpacity={0.2} underlayColor='#6B8E23'> 
-                <Image style={styles.icon} source={require('../assets/add-cart.png')} />
+                <FontAwesome name="cart-plus" size={30}  />
             </TouchableHighlight>):null
             }
             
             <TouchableHighlight onPress={()=>navigation.navigate("Notifications")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                <Image style={styles.icon} source={require('../assets/notification.png')} />
+                  <FontAwesome name="bell" size={28} />
             </TouchableHighlight>
             
             <TouchableHighlight onPress={()=>navigation.navigate('Message')} activeOpacity={0.2} underlayColor='#6B8E23'>
-                <Image style={styles.icon} source={require('../assets/chat.png')} />
+                <FontAwesome name="comments" size={30}  />
             </TouchableHighlight>
             
         </View>
