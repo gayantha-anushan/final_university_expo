@@ -1,9 +1,10 @@
 import React,{useState,useEffect} from 'react';
-import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard, FlatList} from 'react-native';
+import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard, FlatList, ToastAndroid} from 'react-native';
 
 import Post from '../components/Post';
 import Header from '../components/Header';
 import { getConnection } from '../Connection';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Interface = ({navigation }) => {
     
@@ -15,10 +16,18 @@ const Interface = ({navigation }) => {
 
     useEffect(() => {
         //startup functions
-        loaddata()
+        const unsubscribe = navigation.addListener('focus', () => {
+            AsyncStorage.getItem("type", (error, result) => {
+                if (error) {
+                    ToastAndroid.show(error,ToastAndroid.SHORT)
+                } else {
+                    loaddata(result)
+                }
+            })
+        })
     }, [])
 
-    const loaddata = () => {
+    const loaddata = (type) => {
         setListRefreshing(true)
         //Loading Data
         fetch(getConnection()+'/api/posts/',{
@@ -31,15 +40,33 @@ const Interface = ({navigation }) => {
         }).then((response)=>response.json()).then((responseJson)=>{
             var datas = []
             for (var i = 0; i < responseJson.length; i++){
+                var price = 0;
+                switch (type) {
+                    case "farmer":
+                        price = responseJson[i].price.wholeseller
+                        break;
+                    case "wholeseller":
+                        price = responseJson[i].price.wholeseller
+                        break;
+                    case "localseller":
+                        price = responseJson[i].price.localseller
+                        break;
+                    case "customer":
+                        price = responseJson[i].price.customer
+                        break;
+                    default:
+                        price = responseJson[i].price.customer
+                }
                 //console.log(responseJson[i]);
                 datas.push({
+                    key:responseJson[i]._id,
                     authimg: responseJson[i].author.image,
                     postid:responseJson[i]._id,
                     authid:responseJson[i].author._id,
                     username:responseJson[i].author.firstname + " "+responseJson[i].author.lastname,
                     date:responseJson[i].date,
                     title:responseJson[i].title,
-                    price:responseJson[i].price.customer,
+                    price:price,
                     quantity: responseJson[i].quantity,
                     type:responseJson[i].type,
                     image:getConnection()+"/post-img/"+responseJson[i].image
@@ -55,7 +82,7 @@ const Interface = ({navigation }) => {
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation} />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item._id} />
+                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item.key} />
                 
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>

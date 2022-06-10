@@ -1,18 +1,40 @@
-import { StyleSheet, View,Image,Text,TouchableOpacity } from 'react-native'
+import { StyleSheet, View,Image,Text,TouchableHighlight,TouchableOpacity, ToastAndroid } from 'react-native'
 import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Header = ({ navigation }) => {
     const [searchComponent, setSearchComponent] = useState(false)
+    const [typw, setTypw] = useState("");
+
+    useEffect(() => {
+        AsyncStorage.getItem("type", (error, result) => {
+            if (error) {
+                ToastAndroid.show(error, ToastAndroid.SHORT);
+            } else {
+                setTypw(result);
+            }
+        })
+    }, [])
+    
 
   return (
     <View>
         <View style={styles.topContent}>
-            <View style={styles.mainCont}>
-                <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                <Text style={styles.headerText}>Vege Sup</Text>   
-            </View>
+              <View style={styles.mainCont}>
+                  <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
+                      <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+                      </TouchableOpacity>
+                  <View style={styles.htext}>
+                      <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
+                          <Text style={styles.headerText}>Vege Sup</Text>  
+                          </TouchableOpacity>
+                    </View>
+                    
+              </View>
+              
             <TouchableOpacity style={styles.Touchable}>
                 <AntDesign name="search1" onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
             </TouchableOpacity>
@@ -21,29 +43,33 @@ const Header = ({ navigation }) => {
               searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' />):null
         }
           <View style={styles.mainCont1}>
-            <TouchableOpacity onPress={()=>navigation.openDrawer()}>
-                  <AntDesign name="bars" size={30} color="black" />
-            </TouchableOpacity>
+            <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>
+                  <FontAwesome name="ellipsis-v" size={30} />
+            </TouchableHighlight>
               
-            <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                <AntDesign name="home" size={30} color="black" />
-            </TouchableOpacity>
+              <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='#6B8E23'>
+             <FontAwesome name="home" size={30}  />
+            </TouchableHighlight>
               
-            <TouchableOpacity onPress={()=>navigation.navigate("CreatePost")}>
-                <AntDesign name="gift" size={30} color="black" />
-            </TouchableOpacity>
+              {
+                  typw != "customer"?(<TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
+                <FontAwesome name="file-upload" size={30} />
+            </TouchableHighlight>):null
+            }
 
-            <TouchableOpacity onPress={()=>navigation.navigate("Cart")}> 
-                <AntDesign name="shoppingcart" size={30} color="black" />
-            </TouchableOpacity>
+              {
+                  typw != "farmer" ? (<TouchableHighlight onPress={()=>navigation.navigate("Cart")} activeOpacity={0.2} underlayColor='#6B8E23'> 
+                <FontAwesome name="cart-plus" size={30}  />
+            </TouchableHighlight>):null
+            }
             
-            <TouchableOpacity onPress={()=>navigation.navigate("Notifications")}>
-                <AntDesign name="notification" size={30} color="black" />
-            </TouchableOpacity>
+            <TouchableHighlight onPress={()=>navigation.navigate("Notifications")} activeOpacity={0.2} underlayColor='#6B8E23'>
+                  <FontAwesome name="bell" size={28} />
+            </TouchableHighlight>
             
-            <TouchableOpacity onPress={()=>navigation.navigate('Message')}>
-                <AntDesign name="message1" size={30} color="black" />
-            </TouchableOpacity>
+            <TouchableHighlight onPress={()=>navigation.navigate('Message')} activeOpacity={0.2} underlayColor='#6B8E23'>
+                <FontAwesome name="comments" size={30}  />
+            </TouchableHighlight>
             
         </View>
     </View>
@@ -54,15 +80,18 @@ export default Header
 
 const styles = StyleSheet.create({
     logo: {
-        width:90,
+        width: 90,
         height: 90,
     },
     headerText: {
         fontSize: 28,
-        color: '#59E64C',
+        color: '#6B8E23',
         fontWeight: 'bold',
-        marginLeft: 10,
-    
+    },
+    htext: {
+        justifyContent: 'center',
+        textAlign: 'center',
+        alignContent:'center'
     },
     Touchable:{
         marginEnd:10
@@ -74,21 +103,21 @@ const styles = StyleSheet.create({
         justifyContent:'space-between'
     },
     mainCont: {
-        paddingTop: 10,
+        paddingTop: 15,
         display: 'flex',
         flexDirection: 'row',
-        alignItems:'center'
+        alignItems: 'center',
     },
     icon: {
-        marginLeft: 170,
-        paddingTop:4, 
+        paddingTop: 4, 
+        
     },
     mainCont1: {
         paddingTop: 2,
         display: 'flex',
         flexDirection: 'row',
         justifyContent:'space-around',
-        
+        paddingBottom:10
     },
     Input: {
         backgroundColor: "white",

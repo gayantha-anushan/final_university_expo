@@ -42,7 +42,6 @@ const Profile = ({route,navigation}) => {
     const [radioButtons, setRadioButtons] = useState(radioButtonsData);
     const [profileID, setProfileID] = useState(null)
     const [location, setLocation] = useState(null)
-    const [selectedUserType, setSelectedUserType] = useState(null)
     const [image, setImage] = useState(null)
     const [name, setName] = useState(null)
     const [type, setType] = useState(null)
@@ -150,22 +149,26 @@ const Profile = ({route,navigation}) => {
       setType(type)
   }
 
-  const getAction = () => {
+    const getAction = () => {
+      
+        var vali = null;
 
     for(var i = 0; i < radioButtons.length ; i++){
         if(radioButtons[i].selected == true){
-            setSelectedUserType(radioButtons[i].value);
+            vali = radioButtons[i].value;
         }
-    }
+        }
+        if (vali != null) {
 
-      if(state == "NEW"){
-          uploadProfileData();
-      }else{
-          updateProfileData();
-      }
+            if (state == "NEW") {
+                uploadProfileData(vali);
+            } else {
+                updateProfileData(vali);
+            }
+        }
   }
 
-    const updateProfileData = () => {
+    const updateProfileData = (vali) => {
         if (formVerifier()) {
             try {
                 console.log("ok")
@@ -183,7 +186,7 @@ const Profile = ({route,navigation}) => {
                         formdata.append('contact', contact)
                         formdata.append('latitude', point.latitude)
                         formdata.append('longitude', point.longitude)
-                        formdata.append('type', selectedUserType)
+                        formdata.append('type', vali)
                         formdata.append('image', { type: type, uri: image.localUrl, name: name })
                         fetch(Connection.getConnection() + "/api/auth/update-profile", {
                             method: "POST",
@@ -231,7 +234,7 @@ const Profile = ({route,navigation}) => {
         }
     }
 
-    const uploadProfileData = () => {
+    const uploadProfileData = (vali) => {
         if (formVerifier()) {
             try {
                 AsyncStorage.getItem("auth_code", (error, result) => {
@@ -247,7 +250,7 @@ const Profile = ({route,navigation}) => {
                         formdata.append('contact', contact)
                         formdata.append('latitude', point.latitude)
                         formdata.append('longitude', point.longitude)
-                        formdata.append('type', selectedUserType)
+                        formdata.append('type', vali)
                         AsyncStorage.getItem("auth_code", (error, result) => {
                             if (error) {
                                 console.log(error)
@@ -260,13 +263,13 @@ const Profile = ({route,navigation}) => {
                                     //post action after setup url
                                     console.log(responseJson.id)
                                     AsyncStorage.setItem("current_profile", responseJson.id)
+                                    AsyncStorage.setItem("type",responseJson.type)
                                     navigation.navigate('DrawerContainer')
                                 })
                             }
                         })
                     }
-                });
-      
+                }); 
             } catch (error) {
                 console.log(error);
             }
@@ -279,7 +282,7 @@ const Profile = ({route,navigation}) => {
                 <ScrollView>
                     <View style={styles.mainCont}>
                         <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                        <Text style={styles.headerText}>Profile</Text>
+                        <Text style={styles.headerText}>Create Profile</Text>
                     </View>
                         <Text style={styles.Text}>First Name</Text>
                         <TextInput value={firstName} onChangeText={setFirstName} style={styles.input} />
@@ -292,13 +295,13 @@ const Profile = ({route,navigation}) => {
                         image?(<Image source={{ uri: image.localUri }} resizeMode="contain" style={ styles.imagine} />):null
                     }
                     <View style={styles.ButtonCont1}>
-                        <TouchableOpacity onPress={()=>openImagePicker()} style={styles.Touchable}><Text style={styles.Text}>Choose the Photo</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>openImagePicker()} style={styles.Touchable}><Text style={styles.Text1}>Choose the Photo</Text></TouchableOpacity>
                     </View> 
                         <Text style={styles.Text}>Contact</Text>
                         <TextInput value={contact} onChangeText={setContact} style={styles.input} />
                         <Text style={styles.Text}>Type</Text>
                         <View style={styles.container}>
-                            <RadioGroup radioButtons={radioButtons} onPress={onPressRadioButton} layout="column"/>
+                            <RadioGroup radioButtons={radioButtons} onPress={onPressRadioButton} layout="column" />
                         {/* <SegmentedControl values={["Farmer", "Wholeseller", "Local Seller", "Customer"]} selectedIndex={index}  onChange={ (e)=>setIndex(e.nativeEvent.selectedSegmentIndex)} /> */}
                     </View>
                     <Text style={styles.Text}>Location</Text>
@@ -309,7 +312,7 @@ const Profile = ({route,navigation}) => {
                     </View>
                     <View style={styles.ButtonCont1}>
                     <TouchableOpacity style={styles.Touchable1} onPress={()=>getAction()}>
-                            <Text style={styles.Text}>Submit</Text> 
+                            <Text style={styles.Text1}>Submit</Text> 
                     </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -336,10 +339,9 @@ const styles = StyleSheet.create({
         display: 'flex',
     },
     headerText: {
-        fontSize: 36,
-        color: '#59E64C',
+        fontSize: 30,
+        color: '#6B8E23',
         fontWeight: 'bold',
-        marginLeft: 30,
         paddingTop: 20, 
     },
     input: {
@@ -367,20 +369,26 @@ const styles = StyleSheet.create({
     Text: {
         fontSize: 15,
         fontWeight: 'bold',
-        justifyContent:"center"
+        justifyContent: "center",
+        
+    },
+    Text1: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize:15
     },
     Touchable: {
-        backgroundColor: '#59E64C',
+        backgroundColor: '#6B8E23',
         padding: 10,
         borderRadius: 20,
         paddingHorizontal: 20,
     
     },
     Touchable1: {
-        backgroundColor: '#59E64C',
+        backgroundColor: '#6B8E23',
         borderColor:'rgba(0,0,0,0.2)',
         padding: 15,
-        paddingHorizontal: 30,
+        paddingHorizontal: 60,
         borderRadius: 50,
         flexDirection: 'row',
     },
@@ -394,8 +402,9 @@ const styles = StyleSheet.create({
     
 },
     container: {
-        display:'flex',
-        flexDirection:'row'
+        display: 'flex',
+        flexDirection:'row',
+        textAlign:'center'
     },
     container1: {
         flex: 2,

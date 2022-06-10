@@ -6,16 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
 
 const ViewProfile = ({ route,navigation }) => {
-    const [image, setImage] = useState("")
+    const [image, setImage] = useState(null)
     const [type, setType] = useState("")
     const [name, setName] = useState("")
     const [Address, setAddress] = useState("")
     const [contact, setContact] = useState("")
     const [location, setLocation] = useState(null)
-    const [point, setPoint] = useState({
-        latitude: 0,
-        longitude:0
-    })
+    const [point, setPoint] = useState(null)
 
     const { uid} = route.params
 
@@ -95,14 +92,16 @@ const ViewProfile = ({ route,navigation }) => {
                           </TouchableOpacity>
                     {
                         uid ? (<TouchableOpacity onPress={()=>navigation.navigate("Message")}>
-                              <AntDesign name="message1" size={30} color="black" />
+                              <Image style={styles.icon1} source={require('../assets/chat.png')} />
                           </TouchableOpacity>) : null
                           }
                       </View>
                     <View style={styles.upcont}>
                         <View style={{alignSelf:"center"}}>
                             <View style={styles.profileimage}>
-                                <Image source={{uri:image}} style={styles.image} resizeMode="cover"></Image>
+                            {
+                                image ? (<Image source={{uri:image}} style={styles.image} resizeMode="cover"></Image>):null
+                                }
                             </View>
                         </View>
                             <View style={styles.text}>
@@ -111,7 +110,7 @@ const ViewProfile = ({ route,navigation }) => {
                             <View style={styles.ButtonCont}>   
                             {
                                 uid ? null:(<TouchableOpacity style={styles.touchable}  onPress={() => navigation.navigate("Profile", { state: "EDIT" })}>
-                                    <AntDesign name="edit" size={25} color="blue"></AntDesign>
+                                    <Image style={styles.icon} source={require('../assets/writing.png')} />
                                     <Text style={styles.text3}>Edit Profile Details</Text>
                                     </TouchableOpacity>)
                             }
@@ -119,35 +118,39 @@ const ViewProfile = ({ route,navigation }) => {
                             <View style={styles.ButtonCont1}>
                             {
                                 uid ? null :(<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
-                               <AntDesign name="isv" size={25} color="blue"></AntDesign>
-                               <Text style={styles.text3}>Your Post</Text>
+                               <Image style={styles.icon} source={require('../assets/products.png')} />
+                               <Text style={styles.text3}>Your Products</Text>
                             </TouchableOpacity>)
                             }
                             </View>
                     </View>
                     
                         <View style={styles.textset}>
-                            <AntDesign name="user" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/user-1.png')} />
                             <Text style={styles.text1}>Postion As:</Text>
-                            <Text style={styles.text2}>Farmer</Text>
+                            <Text style={styles.text2}>{ type}</Text>
                         </View>
                         <View style={styles.textset}>
-                            <AntDesign name="home" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/home-address.png')} />
                             <Text style={styles.text1}>Address:</Text>
                     <Text style={styles.text2}>{ Address}</Text>
                         </View>     
                         <View style={styles.textset}>
-                            <AntDesign name="phone" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/phone-call.png')} />
                             <Text style={styles.text1}>Phone Number:</Text>
                     <Text style={styles.text2}>{contact}</Text>
                         </View>
                         <View style={styles.textset}>
-                            <AntDesign name="tags" size={25} color="black"></AntDesign>
+                            <Image style={styles.icon1} source={require('../assets/location.png')} />
                             <Text style={styles.text1}>Location:</Text>
                         </View>
-                    <MapView style={styles.map} initialRegion={location} onRegionChange={setLocation} >
-                            <Marker coordinate={point} title="Your Location" description='Selected location that you added as your location'/>
-                    </MapView>
+                    {
+                        location ? (<MapView style={styles.map} initialRegion={location} onRegionChange={setLocation} >
+                            {
+                                point ? (<Marker coordinate={point} title="Your Location" description='Selected location that you added as your location'/>):null
+                            }
+                        </MapView>):null
+                    }
             </ScrollView>        
       </SafeAreaView>
   )
@@ -163,7 +166,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#a9a9a9',
         borderRadius: 40,
         paddingTop: 10,
-        padding:15
+        padding: 15,
+        margin:8
     },
 
     titlebar: {
@@ -246,5 +250,11 @@ const styles = StyleSheet.create({
         width:300,
         height: 150,
         alignSelf:'center'
+    },
+    icon: {
+        tintColor:'white'
+    },
+    icon1: {
+        tintColor:'black'
     }
 })
