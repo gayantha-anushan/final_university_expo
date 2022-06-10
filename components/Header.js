@@ -53,7 +53,7 @@ const Header = ({ navigation }) => {
               
               {
                   typw != "customer"?(<TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                <FontAwesome name="file-upload" size={30} />
+                      <FontAwesome name="plus-square" size={30} />
             </TouchableHighlight>):null
             }
 

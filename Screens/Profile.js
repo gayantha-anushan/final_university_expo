@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { View,Dimensions,Text,StyleSheet,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard,Image, TextInput, TouchableOpacity } from 'react-native'
+import { View,Dimensions,Text,StyleSheet,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard,Image, TextInput, TouchableOpacity, ToastAndroid } from 'react-native'
 import RadioGroup from 'react-native-radio-buttons-group';
 import MapView, { Marker} from 'react-native-maps';
 import Connection, { getConnection } from '../Connection';
@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location'
 import Strawberry from '../assets/strawberry.jpg'
 import * as ImagePicker from 'expo-image-picker'
+import { Button, Dialog, ProgressBar } from 'react-native-paper';
 const radioButtonsData = [
   {
     id: '1',
@@ -49,6 +50,7 @@ const Profile = ({route,navigation}) => {
         latitude: 0,
         longitude:0
     })
+    const [inProgress, setInProgress] = useState(false)
 
     const { state} = route.params
 
@@ -150,13 +152,14 @@ const Profile = ({route,navigation}) => {
   }
 
     const getAction = () => {
+
+        setInProgress(true)
       
         var vali = null;
-
-    for(var i = 0; i < radioButtons.length ; i++){
-        if(radioButtons[i].selected == true){
-            vali = radioButtons[i].value;
-        }
+        for(var i = 0; i < radioButtons.length ; i++){
+            if(radioButtons[i].selected == true){
+                vali = radioButtons[i].value;
+            }
         }
         if (vali != null) {
 
@@ -166,7 +169,7 @@ const Profile = ({route,navigation}) => {
                 updateProfileData(vali);
             }
         }
-  }
+    }
 
     const updateProfileData = (vali) => {
         if (formVerifier()) {
@@ -194,7 +197,10 @@ const Profile = ({route,navigation}) => {
                         }).then((response) => response.json()).then((responseJson) => {
                             //post action after setup url
                             console.log("Successing");
-                            alert("Changes Applied Successful!");
+                            setInProgress(false)
+                        }).catch((error) => {
+                            setInProgress(false)
+                            console.log(error)
                         })
                     }
                 })
@@ -227,7 +233,8 @@ const Profile = ({route,navigation}) => {
             error = "Image is not selected"
         }
         if (error !== "") {
-            alert(error)
+            setInProgress(false);
+            ToastAndroid.show(error, ToastAndroid.SHORT);
             return false
         } else {
             return true;
@@ -263,8 +270,12 @@ const Profile = ({route,navigation}) => {
                                     //post action after setup url
                                     console.log(responseJson.id)
                                     AsyncStorage.setItem("current_profile", responseJson.id)
-                                    AsyncStorage.setItem("type",responseJson.type)
+                                    AsyncStorage.setItem("type", responseJson.type)
+                                    setInProgress(false)
                                     navigation.navigate('DrawerContainer')
+                                }).catch((error) => {
+                                    setInProgress(false)
+                                    console.log(error)
                                 })
                             }
                         })
@@ -292,7 +303,7 @@ const Profile = ({route,navigation}) => {
                         <TextInput value={address} onChangeText={setAddress} style={styles.input1} />
                     <Text style={styles.Text}>Profile Picture</Text>
                     {
-                        image?(<Image source={{ uri: image.localUri }} resizeMode="contain" style={ styles.imagine} />):null
+                        image?(<Image source={{ uri: image.localUri }} resizeMode="stretch"  style={ styles.imagine} />):null
                     }
                     <View style={styles.ButtonCont1}>
                         <TouchableOpacity onPress={()=>openImagePicker()} style={styles.Touchable}><Text style={styles.Text1}>Choose the Photo</Text></TouchableOpacity>
@@ -310,6 +321,12 @@ const Profile = ({route,navigation}) => {
                             <Marker coordinate={point} onDragEnd={(e)=>setPoint(e.nativeEvent.coordinate)} title="Selected Location" draggable  description='You Selected your location as here' />
                         </MapView>
                     </View>
+                    <Dialog visible={inProgress}>
+                        <Dialog.Title>Processing</Dialog.Title>
+                        <Dialog.Content>
+                            <ProgressBar indeterminate={true}  />
+                        </Dialog.Content>
+                    </Dialog>
                     <View style={styles.ButtonCont1}>
                     <TouchableOpacity style={styles.Touchable1} onPress={()=>getAction()}>
                             <Text style={styles.Text1}>Submit</Text> 
@@ -364,7 +381,7 @@ const styles = StyleSheet.create({
     },
     imagine: {
         height: 150,
-        width:'50%'
+        width:150
     },
     Text: {
         fontSize: 15,
