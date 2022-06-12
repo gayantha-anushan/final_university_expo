@@ -7,7 +7,7 @@ const Header = ({title , navigation}) => {
   const _handleSearch = () => console.log('Searching');
 
 
-  return (
+return (
     <Appbar.Header >
       {/* <Appbar.BackAction onPress={_goBack} /> */}
       <Appbar.Action onPress={()=>navigation.openDrawer()} icon="view-list" />

@@ -5,11 +5,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import Connection from '../Connection'
 import {TextInput} from 'react-native-paper'
+import UserContext from '../Context/UserContext';
+
 const Login = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(true);
-    
+
+    // context api
+    const {setUserData} = React.useContext(UserContext);
 
     const loginNow = () => {
         //connection
@@ -28,6 +32,9 @@ const Login = ({ navigation }) => {
             }).then((response)=>response.json()).then(async (responseJson)=>{
                 //response coming from derver
                 if(responseJson.status == "OK"){
+                    setUserData({
+                        token : responseJson.token
+                    });
                     await AsyncStorage.setItem('auth_code',responseJson.token);
                     navigateToSuitable(responseJson.token)
                 }else{

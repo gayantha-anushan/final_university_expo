@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from '@react-native-async-storage/async-storage'
 import Connection from '../Connection'
 import {TextInput} from 'react-native-paper'
+import UserContext from '../Context/UserContext';
 
 const Register = ({ navigation }) => {
     const [email, setemail] = useState('');
@@ -11,6 +12,9 @@ const Register = ({ navigation }) => {
     const [ReTypepassword, Resetpassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(true);
     const [RepasswordVisible, ResetPasswordVisible] = useState(true);
+
+    // context api
+    const {setUserData} = React.useContext(UserContext);
 
     const registerNow = () => {
         //Registration process goes here
@@ -34,6 +38,9 @@ const Register = ({ navigation }) => {
                     navigation.navigate('Profile',{
                         state:"NEW"
                     })
+                    setUserData({
+                        token : responseJson.token
+                    });
                 }else{
                     ToastAndroid.show(responseJson.error)
                 }

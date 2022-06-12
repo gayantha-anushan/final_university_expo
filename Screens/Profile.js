@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location'
 import Strawberry from '../assets/strawberry.jpg'
 import * as ImagePicker from 'expo-image-picker'
+import UserContext from '../Context/UserContext';
+
 const radioButtonsData = [
   {
     id: '1',
@@ -49,6 +51,9 @@ const Profile = ({route,navigation}) => {
         latitude: 0,
         longitude:0
     })
+
+    // use context api
+    const {setUserData} = React.useContext(UserContext);
 
     const { state} = route.params
 
@@ -262,6 +267,9 @@ const Profile = ({route,navigation}) => {
                                 }).then((response) => response.json()).then((responseJson) => {
                                     //post action after setup url
                                     console.log(responseJson.id)
+                                    setUserData({
+                                        user : responseJson.id
+                                    });
                                     AsyncStorage.setItem("current_profile", responseJson.id)
                                     AsyncStorage.setItem("type",responseJson.type)
                                     navigation.navigate('DrawerContainer')
