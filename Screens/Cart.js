@@ -19,18 +19,41 @@ const DATA = [
     },
 ];
 
-const Item = ({name, qty, price,image}) => (
-    <View style={styles.card}>
-        <Image source={{uri:image}} style={styles.itemImage}/>
-        <View style={styles.container}>
+const Item = ({id,name, qty, price,image}) => (
+    <View style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderRadius:15,
+        borderWidth: 1,
+        padding: 3,
+        margin:5
+    }}>
+        <Image source={{ uri: image }} style={{
+            height: 50,
+            width: 50,
+            margin:5,
+            borderRadius:25
+        }}/>
+        <View style={{
+            width:Dimensions.get("screen").width - 78
+        }}>
             <Text style={styles.item}>{name}</Text>
-            <Text>Qty: {qty}Kg</Text>
-            <Text>Price: Rs.{price}</Text>
-        </View>
-        <View style={styles.container1}>
-            <TouchableOpacity style={styles.btn}>
-                <Text style={styles.btntxt}>Cancle Order</Text>
-            </TouchableOpacity>
+            <View style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection:'row'
+            }}>
+                <View>
+                    <Text>Qty: {qty}Kg</Text>
+                    <Text>Price: Rs.{price}</Text>
+                </View>
+                <TouchableOpacity style={styles.btn}>
+                    <Text style={styles.btntxt}>Cancel Order</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     </View>
 );
@@ -253,41 +276,25 @@ const Cart = ({ navigation }) => {
             justifyContent: 'space-around',
             alignItems: 'center'
         },
-        card: {
-            borderColor: '#000000',
-            borderRadius: 10,
-            borderWidth: 1,
-            margin: 5,
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center'
-        },
         container: {
             justifyContent: 'flex-start',
         },
         container1: {
             justifyContent: 'flex-end',
         },
-        itemImage: {
-            height: 50,
-            width: 50,
-            margin: 5,
-            borderRadius: 25
-        },
         item: {
             fontWeight: 'bold',
-            fontSize: 20,
+            fontSize: 18,
         },
         btn: {
-            backgroundColor: 'green',
+            backgroundColor:'#6B8E23',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             height: 40,
-            width: 100,
+            width: 120,
             borderRadius: 20,
-            marginRight: 10
+            marginRight: 10,
         },
         btntxt: {
             color: 'white',
