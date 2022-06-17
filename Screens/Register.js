@@ -100,29 +100,34 @@ const styles = StyleSheet.create({
         height:'100%',
     },
     mainCont: {
+<<<<<<< HEAD
         paddingTop: 35,
+=======
+        paddingTop: 30,
+>>>>>>> gayantha
         display: 'flex',
         flexDirection: 'row',
+        alignItems:'center'
     },
     logo: {
-        width:120,
-        height: 120,
+        width:90,
+        height: 90,
         display: 'flex',
     },
     headerText: {
-        fontSize: 36,
+        fontSize: 32,
         color: '#6B8E23',
         fontWeight: 'bold',
-        justifyContent: 'center',
+        textAlign: 'center',
         alignContent: 'center',
-        fontFamily:'sans-serif-medium'
+        justifyContent:'center'
         
     },
     htext: {
         justifyContent:'center'
     },
     backImage: {
-        width:380,
+        width:'100%',
         height: 250,
         justifyContent: 'center',
     },
@@ -130,7 +135,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#6B8E23',
         padding: 15,
         borderRadius: 20,
-        paddingHorizontal: 60,  
+         
     },
     Touchable1: {
         backgroundColor: '#4d8aeb',
@@ -165,7 +170,7 @@ const styles = StyleSheet.create({
         padding: 2,
         borderRadius: 15,
         justifyContent: "center",
-        width: 375,
+        width: '90%',
         fontSize: 18,
         height: 60,
         backgroundColor:'white'
@@ -193,9 +198,10 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     container: {
-        flex: 1,
+        display: 'flex',
+        flexDirection:'column',
         justifyContent: 'center',
-        alignContent:'center'
+        alignItems:'center'
     }
 
 
