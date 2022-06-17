@@ -130,26 +130,27 @@ const styles = StyleSheet.create({
         height:'100%',
     },
     mainCont: {
-        paddingTop: 50,
+        paddingTop: 30,
         display: 'flex',
         flexDirection: 'row',
+        alignItems:'center'
     },
     logo: {
-        width:120,
-        height: 120,
+        width:90,
+        height: 90,
         display: 'flex',
-        justifyContent:'flex-start'
     },
     headerText: {
-        fontSize: 30,
+        fontSize: 32,
         color: '#6B8E23',
         fontWeight: 'bold',
-        paddingTop: 20,
-        alignItems:'center'
+        textAlign: 'center',
+        alignContent: 'center',
+        justifyContent:'center'
         
     },
     backImage: {
-        width:380,
+        width:'100%',
         height: 250,
         justifyContent: "center",
         opacity: 0.8,
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
         padding: 2,
         borderRadius: 15,
         justifyContent: "center",
-        width: 375,
+        width: '90%',
         fontSize: 18,
         height: 60,
         backgroundColor:'white'

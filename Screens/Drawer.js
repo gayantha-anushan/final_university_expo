@@ -10,6 +10,7 @@ import stocks from '../assets/risk.png';
 import records from '../assets/medical-record.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Connection from '../Connection'
+import { ScrollView } from 'react-native';
 
 const Drawer = (props) => {
     const [currentTab, setCurrentTab] = useState("Home");
@@ -43,7 +44,10 @@ const Drawer = (props) => {
     }, [])
     
     return (
-        <View style={styles.container}>
+        <ScrollView style={{
+            backgroundColor:'#6b8e23'
+        }}>
+            <View style={styles.container}>
             <View style={styles.cont}>
                 {
                     image?(<Image style={styles.image} source={{uri:image}}>
@@ -65,6 +69,7 @@ const Drawer = (props) => {
                 </View>
             </View>
         </View>
+        </ScrollView>
     )
 }
 const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {

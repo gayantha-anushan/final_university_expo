@@ -14,6 +14,7 @@ import ViewBids from './ViewBids'
 import CompletePost from './CompletePost'
 import AsyncStorage from '@react-native-async-storage/async-storage' 
 import UserContext from '../Context/UserContext'
+import SellerBids from './SellerBids'
 
 const Drawer = createDrawerNavigator()
 
@@ -55,7 +56,8 @@ const DrawerContainer = () => {
       <Drawer.Screen name="Cart" component={Cart}/>
       <Drawer.Screen name="Orders" component={Orders} /> 
       <Drawer.Screen name="Settings" component={Settings} />
-      <Drawer.Screen name="ViewBids" component={ViewBids}/>
+      <Drawer.Screen name="ViewBids" component={ViewBids} />
+      <Drawer.Screen name="SellerBids" component={SellerBids}/>
     </Drawer.Navigator>
   )
 }
