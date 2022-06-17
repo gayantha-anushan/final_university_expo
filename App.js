@@ -20,8 +20,16 @@ import About from './Screens/About';
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
 
+// import context API
+import UserContext from './Context/UserContext';
+
 const stack = createNativeStackNavigator();
 export default function App() {
+
+  const [userData , setUserData] = React.useState({
+    token : undefined,
+    user : undefined
+  });
 
   const theme = {
     ...DefaultTheme,
@@ -34,6 +42,7 @@ export default function App() {
   };
 
   return (
+    <UserContext.Provider value={{userData , setUserData}}>
     <PaperProvider theme={theme}>
     <NavigationContainer>
       <stack.Navigator screenOptions={{ headerShown: false }}>
@@ -49,6 +58,7 @@ export default function App() {
       </stack.Navigator>
     </NavigationContainer>
     </PaperProvider> 
+    </UserContext.Provider>
   );
 }
 

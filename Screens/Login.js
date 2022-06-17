@@ -5,16 +5,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import Connection from '../Connection'
 import {TextInput} from 'react-native-paper'
+import UserContext from '../Context/UserContext';
+
 const Login = ({ navigation }) => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(true);
-    
+
+    // context api
+    const {setUserData} = React.useContext(UserContext);
 
     const loginNow = () => {
         //connection
         if(email != "" && password != ""){
-            try{
             fetch(Connection.getConnection()+"/api/auth/login",{
                 method:'POST',
                 headers:{
@@ -25,20 +28,25 @@ const Login = ({ navigation }) => {
                     email:email,
                     password:password
                 }),
-            }).then((response)=>response.json()).then(async (responseJson)=>{
+            }).then((response) => response.json()).then(async (responseJson) => {
+                console.log(responseJson)
                 //response coming from derver
                 if(responseJson.status == "OK"){
+                    setUserData({
+                        token : responseJson.token
+                    });
                     await AsyncStorage.setItem('auth_code',responseJson.token);
                     navigateToSuitable(responseJson.token)
                 }else{
-                    ToastAndroid.show(responseJson.error)
+                     ToastAndroid.show(responseJson.error,ToastAndroid.SHORT)
                 }
+            }).catch((error) => {
+                //console.log("error: " +error)
+                 console.log(error);
+                ToastAndroid.show("Error Occured From Server", ToastAndroid.SHORT);
             })
-            }catch(error){
-                console.log(error);
-            }
         }else{
-            ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
+            ToastAndroid.show("cannot insert empty email and(or) password",ToastAndroid.SHORT);
         }
     }
 
@@ -46,7 +54,6 @@ const Login = ({ navigation }) => {
         //this functon create to navigate for suitable directory
         //TODO1:Check Profile Availability
         //Todo2:route to suitab;e terfaces
-        try{
         fetch(Connection.getConnection()+"/api/auth/profile-data",{
             method:"POST",
             headers:{
@@ -68,10 +75,10 @@ const Login = ({ navigation }) => {
                 AsyncStorage.setItem("type", responseJson.data.type);
                 navigation.navigate('DrawerContainer')
             }
-        })
-        }catch(error){
+        }).catch((error) => {
             console.log(error)
-        }
+            ToastAndroid.show("Error Occured!", ToastAndroid.SHORT);
+        })
     }
 
     return (

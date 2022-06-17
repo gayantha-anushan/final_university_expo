@@ -123,7 +123,7 @@ const CompletePost = ({ route,navigation}) => {
     
         }).catch((error) => {
             console.log(error)
-        })
+        });
     }
 
     const selectAmount = (value) => {

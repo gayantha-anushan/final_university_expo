@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from '@react-native-async-storage/async-storage'
 import Connection from '../Connection'
 import {TextInput} from 'react-native-paper'
+import UserContext from '../Context/UserContext';
 
 const Register = ({ navigation }) => {
     const [email, setemail] = useState('');
@@ -12,37 +13,45 @@ const Register = ({ navigation }) => {
     const [passwordVisible, setPasswordVisible] = useState(true);
     const [RepasswordVisible, ResetPasswordVisible] = useState(true);
 
+    // context api
+    const {setUserData} = React.useContext(UserContext);
+
     const registerNow = () => {
         //Registration process goes here
-        if(email != "" && password != "" && password == ReTypepassword){
-            try{
-            fetch(Connection.getConnection()+"/api/auth/signup",{
-                method:'POST',
-                headers:{
-                    Accept:'application/json',
-                    'Content-Type':'application/json',
-                },
-                body: JSON.stringify({
-                    email:email,
-                    password:password
-                }),
-            })
-            .then((response)=>response.json()).then(async (responseJson)=>{
-                //response coming from server
-                if(responseJson.status == "OK"){
-                    await AsyncStorage.setItem('auth_code',responseJson.token);
-                    navigation.navigate('Profile',{
-                        state:"NEW"
-                    })
-                }else{
-                    ToastAndroid.show(responseJson.error)
-                }
-            })
-            }catch(error){
-                console.log(error)
+        if (email != "" && password != "") {
+            if (password == ReTypepassword) {
+                fetch(Connection.getConnection() + "/api/auth/signup", {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    }),
+                })
+                .then((response) => response.json()).then(async (responseJson) => {
+                    //response coming from server
+                    if (responseJson.status == "OK") {
+                        await AsyncStorage.setItem('auth_code', responseJson.token);
+                        navigation.navigate('Profile', {
+                            state: "NEW"
+                        })
+                        setUserData({
+                            token : responseJson.token
+                        });
+                    } else {
+                        ToastAndroid.show(responseJson.error)
+                    }
+                }).catch((error) => {
+                    ToastAndroid.show("Internal Server Error Occured!",ToastAndroid.SHORT)
+                })
+            } else {
+                ToastAndroid.show("Please enter Same password for both", ToastAndroid.SHORT);
             }
         }else{
-            ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
+            ToastAndroid.show("Please Enter Valid email and(or) password",ToastAndroid.SHORT);
         }
     }
 

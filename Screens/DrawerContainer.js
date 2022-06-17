@@ -13,10 +13,38 @@ import Cart from './Cart'
 import ViewBids from './ViewBids'
 import CompletePost from './CompletePost'
 import Records from './Records'
+import AsyncStorage from '@react-native-async-storage/async-storage' 
+import UserContext from '../Context/UserContext'
 
 const Drawer = createDrawerNavigator()
 
+
+
 const DrawerContainer = () => {
+
+  const {setUserData} = React.useContext(UserContext);
+
+  React.useEffect(() => {
+    AsyncStorage.getItem('auth_code', (error, result) => {
+        if (error) {
+            console.log(error)
+        } else {
+            setUserData({
+              token : result
+            });
+        }
+    });
+    AsyncStorage.getItem("current_profile", (error, result) => {
+      if (error) {
+          console.log(error)
+      } else {
+          setUserData({
+            user : result
+          });
+      }
+    });
+  } , [])
+
   return (
     <Drawer.Navigator drawerContent={props=><Draweri {...props} />} initialRouteName='Interface' screenOptions={{ headerShown:false}}>
        <Drawer.Screen name="Interface" component={Interface} />
