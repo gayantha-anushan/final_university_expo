@@ -133,6 +133,7 @@ const Orders = ({navigation}) => {
                                         orders={orders}
                                         setOrders={setOrders}
                                         title={order.postId.title}
+                                        
                                         />
                             })
                         }
