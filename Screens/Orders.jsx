@@ -5,7 +5,9 @@ import Header from './Header';
 import { useTheme } from 'react-native-paper';
 import Bid from '../components/Bid';
 import AsyncStorage from '@react-native-async-storage/async-storage' 
-import Connection  from '../Connection';
+import Connection, { getConnection }  from '../Connection';
+import { FlatList } from 'react-native-gesture-handler';
+
 
 const Orders = ({navigation}) => {
 
@@ -13,15 +15,16 @@ const Orders = ({navigation}) => {
     const { colors } = useTheme();
     const [isOrder, setIsOrder] = useState(true)
     const [authCode , setAuthCode] = useState(null);
-    const [orders , setOrders] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [bidData, setBidData] = useState([])
 
-    const getOrders =  (result) => {
+    const getOrders = (result,token) => {
         fetch(Connection.getConnection() + "/api/cart/seller/" + result, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'token': authCode,
+                'token': token,
             }
         }).then((result) => result.json()).then((jres) => {
             var array = [];
@@ -31,7 +34,7 @@ const Orders = ({navigation}) => {
             setOrders(array);
             console.log(jres);
         }).catch((error) => {
-            console.log(error);
+            console.log("Error 1 : "+error);
         })
     }
 
@@ -39,21 +42,50 @@ const Orders = ({navigation}) => {
         const unsybscribe = navigation.addListener('focus', () => {
             AsyncStorage.getItem('auth_code', (error, result) => {
                 if (error) {
-                    console.log(error)
+                    console.log("Error 2 : "+error)
                 } else {
                     setAuthCode(result)
-                }
-            })
-            AsyncStorage.getItem("current_profile", (error, result) => {
-                if (error) {
-                    console.log(error)
-                } else {
-                    getOrders(result);
+                     AsyncStorage.getItem("current_profile", (error, result2) => {
+                        if (error) {
+                            console.log(error)
+                        } else {
+                            getOrders(result2,result);
+                            loadBidData(result2,result)
+                        }
+                    })
                 }
             })
         })
 
-    } , []);
+    }, []);
+    
+    const loadBidData = (id,token) => {
+        fetch(Connection.getConnection() + "/api/auction/find-bidded-posts/" + id, {
+            method:'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "token":token
+            }
+        }).then((result) => result.json()).then((jsonResult) => {
+            var bidDatai = [];
+            for (var i = 0; i < jsonResult.length; i++){
+                var dt = {
+                    title: jsonResult[i].post.title,
+                    image: getConnection() + "/post-img/" + jsonResult[i].post.image,
+                    bids: jsonResult[i].bids,
+                    id: jsonResult[i].post._id,
+                    date:jsonResult[i].post.date.substring(0,11)
+                }
+                bidDatai = bidDatai.concat(dt);
+            }
+            setBidData(bidDatai);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    const renderItem = ({ item }) => <Bid bids={item.bids} posttitle={item.title} navigation={navigation} postid={item.id} postdate={item.date} image={item.image} />
 
     return (
         <View style={styles.ordersContainer}>
@@ -108,8 +140,7 @@ const Orders = ({navigation}) => {
                     </ScrollView>
                 ) : (
                         <View>
-                            <Bid bids={1} />
-                            <Bid bids={0} />
+                            <FlatList data={bidData} renderItem={renderItem} keyExtractor={item=>item.id} />
                     </View>
                 )
             }

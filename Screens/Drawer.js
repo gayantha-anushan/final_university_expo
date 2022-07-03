@@ -10,6 +10,7 @@ import stocks from '../assets/risk.png';
 import records from '../assets/medical-record.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Connection from '../Connection'
+import { ScrollView } from 'react-native';
 
 const Drawer = (props) => {
     const [currentTab, setCurrentTab] = useState("Home");
@@ -43,7 +44,10 @@ const Drawer = (props) => {
     }, [])
     
     return (
-        <View style={styles.container}>
+        <ScrollView style={{
+            backgroundColor:'#6b8e23'
+        }}>
+            <View style={styles.container}>
             <View style={styles.cont}>
                 {
                     image?(<Image style={styles.image} source={{uri:image}}>
@@ -58,12 +62,13 @@ const Drawer = (props) => {
                     {TabButton(currentTab, setCurrentTab, "Orders", orders,props.navigation)}
                     {TabButton(currentTab,setCurrentTab,"Contacts",contacts,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Stocks", stocks ,props.navigation)}
-                    {TabButton(currentTab, setCurrentTab, "Records", records)}
+                    {TabButton(currentTab, setCurrentTab, "Records", records,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Settings", settings,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
                 </View>
             </View>
         </View>
+        </ScrollView>
     )
 }
 const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
@@ -87,6 +92,9 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                     break;
                 case "Stocks":
                     navigation.navigate("Stock");
+                    break;
+                case "Records":
+                    navigation.navigate("Records");
                     break;
                 case "Settings":
                     navigation.navigate("Settings");

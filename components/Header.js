@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 const Header = ({ navigation }) => {
     const [searchComponent, setSearchComponent] = useState(false)
     const [typw, setTypw] = useState("");
+    const [keywords, setKeywords] = useState("")
 
     useEffect(() => {
         AsyncStorage.getItem("type", (error, result) => {
@@ -18,6 +19,14 @@ const Header = ({ navigation }) => {
             }
         })
     }, [])
+
+    
+
+    const searchme = () => {
+        navigation.navigate("", {
+            keywords:keywords
+        })
+    }
     
 
   return (
@@ -29,7 +38,7 @@ const Header = ({ navigation }) => {
                       </TouchableOpacity>
                   <View style={styles.htext}>
                       <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                          <Text style={styles.headerText}>Vege Sup</Text>  
+                          <Text style={styles.headerText}>Govi Saviya</Text>  
                           </TouchableOpacity>
                     </View>
                     
@@ -40,20 +49,20 @@ const Header = ({ navigation }) => {
             </TouchableOpacity>
         </View>
           {
-              searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' />):null
+              searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' value={keywords} onChangeText={setKeywords}  />):null
         }
           <View style={styles.mainCont1}>
             <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>
                   <FontAwesome name="ellipsis-v" size={30} />
+                  
             </TouchableHighlight>
-              
               <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='#6B8E23'>
              <FontAwesome name="home" size={30}  />
             </TouchableHighlight>
               
               {
                   typw != "customer"?(<TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                      <FontAwesome name="plus-square" size={30} />
+                <FontAwesome name="plus-square" size={30} />
             </TouchableHighlight>):null
             }
 
@@ -71,7 +80,7 @@ const Header = ({ navigation }) => {
                 <FontAwesome name="comments" size={30}  />
             </TouchableHighlight>
             
-        </View>
+          </View>
     </View>
   )
 }
@@ -87,6 +96,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: '#6B8E23',
         fontWeight: 'bold',
+        fontFamily:'sans-serif-medium'
     },
     htext: {
         justifyContent: 'center',
