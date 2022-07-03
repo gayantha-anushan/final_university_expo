@@ -100,11 +100,7 @@ const styles = StyleSheet.create({
         height:'100%',
     },
     mainCont: {
-<<<<<<< HEAD
-        paddingTop: 35,
-=======
         paddingTop: 30,
->>>>>>> gayantha
         display: 'flex',
         flexDirection: 'row',
         alignItems:'center'

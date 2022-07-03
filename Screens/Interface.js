@@ -6,10 +6,9 @@ import Header from '../components/Header';
 import { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const Interface = ({navigation }) => {
+const Interface = ({ route, navigation }) => {
     
-    const renderItem = ({ item }) => <Post postid={ item.postid} authimg={ item.authimg} navigation={navigation}  username={item.username} authid={ item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
-    
+    const renderItem = ({ item }) => <Post postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
 
     const [data, setData] = useState([])
     const [listRefreshing, setListRefreshing] = useState(false)
@@ -17,6 +16,7 @@ const Interface = ({navigation }) => {
     useEffect(() => {
         //startup functions
         const unsubscribe = navigation.addListener('focus', () => {
+            console.log("parameters : "+ route.params)
             AsyncStorage.getItem("type", (error, result) => {
                 if (error) {
                     ToastAndroid.show(error,ToastAndroid.SHORT)

@@ -9,12 +9,12 @@ import { FlatList } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-const SingleBidItem = ({id, name, address, contact, image, quantity, accepted, value, days, amount }) => {
+const SingleBidItem = ({id, name, address, contact, image, quantity, accepted, value, days, amount,loader }) => {
     
     const acceptBid = (stat) => {
         AsyncStorage.getItem('auth_code', (error, result) => {
             if (error) {
-                console.log(error)
+                ToastAndroid.show("Internal Error!",ToastAndroid.SHORT)
             } else {
                 AsyncStorage.getItem('current_profile', (err, resu) => {
                     if (err) {
@@ -34,7 +34,8 @@ const SingleBidItem = ({id, name, address, contact, image, quantity, accepted, v
                             })
                         }).then((respi) => respi.json()).then((jsonResponse) => {
                             if (jsonResponse.data) {
-                                accepted:stat
+                                loader();
+                                console.log(accepted + " "+ stat + " " + jsonResponse.data)
                             } else {
                                 ToastAndroid.show("Something Went Wrong!",ToastAndroid.SHORT)
                             }
@@ -75,16 +76,16 @@ const SingleBidItem = ({id, name, address, contact, image, quantity, accepted, v
             </View>
             <View style={styles.holderContainer}>
                 <View style={styles.holder}>
-                    <Text style={styles.holderTitle}>Amount</Text>
-                    <Text style={styles.holderCont}>{amount}</Text>
+                    <Text style={styles.holderTitle}>Bidded</Text>
+                    <Text style={styles.holderCont}>Rs {amount.toFixed(2)}</Text>
                 </View>
                 <View style={styles.holder}>
-                    <Text style={styles.holderTitle}>quantity</Text>
-                    <Text style={styles.holderCont}>{quantity}</Text>
+                    <Text style={styles.holderTitle}>Requested</Text>
+                    <Text style={styles.holderCont}>{quantity.toFixed(3)} Kg</Text>
                 </View>
                 <View style={styles.holder}>
-                    <Text style={styles.holderTitle}>Value</Text>
-                    <Text style={styles.holderCont}>{value}</Text>
+                    <Text style={styles.holderTitle}>Your Value</Text>
+                    <Text style={styles.holderCont}>Rs {value.toFixed(2)}</Text>
                 </View>
                 <View style={styles.holder}>
                     <Text style={styles.holderTitle}>days</Text>
@@ -122,6 +123,7 @@ const SellerBids = ({ route, navigation }) => {
     }, [id])
 
     const loadData = () => {
+        setRefreshList(true);
         fetch(getConnection() + "/api/auction/post-and-bid/" + id, {
             method: "GET",
             headers: {
@@ -134,11 +136,14 @@ const SellerBids = ({ route, navigation }) => {
             setTitle(resasjson.post.title)
             setDataList(resasjson.bids)
         }).catch(error => {
-            console.log(error)
+            ToastAndroid.show("Loading Error", ToastAndroid.SHORT);
         })
+        setRefreshList(false)
     }
+    
+    const [refreshList, setRefreshList] = useState(false)
 
-    const renderItem = ({ item }) => <SingleBidItem accepted={item.accepted} name={item.bidder.firstname + " " + item.bidder.lastname} address={item.bidder.address} amount={item.amount} quantity={item.quantity} value={item.value} days={item.buy_after} contact={item.bidder.contact} image={getConnection() + "/profile/" + item.bidder.image} id={item._id} />
+    const renderItem = ({ item }) => <SingleBidItem loader={loadData} accepted={item.accepted} name={item.bidder.firstname + " " + item.bidder.lastname} address={item.bidder.address} amount={item.amount} quantity={item.quantity} value={item.value} days={item.buy_after} contact={item.bidder.contact} image={getConnection() + "/profile/" + item.bidder.image} id={item._id} />
     
 
   return (
@@ -219,7 +224,7 @@ const SellerBids = ({ route, navigation }) => {
                   <FontAwesome name="filter" size={24} color="black" />
               </TouchableOpacity>
           </View>
-          <FlatList data={dataList} renderItem={renderItem} keyExtractor={item=>item._id} />
+          <FlatList data={dataList} renderItem={renderItem} refreshing={refreshList} onRefresh={()=>loadData()} keyExtractor={item=>item._id} />
     </View>
   )
 }

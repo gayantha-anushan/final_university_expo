@@ -17,6 +17,7 @@ const Login = ({ navigation }) => {
 
     const loginNow = () => {
         //connection
+        console.log("Clicked")
         if(email != "" && password != ""){
             fetch(Connection.getConnection()+"/api/auth/login",{
                 method:'POST',
