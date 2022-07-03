@@ -4,6 +4,9 @@ import { AntDesign } from '@expo/vector-icons';
 import Connection, { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Marker } from 'react-native-maps';
+import { Button, Dialog, ProgressBar } from 'react-native-paper';
+import DialogReport from './DialogReport';
+import UserContext from '../Context/UserContext';
 
 const ViewProfile = ({ route,navigation }) => {
     const [image, setImage] = useState(null)
@@ -15,6 +18,8 @@ const ViewProfile = ({ route,navigation }) => {
     const [point, setPoint] = useState(null)
 
     const { uid} = route.params
+    
+    const {userData} = React.useContext(UserContext);
 
 
     useEffect(() => {
@@ -124,6 +129,12 @@ const ViewProfile = ({ route,navigation }) => {
                             }
                             </View>
                     </View>
+                    <View>
+                        <DialogReport 
+                        reporteeId={uid}
+                        reportorId={userData.user}
+                        />
+                    </View>
                     
                         <View style={styles.textset}>
                             <Image style={styles.icon1} source={require('../assets/user-1.png')} />
@@ -150,8 +161,8 @@ const ViewProfile = ({ route,navigation }) => {
                                 point ? (<Marker coordinate={point} title="Your Location" description='Selected location that you added as your location'/>):null
                             }
                         </MapView>):null
-                    }
-            </ScrollView>        
+                    } 
+            </ScrollView>   
       </SafeAreaView>
   )
 }

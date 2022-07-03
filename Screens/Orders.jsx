@@ -29,7 +29,7 @@ const Orders = ({navigation}) => {
                 array = array.concat(item);
             })
             setOrders(array);
-            // console.log(jres);
+            console.log(jres);
         }).catch((error) => {
             console.log(error);
         })
@@ -100,6 +100,7 @@ const Orders = ({navigation}) => {
                                         navigation={navigation}
                                         orders={orders}
                                         setOrders={setOrders}
+                                        title={order.postId.title}
                                         />
                             })
                         }

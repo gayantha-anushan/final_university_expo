@@ -225,6 +225,15 @@ const Cart = ({ navigation }) => {
 
     const bidRenderItem = ({ item }) => (<BidItem cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)
     
+
+    // check the conditional render
+    const renderItem1 = ({item}) => {
+        if(item.price == 400){
+            return <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} /> 
+        }
+    }
+
+
     return (
 
         <View>
