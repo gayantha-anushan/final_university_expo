@@ -1,36 +1,42 @@
 import React,{useState,useEffect} from 'react';
-import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard, FlatList, ToastAndroid} from 'react-native';
+import { View,Text ,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard, FlatList, ToastAndroid} from 'react-native';
 
 import Post from '../components/Post';
-import Header from '../components/Header';
-import { getConnection } from '../Connection';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import Header from './Header';
+import Connection  from '../Connection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native-paper';
+// import Post from '../components/Post'
 
-const Interface = ({ route, navigation }) => {
-    
-    const renderItem = ({ item }) => <Post postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
+const ContactPost = ({navigation , route}) => {
+
+    const renderItem = ({ item }) => <Post postid={ item.postid} authimg={ item.authimg} navigation={navigation}  username={item.username} authid={ item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
+
+    const title = 'Posts';
 
     const [data, setData] = useState([])
-    const [listRefreshing, setListRefreshing] = useState(false)
+    const [listRefreshing, setListRefreshing] = useState(false);
+    const [type , setType] = useState();
 
     useEffect(() => {
         //startup functions
         const unsubscribe = navigation.addListener('focus', () => {
-            console.log("parameters : "+ route.params)
             AsyncStorage.getItem("type", (error, result) => {
                 if (error) {
                     ToastAndroid.show(error,ToastAndroid.SHORT)
                 } else {
-                    loaddata(result)
+                    setData([]);
+                    setType(result);
                 }
             })
         })
-    }, [])
+    }, []);
 
-    const loaddata = (type) => {
+
+    const loaddata = async () => { 
         setListRefreshing(true)
         //Loading Data
-        fetch(getConnection()+'/api/posts/',{
+        fetch(Connection.getConnection()+'/api/posts/'+route.params.id,{
             method:'GET',
             headers:{
                 'Accept':'application/json',
@@ -69,29 +75,27 @@ const Interface = ({ route, navigation }) => {
                     price:price,
                     quantity: responseJson[i].quantity,
                     type:responseJson[i].type,
-                    image:getConnection()+"/post-img/"+responseJson[i].image
+                    image:Connection.getConnection()+"/post-img/"+responseJson[i].image
                 })
             }
             setData(datas)
         })
         setListRefreshing(false)
     }
-    
- 
+
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
-            <Header navigation={navigation} />
+        <View>
+            <Header title={title} navigation={navigation} />
+            <Button icon="refresh" mode="contained" onPress={loaddata}>
+                See All Posts
+            </Button>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item.key} />
-                
+                {
+                    data ? <FlatList data={data} renderItem={renderItem} keyExtractor={item => item.key} /> : <View></View> 
+                }              
             </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-    );
+        </View>
+    )
 }
-const styles = StyleSheet.create({
-    mainArea: {
-        backgroundColor: "white",
-        height:'100%',
-    }
-});
-export default Interface;
+
+export default ContactPost;

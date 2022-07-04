@@ -19,44 +19,78 @@ const DATA = [
     },
 ];
 
-const Item = ({id,name, qty, price,image}) => (
-    <View style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderRadius:15,
-        borderWidth: 1,
-        padding: 3,
-        margin:5
-    }}>
-        <Image source={{ uri: image }} style={{
-            height: 50,
-            width: 50,
-            margin:5,
-            borderRadius:25
-        }}/>
+const Item = ({id,name, qty, price,image , isApproved , cartItems , setCartItems , remainDays}) => {
+
+    const deleteCartItem = async () => {
+        fetch(getConnection() + "/api/cart/removecartitem/"+id , {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        }).then((response) => response.json()).then((jsonResult) => {
+            console.log(jsonResult);
+        })
+        console.log('clicked');
+        setCartItems(
+            cartItems.filter(cartItem =>  cartItem.id !== id)
+        );
+    }
+
+    return (
         <View style={{
-            width:Dimensions.get("screen").width - 78
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderRadius:15,
+            borderWidth: 1,
+            padding: 3,
+            margin:5
         }}>
-            <Text style={styles.item}>{name}</Text>
+            <Image source={{ uri: image }} style={{
+                height: 50,
+                width: 50,
+                margin:5,
+                borderRadius:25
+            }}/>
             <View style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexDirection:'row'
+                width:Dimensions.get("screen").width - 78
             }}>
-                <View>
-                    <Text>Qty: {qty}Kg</Text>
-                    <Text>Price: Rs.{price}</Text>
+                <Text style={styles.item}>{name}</Text>
+                <View style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexDirection:'row'
+                }}>
+                    <View>
+                        <Text>Qty: {qty}Kg</Text>
+                        <Text>Price: Rs.{price}</Text>
+                        {
+                            remainDays ? (
+                                <Text>Remain Days: {remainDays}</Text>
+                            ) : (
+                                <Text></Text>
+                            )
+                        }
+                    </View>
+                    {
+                        isApproved ? (
+                        <TouchableOpacity style={styles.btn}>
+                            <Text style={styles.btntxt}>Order Approved</Text>
+                        </TouchableOpacity>
+                        ) : (
+                        <TouchableOpacity style={styles.btn} onPress={deleteCartItem}>
+                            <Text style={styles.btntxt}>Cancel Order</Text>
+                        </TouchableOpacity>
+                        )
+                    }
                 </View>
-                <TouchableOpacity style={styles.btn}>
-                    <Text style={styles.btntxt}>Cancel Order</Text>
-                </TouchableOpacity>
             </View>
         </View>
-    </View>
-);
+    )
+};
 
 const BidItem = ({ id, name, qty, price, image, accepted,cancelBid }) => {
 
@@ -159,7 +193,9 @@ const Cart = ({ navigation }) => {
                     title:jsonResult[i].postId.title,
                     quantity: jsonResult[i].qty,
                     price: jsonResult[i].price,
-                    image:getConnection()+ '/post-img/' +jsonResult[i].postId.image
+                    image:getConnection()+ '/post-img/' +jsonResult[i].postId.image,
+                    isApproved : jsonResult[i].isApproved,
+                    remainDays : parseInt(jsonResult[i].remainDays)
                 })
             }
             setCartItems(datas);
@@ -220,11 +256,20 @@ const Cart = ({ navigation }) => {
     const [price, setPrice] = useState("");
     const [qty, setQty] = useState("");
     const renderItem = ({ item }) => (
-        <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} />
+        <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} isApproved={item.isApproved} remainDays={item.remainDays} cartItems={CartItems} setCartItems={setCartItems}/>
     );
 
     const bidRenderItem = ({ item }) => (<BidItem cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)
     
+
+    // check the conditional render
+    const renderItem1 = ({item}) => {
+        if(item.price == 400){
+            return <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} /> 
+        }
+    }
+
+
     return (
 
         <View>

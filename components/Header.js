@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 const Header = ({ navigation }) => {
     const [searchComponent, setSearchComponent] = useState(false)
     const [typw, setTypw] = useState("");
+    const [keywords, setKeywords] = useState("")
 
     useEffect(() => {
         AsyncStorage.getItem("type", (error, result) => {
@@ -19,6 +20,15 @@ const Header = ({ navigation }) => {
         })
         
     }, [])
+
+    
+
+    const searchme = () => {
+        navigation.navigate("", {
+            keywords:keywords
+        })
+    }
+    
 
   return (
     <View>
@@ -40,7 +50,7 @@ const Header = ({ navigation }) => {
             </TouchableOpacity>
         </View>
           {
-              searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' />):null
+              searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' value={keywords} onChangeText={setKeywords}  />):null
         }
           <View style={styles.mainCont1}>
             <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>

@@ -1,5 +1,5 @@
 import React from 'react'
-import{Image,StyleSheet,View,Text, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard} from 'react-native'
+import{Image,StyleSheet,View,Text, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, Dimensions} from 'react-native'
 
 const Login = ({ navigation })=> {
     return (
@@ -11,7 +11,9 @@ const Login = ({ navigation })=> {
                     <Text style={styles.headerText}>Govi Saviya</Text>
                 </View>
                 
-                <Image style={styles.backImage} source={require('../assets/Farmer.png')} />
+                    <View style={styles.adjuster}>
+                        <Image style={styles.backImage} source={require('../assets/Farmer.png')} />
+                </View>
             
                 <View style={styles.ButtonCont}>
                     <TouchableOpacity style={styles.Touchable}  onPress={()=>navigation.navigate('Login')}>
@@ -29,45 +31,46 @@ const styles = StyleSheet.create({
         height:'100%',
     },
     mainCont: {
-        paddingTop: 50,
+        paddingTop: 30,
         display: 'flex',
         flexDirection: 'row',
-        alignContent: 'center',
-        
+        alignItems:'center'
     },
     logo: {
-        width:120,
-        height: 120,
-        
+        width:90,
+        height: 90,
         display: 'flex',
     },
     headerText: {
-        fontSize: 36,
+        fontSize: 32,
         color: '#6B8E23',
         fontWeight: 'bold',
-        paddingTop: 20,
         textAlign: 'center',
         alignContent: 'center',
         justifyContent: 'center',
         fontFamily:'sans-serif-medium'  
         
     },
+    adjuster: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems:'center'
+    },
     backImage: {
-        width:370,
-        height: 400,  
+        width:'80%',
+        height:Dimensions.get("screen").height -300,  
         borderRadius:10
     },
     Touchable: {
         backgroundColor: '#6B8E23',
         padding: 15,
         borderRadius: 20,
-        paddingHorizontal: 50,  
+        paddingHorizontal: 50,
     },
     ButtonCont: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingTop:80
 
     },
     Text: {

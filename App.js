@@ -37,7 +37,8 @@ export default function App() {
     colors: {
       ...DefaultTheme.colors,
       primary: '#6b8e23',
-      accent: '#6b8e23',
+      accent: 'red',
+      black : 'black'
     },
   };
 
