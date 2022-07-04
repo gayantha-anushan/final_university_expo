@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginStart: 10,
         fontWeight: 'bold',
-        color:'#008b8b'
+        color: '#6B8E23',
     },
     text2: {
         fontSize: 20,

@@ -17,8 +17,8 @@ const Header = ({ navigation }) => {
                 setTypw(result);
             }
         })
+        
     }, [])
-    
 
   return (
     <View>
@@ -36,7 +36,7 @@ const Header = ({ navigation }) => {
               </View>
               
             <TouchableOpacity style={styles.Touchable}>
-                <AntDesign name="search1" onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
+                <AntDesign name="search1"  onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
             </TouchableOpacity>
         </View>
           {
@@ -44,7 +44,7 @@ const Header = ({ navigation }) => {
         }
           <View style={styles.mainCont1}>
             <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>
-                  <FontAwesome name="ellipsis-v" size={30} />
+                  <FontAwesome name="navicon" size={30} />
                   
             </TouchableHighlight>
               <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='#6B8E23'>
