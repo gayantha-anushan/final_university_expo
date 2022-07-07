@@ -155,9 +155,18 @@ const CreatePost = ({navigation}) => {
                     </View>
                 <Text style={styles.priceChooser}>Price:</Text>
                 <View style={styles.container2}>
-                    <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric'/>
-                    <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
-                    <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
+                              <View>
+                                <Text>WholeSeller</Text>  
+                        <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric'/>
+                    </View>
+                              <View>
+                                  <Text>Local Seller</Text>
+                                  <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
+                    </View>
+                              <View>
+                                  <Text>Customer</Text>
+                                  <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
+                    </View>
                   </View>
                   <Text style={styles.priceChooser}>Description:</Text>
                           <Textarea style={{ height: 170, borderRadius: 10, backgroundColor: '#e9e9e9' }} maxLength={120} value={description} onChangeText={setdescription} placeholder={'Description'} placeholderTextColor={'#c7c7c7'}/>
