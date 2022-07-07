@@ -130,6 +130,24 @@ const CreatePost = ({navigation}) => {
         }).catch((error) => {
             console.log(error)
         })
+
+        fetch(getConnection() + '/api/stock/createstock' , {
+            method : 'POST',
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                // 'token' : authCode
+            },
+            body : JSON.stringify({
+                sellerId : authToken,
+                qty : quantity,
+                title : title
+            })
+        }).then((result) => result.json()).then((jres) => {
+            console.log(jres);
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
   return (

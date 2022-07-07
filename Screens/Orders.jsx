@@ -32,6 +32,7 @@ const Orders = ({navigation}) => {
                 array = array.concat(item);
             })
             setOrders(array);
+            console.log(jres);
         }).catch((error) => {
             console.log("Error 1 : "+error);
         })
@@ -131,6 +132,8 @@ const Orders = ({navigation}) => {
                                         navigation={navigation}
                                         orders={orders}
                                         setOrders={setOrders}
+                                        title={order.postId.title}
+                                        
                                         />
                             })
                         }

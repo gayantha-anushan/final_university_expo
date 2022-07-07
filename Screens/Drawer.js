@@ -61,7 +61,7 @@ const Drawer = (props) => {
                     {TabButton(currentTab, setCurrentTab, "Profile", profile,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Orders", orders,props.navigation)}
                     {TabButton(currentTab,setCurrentTab,"Contacts",contacts,props.navigation)}
-                    {TabButton(currentTab, setCurrentTab, "Stocks", stocks)}
+                    {TabButton(currentTab, setCurrentTab, "Stocks", stocks ,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Records", records,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Settings", settings,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
@@ -89,6 +89,9 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                     break;
                 case "Contacts":
                     navigation.navigate("Contacts");
+                    break;
+                case "Stocks":
+                    navigation.navigate("Stock");
                     break;
                 case "Records":
                     navigation.navigate("Records");

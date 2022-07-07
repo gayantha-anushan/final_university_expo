@@ -15,6 +15,7 @@ const MyComponent = (props) => {
   const hideDialog = () => setVisible(false);
 
   const updateStatus = () => {
+    var date = new Date();
     fetch(Connection.getConnection() + "/api/cart/approvedseller/" + props.index, {
         method: 'POST',
         headers: {
@@ -23,7 +24,8 @@ const MyComponent = (props) => {
             // 'token': authCode,
         },
         body: JSON.stringify({
-            daysToTransaction : parseInt(days)
+            daysToTransaction : parseInt(days),
+            finalDate : date.setDate(date.getDate() + parseInt(days))
         })
     }).then((result) => result.json()).then((jres) => {
         // console.log(jres);
