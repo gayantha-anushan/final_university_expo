@@ -1,15 +1,48 @@
 import { StyleSheet, Text,Image, View, ToastAndroid } from 'react-native'
 import React,{useEffect,useState} from 'react'
 import strawberry from '../assets/strawberry.jpg'
-import { TextInput } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native'
+import { Avatar, Button, Card, Title, Paragraph, Dialog, Portal, Provider } from 'react-native-paper';
+import { RadioButton } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 import { getConnection } from '../Connection'
 import { FlatList } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-const SingleBidItem = ({id, name, address, contact, image, quantity, accepted, value, days, amount,loader }) => {
+const SingleBidItem = ({ id, name, address, contact, image, quantity, accepted, value, days, amount, loader }) => {
+
+    const [showDialog, setShowDialog] = useState(false)
+    const [radioValue, setRadioValue] = useState("3");
+    const [comment, setComment] = useState("")
+    
+    const completeBid = () => {
+        AsyncStorage.getItem('auth_code', (error, result) => {
+            if (error) {
+                ToastAndroid.show("Internal Error!", ToastAndroid.SHORT)
+            } else {
+                AsyncStorage.getItem('current_profile', (err, resu) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        //fetch complete bid
+                        fetch(getConnection() + "/api/auction/complete-bid", {
+                            method: 'GET',
+                            headers: {
+                                token: result,
+                                profile: resu,
+                                bid:id
+                            }
+                        }).then((result) => result.json()).then((jres) => {
+                            
+                        })
+                        //fetch raingd
+                    }
+                });
+            }
+        });
+    }
     
     const acceptBid = (stat) => {
         AsyncStorage.getItem('auth_code', (error, result) => {
@@ -99,13 +132,48 @@ const SingleBidItem = ({id, name, address, contact, image, quantity, accepted, v
                 flexDirection:'row'
             }}>
                 {
-                    accepted ? (<TouchableOpacity onPress={()=>acceptBid(false)} style={styles.buttonCover}>
+                    accepted ? (
+                        <View style={{
+                            display: 'flex',
+                            flexDirection:'row',
+                            justifyContent: 'center',
+                            alignItems:'center'
+                        }}>
+                            <TouchableOpacity onPress={() => setShowDialog(true)} style={styles.buttonCover}>
+                    <Text>Complete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => acceptBid(false)} style={styles.buttonCover}>
                     <Text>Reject</Text>
-                </TouchableOpacity>):(<TouchableOpacity onPress={()=>acceptBid(true)} style={styles.buttonCover}>
+                </TouchableOpacity>
+                        </View>
+                    ):(<TouchableOpacity onPress={()=>acceptBid(true)} style={styles.buttonCover}>
                     <Text>Accept</Text>
                 </TouchableOpacity>)
                 }
             </View>
+            <Portal>
+            <Dialog visible={showDialog} onDismiss={()=>setShowDialog(false)}>
+
+            <Dialog.Title>Rate This Buyer</Dialog.Title>
+            <Dialog.Content>
+                <RadioButton.Group onValueChange={value => setRadioValue(value)} value={radioValue}>
+                    <RadioButton.Item label="Very Bad" value="1" />
+                    <RadioButton.Item label="Bad" value="2" />
+                    <RadioButton.Item label="Okay" value="3" />
+                    <RadioButton.Item label="Good" value="4" />
+                    <RadioButton.Item label="Very Good" value="5" />
+                </RadioButton.Group>
+                <TextInput
+                    label="Add a Comment.."
+                    value={comment}
+                    onChangeText={comment => setComment(comment)}
+                />
+            </Dialog.Content>
+            <Dialog.Actions>
+            <Button onPress={completeBid()}>Finish</Button>
+            </Dialog.Actions>
+            </Dialog>
+          </Portal>
         </View>
     )
 }
