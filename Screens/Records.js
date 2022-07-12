@@ -18,16 +18,9 @@ const Records = ({ navigation }) => {
             <View style={styles.des1}>
                 <Text style={styles.head1}>Analytics</Text>
             </View>
-            <View style={styles.cardcont}>
-                <View style={styles.card1}>
-                    <View style={styles.cardinsert}>
-                        <Text>85.5%</Text>
-                        <Text>hgh</Text>
-                    </View>
-                </View>
-                <View style={styles.card2}>
-                    <Text>85.5%</Text>
-                </View>
+            <View style={styles.card}>
+                <Image style={styles.icon} source={require('../assets/records.jpg')} />
+                <Text>kjfjdijv</Text>
             </View>
         </View>
   )
@@ -60,7 +53,14 @@ const styles = StyleSheet.create({
         
     },
     des1: {
-        
+        display:'flex'
+    },
+    icon: {
+        justifyContent: 'center',
+        height: 100,
+        width: 100,
+        overflow: 'hidden',
+        borderRadius:80
     },
     head: {
         fontSize: 20,
@@ -74,26 +74,8 @@ const styles = StyleSheet.create({
         fontFamily: 'sans-serif-medium',
         fontWeight:'bold'
     },
-    card1: {
-        backgroundColor: '#87cefa',
-        padding: 60,
-        borderRadius: 20,
-        paddingVertical: 90,
-        
-    },
-    card2: {
-        backgroundColor: '#9370db',
-        padding: 60,
-        borderRadius: 20,
-        paddingVertical: 80,
-    },
-    cardcont: {
-        flexDirection: 'row',
-        justifyContent:'space-between',
-        flexWrap:'wrap',
-    },
-    cardinsert: {
-        display: 'flex',
-        flexDirection:'row'
+    card: {
+        padding: 20,
+        justifyContent:'center'
     }
 })

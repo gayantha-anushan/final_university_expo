@@ -10,7 +10,8 @@ import { io } from "socket.io-client";
 
 const Interface = ({ route, navigation }) => {
     
-
+    const renderItem = ({ item }) => <Post socket={socket} postid={item.postid} incompleted={item.incompleted} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
+    // const renderItem = ({ item }) => <Post  postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     const [data, setData] = useState([])
     const [listRefreshing, setListRefreshing] = useState(false);
 
@@ -44,7 +45,7 @@ const Interface = ({ route, navigation }) => {
         });
     }, []);
 
-    const renderItem = ({ item }) => <Post socket={socket} postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
+    
 
     const loaddata = (type) => {
         setListRefreshing(true)
@@ -85,13 +86,15 @@ const Interface = ({ route, navigation }) => {
                     username:responseJson[i].author.firstname + " "+responseJson[i].author.lastname,
                     date:responseJson[i].date,
                     title:responseJson[i].title,
-                    price:price,
-                    quantity: responseJson[i].quantity,
+                    price: price,
+                    incompleted: responseJson[i].incompletedQuantity,
+                    quantity: responseJson[i].quantity - responseJson[i].successQuantity,
                     type:responseJson[i].type,
                     image:getConnection()+"/post-img/"+responseJson[i].image
                 })
             }
             setData(datas)
+            console.log(datas)
         })
         setListRefreshing(false)
     }
