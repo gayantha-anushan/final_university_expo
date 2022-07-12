@@ -5,9 +5,12 @@ import { AntDesign } from '@expo/vector-icons';
 import NumericInput from 'react-native-numeric-input'
 import { Dialog } from 'react-native-simple-dialogs'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ProgressDialog } from 'react-native-simple-dialogs'
+import { ProgressDialog } from 'react-native-simple-dialogs';
+import UserContext from '../Context/UserContext';
 
 const CompletePost = ({ route,navigation}) => {
+
+    const {userData} = React.useContext(UserContext);
 
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
@@ -25,9 +28,10 @@ const CompletePost = ({ route,navigation}) => {
     const [profileId, setProfileId] = useState(null)
     const [isProgress, setIsProgress] = useState(false);
     const [userType, setUserType] = useState(null);
-    const [authorId, setAuthorId] = useState("")
+    const [authorId, setAuthorId] = useState("");
+    const [cartId , setCartId] = useState();
 
-    const { id } = route.params
+    const { id , socket } = route.params
     AsyncStorage.getItem('current_profile', (error, result) => {
         if (error) {
             console.log(error)
@@ -101,6 +105,12 @@ const CompletePost = ({ route,navigation}) => {
     }
     
     const order = () => {
+
+        socket.emit('sendNotification' , {
+            senderName : userData.user,
+            receiverName : authorId
+        });
+
         fetch(getConnection() + '/api/cart/addtocart', {
             method: "POST",
             headers: {
@@ -115,15 +125,34 @@ const CompletePost = ({ route,navigation}) => {
                 qty:orderAmount
             })
             
-        }).then((response) => response.text()).then((responseText) => {
-            console.log("Data insert");
-            console.log(responseText);
-            setIsProgress(false);
-            navigation.navigate("Cart")
+        }).then((response) => response.json()).then((jsonResult) => {
+            setCartId(jsonResult._id);
+            // setIsProgress(false);
+            // navigation.navigate("Cart");
     
         }).catch((error) => {
             console.log(error)
         });
+
+
+        fetch(getConnection() + '/api/cart/addtonotification' , {
+            method: "POST",
+            headers: {
+                'Accept':'application/json',
+                'Content-Type':'application/json',
+            },
+            body: JSON.stringify({
+                buyerId:profileId,
+                sellerId:authorId,
+                cartId : cartId
+            })
+        }).then((response) => response.json()).then((jsonResult) => {
+            setIsProgress(false);
+            navigation.navigate("Cart");
+    
+        }).catch((error) => {
+            console.log(error)
+        });   
     }
 
     const selectAmount = (value) => {

@@ -7,6 +7,7 @@ import Bid from '../components/Bid';
 import AsyncStorage from '@react-native-async-storage/async-storage' 
 import Connection, { getConnection }  from '../Connection';
 import { FlatList } from 'react-native-gesture-handler';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 const Orders = ({navigation}) => {
@@ -16,7 +17,8 @@ const Orders = ({navigation}) => {
     const [isOrder, setIsOrder] = useState(true)
     const [authCode , setAuthCode] = useState(null);
     const [orders, setOrders] = useState([]);
-    const [bidData, setBidData] = useState([])
+    const [bidData, setBidData] = useState([]);
+    const [animating , setAnimating] = React.useState(true);
 
     const getOrders = (result,token) => {
         fetch(Connection.getConnection() + "/api/cart/seller/" + result, {
@@ -33,6 +35,7 @@ const Orders = ({navigation}) => {
             })
             setOrders(array);
             console.log(jres);
+            setAnimating(false);
         }).catch((error) => {
             console.log("Error 1 : "+error);
         })
@@ -40,6 +43,7 @@ const Orders = ({navigation}) => {
 
     useEffect(() => {
         const unsybscribe = navigation.addListener('focus', () => {
+            setAnimating(true);
             AsyncStorage.getItem('auth_code', (error, result) => {
                 if (error) {
                     console.log("Error 2 : "+error)
@@ -115,12 +119,10 @@ const Orders = ({navigation}) => {
             {
                 isOrder ? (
                     <ScrollView>
+                        <View style={{marginTop : 25 , marginBottom : 25}}>
+                            <ActivityIndicator animating={animating}/>
+                        </View>
                         {
-                            // orders.map(order => {
-                            //     order.postId ?  (   
-                            //         <Order />
-                            //     ) : null
-                            // })
                             orders.map(order => {
                                 return <Order 
                                         key={order._id}
@@ -133,7 +135,7 @@ const Orders = ({navigation}) => {
                                         orders={orders}
                                         setOrders={setOrders}
                                         title={order.postId.title}
-                                        
+                                        remainDays={order.remainDays}
                                         />
                             })
                         }

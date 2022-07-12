@@ -65,7 +65,10 @@ const MyComponent = (props) => {
               <TextInput
                 label="Days..."
                 value={days}
-                onChangeText={days => setDays(days)}
+                onChangeText={days => {
+                  setDays(days);
+                  props.setRemainDays(days);
+                }}
               />
             </Dialog.Content>
             <Dialog.Actions>

@@ -23,8 +23,22 @@ import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
 // import context API
 import UserContext from './Context/UserContext';
 
+// socket
+const { io } = require("socket.io-client");
+const socket = io("http://192.168.1.4:3001");
+
 const stack = createNativeStackNavigator();
 export default function App() {
+
+  React.useEffect(() => {
+    socket.on("connect", () => {
+      console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    });
+    
+    socket.on("disconnect", () => {
+      console.log(socket.id); // undefined
+    });
+  } , []);
 
   const [userData , setUserData] = React.useState({
     token : undefined,

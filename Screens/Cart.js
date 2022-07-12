@@ -3,7 +3,8 @@ import React,{ useEffect,useState } from 'react'
 import Header from '../components/Header'
 import strawberry from '../assets/strawberry.jpg'
 import { getConnection } from '../Connection';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ActivityIndicator } from 'react-native-paper';
 const DATA = [
     {
         id: '1',
@@ -156,8 +157,11 @@ const Cart = ({ navigation }) => {
 
     // }, [])
 
+    const [animating , setAnimating] = React.useState(true);
+
     useEffect(() => {
         const unsybscribe = navigation.addListener('focus', () => {
+            setAnimating(true);
             AsyncStorage.getItem('auth_code', (error, result) => {
                 if (error) {
                     console.log(error)
@@ -172,6 +176,7 @@ const Cart = ({ navigation }) => {
                     loadBids(result)
                     setProfile(result)
                     loadCartItems(result);
+                    
                 }
             })
         })
@@ -200,6 +205,7 @@ const Cart = ({ navigation }) => {
             }
             setCartItems(datas);
             console.log(datas);
+            setAnimating(false);
         })
     };
 
@@ -298,6 +304,9 @@ const Cart = ({ navigation }) => {
                     }}>
                         <Text>Bid Status</Text>
                     </TouchableOpacity>
+                </View>
+                <View style={{marginTop : 25 , marginBottom : 25}}>
+                    <ActivityIndicator animating={animating}/>
                 </View>
                 {
                     isDirect ? (<FlatList data={CartItems} onRefresh={() => loadCartItems(profile)} refreshing={ false} renderItem={renderItem} keyExtractor={item => item.id} />) :

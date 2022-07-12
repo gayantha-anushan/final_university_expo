@@ -18,7 +18,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import UserContext from '../Context/UserContext'
 import Contacts from './Contacts';
 import ContactPost from './ContactPost';
-import SellerBids from './SellerBids'
+import SellerBids from './SellerBids';
+
 
 const Drawer = createDrawerNavigator()
 
@@ -27,6 +28,7 @@ const Drawer = createDrawerNavigator()
 const DrawerContainer = () => {
 
   const {setUserData} = React.useContext(UserContext);
+
 
   React.useEffect(() => {
     AsyncStorage.getItem('auth_code', (error, result) => {
@@ -47,7 +49,10 @@ const DrawerContainer = () => {
           });
       }
     });
-  } , [])
+  } , []);
+
+
+  
 
   return (
     <Drawer.Navigator drawerContent={props=><Draweri {...props} />} initialRouteName='Interface' screenOptions={{ headerShown:false}}>
