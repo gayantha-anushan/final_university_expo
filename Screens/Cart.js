@@ -199,7 +199,7 @@ const Cart = ({ navigation }) => {
                 })
             }
             setCartItems(datas);
-            console.log(datas);
+            //console.log(datas);
         })
     };
 
@@ -225,6 +225,8 @@ const Cart = ({ navigation }) => {
                 datas = datas.concat(dd);
             }
             setBidList(datas)
+            console.log("-------------------------------------------------------------")
+            console.log(datas)
         }).catch((error) => {
             console.log(error)
         })

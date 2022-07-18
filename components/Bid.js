@@ -22,7 +22,6 @@ const Bid = ({ bids, posttitle, postid, postdate, image,navigation }) => {
         <Button onPress={() => navigation.navigate("SellerBids", {
           id:postid
         })}>View Bids</Button>
-        <Button>End Bid</Button>
       </Card.Actions>
     </Card>
   )
