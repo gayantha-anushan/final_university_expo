@@ -9,7 +9,7 @@ import Connection  from '../Connection';
 import { RadioButton } from 'react-native-paper';
 import UserContext from '../Context/UserContext';
 
-const MyComponent = ({index , orders , setOrders , buyerId , sellerId , qty , price , title , postId}) => {
+const MyComponent = ({index , cartItems , setCartItems ,sellerId}) => {
 
     const {userData} = React.useContext(UserContext);
 
@@ -23,17 +23,13 @@ const MyComponent = ({index , orders , setOrders , buyerId , sellerId , qty , pr
 
     const completeOrder = () => {
 
-        fetch(Connection.getConnection() + '/api/sales/updatesale/' + index , {
+        fetch(Connection.getConnection() + '/api/cart/closecartItem/' + index , {
             method : 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
                 // 'token': authCode,
             },
-            body : JSON.stringify({
-                qty : qty,
-                postId : postId
-            })
         }).then((result) => result.json()).then((jres) => {
             console.log(jres);
         }).catch((error) => {
@@ -48,39 +44,27 @@ const MyComponent = ({index , orders , setOrders , buyerId , sellerId , qty , pr
                 // 'token': authCode,
             },
             body : JSON.stringify({
-                rateeId : buyerId,
+                rateeId : sellerId,
                 raterId : userData.user,
                 rate : parseInt(value),
                 comment : comment
             })
         })
 
-        fetch(Connection.getConnection() + '/api/cart/finishcartitem/' + index , {
-            method : 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                // 'token': authCode,
-              }
-        }).then((result) => result.json()).then((jres) => {
-            console.log(jres);
-        }).catch((error) => {
-            console.log(error);
-        });
-
-
-        setOrders(orders.filter(order => order._id !== index));
+        setCartItems(cartItems.filter(item => item.id !== index));
         setVisible(false);
 
     }
   
     return (
         <View>
-          <Button onPress={showDialog}>Complete Order</Button>
+            <TouchableOpacity onPress={showDialog} style={styles.btn}>
+                <Text style={styles.btntxt}>Close Order</Text>
+            </TouchableOpacity>
           <Portal>
             <Dialog visible={visible} onDismiss={hideDialog}>
 
-            <Dialog.Title>Rate This Buyer</Dialog.Title>
+            <Dialog.Title>Rate This Seller</Dialog.Title>
             <Dialog.Content>
                 <RadioButton.Group onValueChange={value => setValue(value)} value={value}>
                     <RadioButton.Item label="Very Bad" value="1" />
@@ -108,3 +92,21 @@ const MyComponent = ({index , orders , setOrders , buyerId , sellerId , qty , pr
   
   export default MyComponent;
 
+  const styles = StyleSheet.create({
+    btn: {
+        backgroundColor:'#6B8E23',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 40,
+        width: 120,
+        borderRadius: 20,
+        marginRight: 10,
+    },
+    btntxt: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 14
+    },
+
+})

@@ -11,8 +11,7 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
     const [isDirect, setIsDirect] = useState(false)
     const [authUri, setAuthUri] = useState(null)
 
-    useEffect(() => {
-        
+    useEffect(() => {       
         setAuthUri(getConnection() + "/profile/" + authimg);
         if(type == "Direct Sell"){
             setTypeName("Direct Sell")

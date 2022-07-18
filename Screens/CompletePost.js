@@ -152,7 +152,24 @@ const CompletePost = ({ route,navigation}) => {
     
         }).catch((error) => {
             console.log(error)
-        });   
+        });  
+        
+        // fetch(getConnection() + '/api/posts/transaction/'+id , {
+        //     method: 'POST',
+        //     headers: {
+        //         'Accept':'application/json',
+        //         'Content-Type':'application/json',
+        //     },
+        //     body : JSON.stringify({
+        //         amount : orderAmount,
+        //     })
+        // }).then((response) => response.json()).then((jsonResult) => {
+        //     setIsProgress(false);
+        //     navigation.navigate("Cart");
+    
+        // }).catch((error) => {
+        //     console.log(error)
+        // });
     }
 
     const selectAmount = (value) => {

@@ -5,22 +5,10 @@ import strawberry from '../assets/strawberry.jpg'
 import { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
-const DATA = [
-    {
-        id: '1',
-        name: 'Red Onion',
-        qty: '150',
-        price: '15000',
-    },
-    {
-        id: '2',
-        name: 'Potato',
-        qty: '50',
-        price: '11000',
-    },
-];
+import CloseCart from './CloseCart';
 
-const Item = ({id,name, qty, price,image , isApproved , cartItems , setCartItems , remainDays}) => {
+
+const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , cartItems , setCartItems , remainDays}) => {
 
     const deleteCartItem = async () => {
         fetch(getConnection() + "/api/cart/removecartitem/"+id , {
@@ -78,9 +66,21 @@ const Item = ({id,name, qty, price,image , isApproved , cartItems , setCartItems
                     </View>
                     {
                         isApproved ? (
-                        <TouchableOpacity style={styles.btn}>
-                            <Text style={styles.btntxt}>Order Approved</Text>
-                        </TouchableOpacity>
+                            isFinish ? (
+                                // <TouchableOpacity style={styles.btn}>
+                                //     <Text style={styles.btntxt}>Close Order</Text>
+                                // </TouchableOpacity>
+                                <CloseCart 
+                                    index={id}
+                                    sellerId={sellerId}
+                                    cartItems={cartItems}
+                                    setCartItems={setCartItems}
+                                />
+                            ) : (
+                                <TouchableOpacity style={styles.btn}>
+                                    <Text style={styles.btntxt}>Order Approved</Text>
+                                </TouchableOpacity>
+                            )
                         ) : (
                         <TouchableOpacity style={styles.btn} onPress={deleteCartItem}>
                             <Text style={styles.btntxt}>Cancel Order</Text>
@@ -200,7 +200,9 @@ const Cart = ({ navigation }) => {
                     price: jsonResult[i].price,
                     image:getConnection()+ '/post-img/' +jsonResult[i].postId.image,
                     isApproved : jsonResult[i].isApproved,
-                    remainDays : parseInt(jsonResult[i].remainDays)
+                    remainDays : parseInt(jsonResult[i].remainDays),
+                    isFinish : jsonResult[i].isFinish,
+                    sellerId : jsonResult[i].sellerId 
                 })
             }
             setCartItems(datas);
@@ -262,7 +264,7 @@ const Cart = ({ navigation }) => {
     const [price, setPrice] = useState("");
     const [qty, setQty] = useState("");
     const renderItem = ({ item }) => (
-        <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} isApproved={item.isApproved} remainDays={item.remainDays} cartItems={CartItems} setCartItems={setCartItems}/>
+        <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} sellerId={item.sellerId} isFinish={item.isFinish} isApproved={item.isApproved} remainDays={item.remainDays} cartItems={CartItems} setCartItems={setCartItems}/>
     );
 
     const bidRenderItem = ({ item }) => (<BidItem cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)

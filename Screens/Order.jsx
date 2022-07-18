@@ -11,7 +11,7 @@ import UserContext from '../Context/UserContext';
 
 const LeftContent = props =><Avatar.Icon {...props} icon="folder" />
 
-const Order = ({navigation , buyerId , qty , price , index , isApproved , orders , setOrders , title , remainDays}) => {
+const Order = ({navigation , buyerId , qty , price , index , isApproved , orders , setOrders , title , remainDays , postId}) => {
 
     const [toggle , setToggle] = useState(!isApproved);
     // this is not update
@@ -44,7 +44,26 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
     
 
     const cancelOrder = () => {
-        console.log("You cancel the order");
+        fetch(Connection.getConnection() + '/api/cart/cancelcartitem/' + index , {
+            method : 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                // 'token': authCode,
+            },
+            body : JSON.stringify({
+                qty : qty,
+                postId : postId,
+            })
+        }).then((result) => result.json()).then((jres) => {
+            console.log(jres);
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        setOrders(orders.filter(order => {
+            return order._id !== index;
+        }));
     }
 
 
@@ -70,6 +89,8 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
                     sellerId={userData.user}
                     title={title}
                     setRemainDays={setRemainDays}
+                    postId={postId}
+                    qty={qty}
                     />
                 ) : (
                     <View>
@@ -85,6 +106,7 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
                         qty={qty}
                         price={price}
                         title={title}
+                        postId={postId}
                         />
                     </View>
                 )
@@ -92,9 +114,7 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
             }
             {
                 !toggle ? (
-                    <TouchableOpacity >
-                        <Button>Cancel Order</Button>
-                    </TouchableOpacity>
+                        <Button onPress={cancelOrder}>Cancel Order</Button>
                 ) : null
             }
             </Card.Actions>
