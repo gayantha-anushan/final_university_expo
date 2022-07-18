@@ -7,10 +7,16 @@ import Connection from '../Connection'
 import {TextInput} from 'react-native-paper'
 import UserContext from '../Context/UserContext';
 
+
 const Login = ({ navigation }) => {
+
+    
+
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(true);
+
+    
 
     // context api
     const {setUserData} = React.useContext(UserContext);
@@ -72,7 +78,7 @@ const Login = ({ navigation }) => {
                     state:"NEW"
                 })
             }else{
-                AsyncStorage.setItem("current_profile", responseJson.data._id)
+                AsyncStorage.setItem("current_profile", responseJson.data._id);
                 AsyncStorage.setItem("type", responseJson.data.type);
                 navigation.navigate('DrawerContainer')
             }

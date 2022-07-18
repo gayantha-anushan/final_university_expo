@@ -1,11 +1,14 @@
 import { StyleSheet, View,Image,Text,TouchableHighlight,TouchableOpacity, ToastAndroid } from 'react-native'
 import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 
-const Header = ({ navigation }) => {
+const Header = ({ navigation , socket}) => {
+    const [notification , setNotification] = useState([]);
+    const [notify , setNotify] = useState(false);
     const [searchComponent, setSearchComponent] = useState(false)
     const [typw, setTypw] = useState("");
     const [keywords, setKeywords] = useState("")
@@ -18,11 +21,19 @@ const Header = ({ navigation }) => {
                 setTypw(result);
             }
         })
-        
-    }, [])
+    }, []);
 
-    
+    useEffect(() => {
+        socket?.on('getNotification' , (data) => {
+            setNotification((prev) => [...prev , data]);
+            setNotify(true);
+            notification?.map((n) => {
+                console.log(n.senderName);
+            })
+        });
+    } , [socket]);
 
+  
     const searchme = () => {
         navigation.navigate("", {
             keywords:keywords
@@ -73,8 +84,14 @@ const Header = ({ navigation }) => {
             </TouchableHighlight>):null
             }
             
-            <TouchableHighlight onPress={()=>navigation.navigate("Notifications")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                  <FontAwesome name="bell" size={28} />
+            <TouchableHighlight onPress={()=>{setNotify(false); navigation.navigate("Notifications" , {notification: notification});}} activeOpacity={0.2} underlayColor='#6B8E23'>
+                  {
+                    notify ? (
+                        <MaterialCommunityIcons name="bell-alert" size={28} color="red" />
+                    ) : (
+                        <FontAwesome name="bell" size={28} />
+                    )
+                  }
             </TouchableHighlight>
             
             <TouchableHighlight onPress={()=>navigation.navigate('Message')} activeOpacity={0.2} underlayColor='#6B8E23'>

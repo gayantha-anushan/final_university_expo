@@ -11,11 +11,12 @@ import UserContext from '../Context/UserContext';
 
 const LeftContent = props =><Avatar.Icon {...props} icon="folder" />
 
-const Order = ({navigation , buyerId , qty , price , index , isApproved , orders , setOrders , title}) => {
+const Order = ({navigation , buyerId , qty , price , index , isApproved , orders , setOrders , title , remainDays}) => {
 
     const [toggle , setToggle] = useState(!isApproved);
     // this is not update
     const [user , setUser] = useState();
+    const [days , setRemainDays] = useState(remainDays);
 
     // context api
     const {userData} = React.useContext(UserContext);
@@ -53,6 +54,11 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
             <Title>{title}</Title>
             <Title>From : {buyerId.firstname} &nbsp;{buyerId.lastname}</Title>
             <Paragraph>Price : {price} &nbsp;&nbsp;&nbsp;Quantity : {qty}</Paragraph>
+            {
+                days ? (
+                    <Paragraph>Remain Days : {parseInt(days)}</Paragraph>
+                ) : null
+            }
             </Card.Content>
             <Card.Actions>
             {
@@ -63,6 +69,7 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
                     buyerId={buyerId}
                     sellerId={userData.user}
                     title={title}
+                    setRemainDays={setRemainDays}
                     />
                 ) : (
                     <View>

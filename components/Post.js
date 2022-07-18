@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { AntDesign } from '@expo/vector-icons';
 import { getConnection } from '../Connection';
 
-const Post = ({username,incompleted,postid,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
+const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
@@ -61,7 +61,7 @@ const Post = ({username,incompleted,postid,postdate,title,quantity,price,type,im
                           <Image style={styles.icon} source={require('../assets/location.png')} />
                         <Text style={{color:'white',fontWeight:'bold'}}>Location</Text>
                     </TouchableOpacity>
-                      <TouchableOpacity onPress={()=>navigation.navigate("CompletePost",{id:postid})} style={styles.btn2}>
+                      <TouchableOpacity onPress={()=>navigation.navigate("CompletePost",{id:postid , socket:socket})} style={styles.btn2}>
                           <Image style={styles.icon} source={require('../assets/view.png')} />
                         <Text style={{color:'white',fontWeight:'bold'}}>View</Text>
                     </TouchableOpacity>

@@ -5,7 +5,7 @@ import Contact from './Contact';
 import Connection  from '../Connection';
 import UserContext from '../Context/UserContext';
 import { Button } from 'react-native-paper';
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 
 const Contacts = ({navigation}) => {
 

@@ -1,31 +1,80 @@
 import { StyleSheet, View, KeyboardAvoidingView, Text, Image, TouchableOpacity} from 'react-native'
 import React from 'react'
 import Header from '../components/Header'
-import strawberry from '../assets/strawberry.jpg'
+import { List } from 'react-native-paper';
+import UserContext from '../Context/UserContext';
+import { getConnection } from '../Connection';
+import Notification from './Notification';
+import { ScrollView } from 'react-native-gesture-handler';
+import { ActivityIndicator } from 'react-native-paper';
 
 
-const Notifications = ({navigation}) => {
+const Notifications = ({navigation , route}) => {
+
+
+    const {userData} = React.useContext(UserContext);
+    const [notifications , setNotifications] = React.useState([]);
+    const [animating , setAnimating] = React.useState(true);
+
+
+    React.useEffect(() => {
+        const unsybscribe = navigation.addListener('focus', () => {
+            setAnimating(true);
+            fetch(getConnection() + "/api/cart/getnotifications/" + userData.user, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
+            }).then((response) => response.json()).then((jsonResult) => {
+                var datas = []
+                for (var i = jsonResult.length-1; i >= 0 ; i--){
+                    datas = datas.concat({
+                        _id : jsonResult[i]._id,
+                        buyerFirstName : jsonResult[i].buyerId.firstname,
+                        buyerLastName : jsonResult[i].buyerId.lastname,
+                        date : jsonResult[i].date,
+                        sellerId : jsonResult[i].sellerId,
+                        transactionType : jsonResult[i].transactionType,
+                    });
+                }
+                setNotifications(datas);
+                console.log(jsonResult);
+                setAnimating(false);
+            })
+        })
+        console.log("USe Effext Called");
+    }, []);
+
+
+
+
+
     return (
         <View>
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation}/>
-                <View style={styles.card}>
-                    <View style={styles.container1}>
-                        <Image source={strawberry} style={styles.userImage}/>
-                        <View>
-                            <Text style={styles.user}>Amal Srinath</Text>
-                            <Text>2022/05/16</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.txt}>Direct Sell</Text>
-                        </View>
-                    </View>
-                    <View style={styles.container2}>
-                        <TouchableOpacity style={styles.btn}>
-                            <Text style={styles.btntxt}>View Order</Text>
-                        </TouchableOpacity>
-                    </View>   
-                </View>
+            <View style={{marginTop : 25 , marginBottom : 25}}>
+                            <ActivityIndicator animating={animating}/>
+            </View>
+            <ScrollView>
+            {
+
+                notifications.map(notification => {
+                    return <Notification 
+                            key={notification._id}
+                            id={notification._id}
+                            firstName={notification.buyerFirstName}
+                            lastName={notification.buyerLastName}
+                            date={notification.date}
+                            transactionType={notification.transactionType}
+                            notifications={notifications}
+                            setNotifications={setNotifications}
+                            />
+                })
+                
+            }
+            </ScrollView>
             </KeyboardAvoidingView>
         </View>
     )
@@ -83,3 +132,4 @@ const styles = StyleSheet.create({
     }
 })
   
+
