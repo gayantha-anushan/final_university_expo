@@ -22,10 +22,11 @@ import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
 
 // import context API
 import UserContext from './Context/UserContext';
+import { getConnection } from './Connection';
 
 // socket
 const { io } = require("socket.io-client");
-const socket = io("http://192.168.1.4:3001");
+const socket = io(getConnection);
 
 const stack = createNativeStackNavigator();
 export default function App() {
