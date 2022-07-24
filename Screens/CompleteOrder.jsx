@@ -68,6 +68,19 @@ const MyComponent = ({index , orders , setOrders , buyerId , sellerId , qty , pr
             console.log(error);
         });
 
+        // fetch(Connection.getConnection() + '/api/stock/updatestock/'+ postId._id , {
+        //     method : 'POST',
+        //     headers : {
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json',
+        //         // 'token': authCode,
+        //     }
+        // }).then((result) => result.json()).then((jres) => {
+        //     console.log(jres);
+        // }).catch((error) => {
+        //     console.log(error);
+        // });
+
 
         setOrders(orders.filter(order => order._id !== index));
         setVisible(false);
