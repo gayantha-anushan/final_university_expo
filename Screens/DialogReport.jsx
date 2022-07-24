@@ -6,7 +6,7 @@ import { TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Connection from '../Connection';
 
-const MyComponent = (props) => {
+const DialogReport = (props) => {
   const [visible, setVisible] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -74,4 +74,4 @@ const MyComponent = (props) => {
   );
 };
 
-export default MyComponent;
+export default DialogReport;

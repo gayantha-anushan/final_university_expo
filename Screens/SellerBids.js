@@ -1,15 +1,69 @@
 import { StyleSheet, Text,Image, View, ToastAndroid } from 'react-native'
 import React,{useEffect,useState} from 'react'
 import strawberry from '../assets/strawberry.jpg'
-import { TextInput } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native'
+import { Avatar, Button,  Dialog, Portal, Provider } from 'react-native-paper';
+import { RadioButton } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 import { getConnection } from '../Connection'
 import { FlatList } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-const SingleBidItem = ({id, name, address, contact, image, quantity, accepted, value, days, amount,loader }) => {
+const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed, quantity, accepted, value, days, amount, loader }) => {
+
+    const [showDialog, setShowDialog] = useState(false)
+    const [radioValue, setRadioValue] = useState("3");
+    const [comment, setComment] = useState("")
+    
+    const completeBid = () => {
+        AsyncStorage.getItem('auth_code', (error, result) => {
+            if (error) {
+                ToastAndroid.show("Internal Error!", ToastAndroid.SHORT)
+            } else {
+                AsyncStorage.getItem('current_profile', (err, resu) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        //fetch complete bid
+                        fetch(getConnection() + "/api/auction/complete-bid", {
+                            method: 'GET',
+                            headers: {
+                                token: result,
+                                profile: resu,
+                                bid:id
+                            }
+                        }).then((result) => result.text()).then((jres) => {
+                            fetch(getConnection() + "/api/auth/createrate", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Accept":"application/json"
+                                },
+                                body: JSON.stringify({
+                                    raterId:resu,
+                                    rateeId:bidder_id,
+                                    rate:radioValue,
+                                    comment:comment
+                                })
+                            }).then((reso) => reso.text()).then((resx) => {
+                                ToastAndroid.show("Successfully Completed!", ToastAndroid.SHORT);
+                                setComment("");
+                                setShowDialog(false)
+                                loader()
+                            }).catch(error => {
+                                console.log(error)
+                            })
+                        }).catch((error)=>{
+                            console.log(error)
+                        })
+                        //fetch raingd
+                    }
+                });
+            }
+        });
+    }
     
     const acceptBid = (stat) => {
         AsyncStorage.getItem('auth_code', (error, result) => {
@@ -99,13 +153,48 @@ const SingleBidItem = ({id, name, address, contact, image, quantity, accepted, v
                 flexDirection:'row'
             }}>
                 {
-                    accepted ? (<TouchableOpacity onPress={()=>acceptBid(false)} style={styles.buttonCover}>
+                    accepted ? (
+                        <View style={{
+                            display: 'flex',
+                            flexDirection:'row',
+                            justifyContent: 'center',
+                            alignItems:'center'
+                        }}>
+                            <TouchableOpacity disabled={completed} onPress={() => setShowDialog(true)} style={completed ? styles.buttonCoverDisabled : styles.buttonCover}>
+                    <Text>Complete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity disabled={completed} onPress={() => acceptBid(false)} style={completed ? styles.buttonCoverDisabled : styles.buttonCover}>
                     <Text>Reject</Text>
-                </TouchableOpacity>):(<TouchableOpacity onPress={()=>acceptBid(true)} style={styles.buttonCover}>
+                </TouchableOpacity>
+                        </View>
+                    ):(<TouchableOpacity onPress={()=>acceptBid(true)} style={styles.buttonCover}>
                     <Text>Accept</Text>
                 </TouchableOpacity>)
                 }
             </View>
+            <Portal>
+            <Dialog visible={showDialog} onDismiss={()=>setShowDialog(false)}>
+
+            <Dialog.Title>Rate This Buyer</Dialog.Title>
+            <Dialog.Content>
+                <RadioButton.Group onValueChange={value => setRadioValue(value)} value={radioValue}>
+                    <RadioButton.Item label="Very Bad" value="1" />
+                    <RadioButton.Item label="Bad" value="2" />
+                    <RadioButton.Item label="Okay" value="3" />
+                    <RadioButton.Item label="Good" value="4" />
+                    <RadioButton.Item label="Very Good" value="5" />
+                </RadioButton.Group>
+                <TextInput
+                    label="Add a Comment.."
+                    value={comment}
+                    onChangeText={comment => setComment(comment)}
+                />
+            </Dialog.Content>
+            <Dialog.Actions>
+            <Button onPress={()=>completeBid()}>Finish</Button>
+            </Dialog.Actions>
+            </Dialog>
+          </Portal>
         </View>
     )
 }
@@ -135,6 +224,7 @@ const SellerBids = ({ route, navigation }) => {
             setImage(getConnection() + "/post-img/" + resasjson.post.image);
             setTitle(resasjson.post.title)
             setDataList(resasjson.bids)
+            console.log(resasjson.bids)
         }).catch(error => {
             ToastAndroid.show("Loading Error", ToastAndroid.SHORT);
         })
@@ -143,7 +233,7 @@ const SellerBids = ({ route, navigation }) => {
     
     const [refreshList, setRefreshList] = useState(false)
 
-    const renderItem = ({ item }) => <SingleBidItem loader={loadData} accepted={item.accepted} name={item.bidder.firstname + " " + item.bidder.lastname} address={item.bidder.address} amount={item.amount} quantity={item.quantity} value={item.value} days={item.buy_after} contact={item.bidder.contact} image={getConnection() + "/profile/" + item.bidder.image} id={item._id} />
+    const renderItem = ({ item }) => <SingleBidItem completed={item.completed} loader={loadData} accepted={item.accepted} bidder_id={item.bidder._id} name={item.bidder.firstname + " " + item.bidder.lastname} address={item.bidder.address} amount={item.amount} quantity={item.quantity} value={item.value} days={item.buy_after} contact={item.bidder.contact} image={getConnection() + "/profile/" + item.bidder.image} id={item._id} />
     
 
   return (
@@ -234,6 +324,13 @@ export default SellerBids
 const styles = StyleSheet.create({
     buttonCover: {
         backgroundColor: '#688e23',
+        padding: 8,
+        paddingHorizontal: 15,
+        borderRadius: 20,
+        margin:10
+    },
+    buttonCoverDisabled: {
+        backgroundColor: '#aaaaaa',
         padding: 8,
         paddingHorizontal: 15,
         borderRadius: 20,
