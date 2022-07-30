@@ -11,29 +11,30 @@ const ViewBids = ({ route, navigation }) => {
     const [content, setcontent] = useState([])
 
     useEffect(() => {
-        console.log(id)
-        fetch(getConnection() + "/api/auction/bids/" + id, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept":"application/json"
-            }
-        }).then((result) => result.json()).then((jsonResult) => {
-            var data = [];
-            for (var i = 0; i < jsonResult.length; i++){
-                data = data.concat({
-                    _id:jsonResult[i]._id,
-                    authorname: jsonResult[i].bidder.firstname+" "+jsonResult[i].bidder.lastname,
-                    amount: jsonResult[i].amount,
-                    quantity: jsonResult[i].quantity,
-                    buydate:jsonResult[i].buy_after,
-                })
-            }
-            setcontent(data)
-        }).catch((error) => {
-            console.log(error)
+        const unsub = navigation.addListener('focus', () => {
+            fetch(getConnection() + "/api/auction/bids/" + id, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept":"application/json"
+                }
+            }).then((result) => result.json()).then((jsonResult) => {
+                var data = [];
+                for (var i = 0; i < jsonResult.length; i++){
+                    data = data.concat({
+                        _id:jsonResult[i]._id,
+                        authorname: jsonResult[i].bidder.firstname+" "+jsonResult[i].bidder.lastname,
+                        amount: jsonResult[i].amount,
+                        quantity: jsonResult[i].quantity,
+                        buydate:jsonResult[i].buy_after,
+                    })
+                }
+                setcontent(data)
+            }).catch((error) => {
+                console.log(error)
+            })
         })
-    }, [id])
+    }, [])
     
 
     const renderItem = ({ item }) => <BidContent buydays={ item.buydate} authorname={item.authorname} amount={item.amount} quantity={ item.quantity} />

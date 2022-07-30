@@ -1,13 +1,17 @@
 import { StyleSheet, View,Image,Text,TouchableHighlight,TouchableOpacity, ToastAndroid } from 'react-native'
 import React, { useEffect,useState} from 'react'
 import { AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 
-const Header = ({ navigation }) => {
+const Header = ({ navigation , socket}) => {
+    const [notification , setNotification] = useState([]);
+    const [notify , setNotify] = useState(false);
     const [searchComponent, setSearchComponent] = useState(false)
     const [typw, setTypw] = useState("");
+    const [keywords, setKeywords] = useState("")
 
     useEffect(() => {
         AsyncStorage.getItem("type", (error, result) => {
@@ -17,7 +21,24 @@ const Header = ({ navigation }) => {
                 setTypw(result);
             }
         })
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        socket?.on('getNotification' , (data) => {
+            setNotification((prev) => [...prev , data]);
+            setNotify(true);
+            notification?.map((n) => {
+                console.log(n.senderName);
+            })
+        });
+    } , [socket]);
+
+  
+    const searchme = () => {
+        navigation.navigate("", {
+            keywords:keywords
+        })
+    }
     
 
   return (
@@ -29,31 +50,31 @@ const Header = ({ navigation }) => {
                       </TouchableOpacity>
                   <View style={styles.htext}>
                       <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                          <Text style={styles.headerText}>Vege Sup</Text>  
+                          <Text style={styles.headerText}>Govi Saviya</Text>  
                           </TouchableOpacity>
                     </View>
                     
               </View>
               
             <TouchableOpacity style={styles.Touchable}>
-                <AntDesign name="search1" onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
+                <AntDesign name="search1"  onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
             </TouchableOpacity>
         </View>
           {
-              searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' />):null
+              searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' value={keywords} onChangeText={setKeywords}  />):null
         }
           <View style={styles.mainCont1}>
             <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>
-                  <FontAwesome name="ellipsis-v" size={30} />
+                  <FontAwesome name="navicon" size={30} />
+                  
             </TouchableHighlight>
-              
               <TouchableHighlight onPress={() => navigation.navigate("Interface")} activeOpacity={0.2} underlayColor='#6B8E23'>
              <FontAwesome name="home" size={30}  />
             </TouchableHighlight>
               
               {
                   typw != "customer"?(<TouchableHighlight onPress={()=>navigation.navigate("CreatePost")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                <FontAwesome name="file-upload" size={30} />
+                <FontAwesome name="plus-square" size={30} />
             </TouchableHighlight>):null
             }
 
@@ -63,15 +84,21 @@ const Header = ({ navigation }) => {
             </TouchableHighlight>):null
             }
             
-            <TouchableHighlight onPress={()=>navigation.navigate("Notifications")} activeOpacity={0.2} underlayColor='#6B8E23'>
-                  <FontAwesome name="bell" size={28} />
+            <TouchableHighlight onPress={()=>{setNotify(false); navigation.navigate("Notifications" , {notification: notification});}} activeOpacity={0.2} underlayColor='#6B8E23'>
+                  {
+                    notify ? (
+                        <MaterialCommunityIcons name="bell-alert" size={28} color="red" />
+                    ) : (
+                        <FontAwesome name="bell" size={28} />
+                    )
+                  }
             </TouchableHighlight>
             
             <TouchableHighlight onPress={()=>navigation.navigate('Message')} activeOpacity={0.2} underlayColor='#6B8E23'>
                 <FontAwesome name="comments" size={30}  />
             </TouchableHighlight>
             
-        </View>
+          </View>
     </View>
   )
 }
@@ -87,6 +114,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: '#6B8E23',
         fontWeight: 'bold',
+        fontFamily:'sans-serif-medium'
     },
     htext: {
         justifyContent: 'center',

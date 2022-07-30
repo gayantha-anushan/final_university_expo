@@ -114,22 +114,43 @@ const CreatePost = ({navigation}) => {
         formdata.append('longitude',point.longitude)
         formdata.append('image',{type:type,uri:image.localUri,name:name})
 
+        var _id;
         fetch(getConnection()+'/api/posts/createpost',{
             method: 'POST',
             body:formdata
-        }).then((response)=>response.text()).then((responseText)=>{
-            console.log("Responded by server")
+        }).then((response)=>response.json()).then((responseJson)=>{
+            _id = responseJson._id;
+            fetch(getConnection() + '/api/stock/createstock' , {
+                method : 'POST',
+                headers : {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    // 'token' : authCode
+                },
+                body : JSON.stringify({
+                    postId : _id,
+                    sellerId : authToken,
+                    qty : quantity,
+                    title : title
+                })
+            }).then((result) => result.json()).then((jres) => {
+                console.log(jres);
+            }).catch((error) => {
+                console.log(error);
+            });
             setTitle("")
             setQuantity("")
             setWholeSeller("")
             setLocalSeller("")
             setCustomer("")
             setdescription("")
-            console.log(responseText)
+            
             setIsProgress(false)
         }).catch((error) => {
             console.log(error)
         })
+
+        
     }
 
   return (
@@ -155,9 +176,18 @@ const CreatePost = ({navigation}) => {
                     </View>
                 <Text style={styles.priceChooser}>Price:</Text>
                 <View style={styles.container2}>
-                    <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric'/>
-                    <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
-                    <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
+                              <View>
+                                <Text>WholeSeller</Text>  
+                        <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric'/>
+                    </View>
+                              <View>
+                                  <Text>Local Seller</Text>
+                                  <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
+                    </View>
+                              <View>
+                                  <Text>Customer</Text>
+                                  <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>
+                    </View>
                   </View>
                   <Text style={styles.priceChooser}>Description:</Text>
                           <Textarea style={{ height: 170, borderRadius: 10, backgroundColor: '#e9e9e9' }} maxLength={120} value={description} onChangeText={setdescription} placeholder={'Description'} placeholderTextColor={'#c7c7c7'}/>
@@ -179,18 +209,8 @@ const CreatePost = ({navigation}) => {
                                 <AntDesign name={'checkcircle'} size={20} color="white"></AntDesign>
                                 <Text style={styles.buttonText}>Create Post</Text>
                             </View>
-                        </TouchableOpacity>
-                        <Text style={styles.priceChooser}>Location:</Text>
-                          
-                    </View>
-    
-                  {
-                      location ? (<MapView initialRegion={location} style={styles.mapStyler}>
-                            {
-                              point ? (<Marker coordinate={point} draggable onDragEnd={(e)=>setPoint(e.nativeEvent.coordinate)} title="Place Your Product" description='Locate your product for more customer engage to your product' />):null
-                            }
-                        </MapView>):null
-                  }
+                        </TouchableOpacity> 
+                    </View>          
                   <ProgressDialog activityIndicatorSize="small" activityIndicatorColor="gray" visible={isProgress} title="Uploading Post" message='Please wait moment....' />
             
                   </ScrollView>

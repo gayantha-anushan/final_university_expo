@@ -5,14 +5,13 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { AntDesign } from '@expo/vector-icons';
 import { getConnection } from '../Connection';
 
-const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
+const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
     const [authUri, setAuthUri] = useState(null)
 
-    useEffect(() => {
-        console.log(postid)
+    useEffect(() => {       
         setAuthUri(getConnection() + "/profile/" + authimg);
         if(type == "Direct Sell"){
             setTypeName("Direct Sell")
@@ -61,15 +60,15 @@ const Post = ({username,postid,postdate,title,quantity,price,type,image,authid,n
                           <Image style={styles.icon} source={require('../assets/location.png')} />
                         <Text style={{color:'white',fontWeight:'bold'}}>Location</Text>
                     </TouchableOpacity>
-                      <TouchableOpacity onPress={()=>navigation.navigate("CompletePost",{id:postid})} style={styles.btn2}>
+                      <TouchableOpacity onPress={()=>navigation.navigate("CompletePost",{id:postid , socket:socket})} style={styles.btn2}>
                           <Image style={styles.icon} source={require('../assets/view.png')} />
                         <Text style={{color:'white',fontWeight:'bold'}}>View</Text>
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={{margin:10}}>
-                <Text style={{fontSize:17}}>{quantity} kg</Text>
-                <Text style={{fontSize:17}}>Rs :{price}</Text>
+                  <Text style={{ fontSize: 17 }}>{quantity} { incompleted > 0 ? " - "+incompleted : null} kg</Text>
+                <Text style={{fontSize:17}}>Rs :{price.toFixed(2)}</Text>
             </View>
         </View>
     </View>

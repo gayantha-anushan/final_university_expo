@@ -5,16 +5,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import Connection from '../Connection'
 import {TextInput} from 'react-native-paper'
+import UserContext from '../Context/UserContext';
+
+
 const Login = ({ navigation }) => {
+
+    
+
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(true);
+
     
+
+    // context api
+    const {setUserData} = React.useContext(UserContext);
 
     const loginNow = () => {
         //connection
+        console.log("Clicked")
         if(email != "" && password != ""){
-            try{
             fetch(Connection.getConnection()+"/api/auth/login",{
                 method:'POST',
                 headers:{
@@ -25,20 +35,25 @@ const Login = ({ navigation }) => {
                     email:email,
                     password:password
                 }),
-            }).then((response)=>response.json()).then(async (responseJson)=>{
+            }).then((response) => response.json()).then(async (responseJson) => {
+                console.log(responseJson)
                 //response coming from derver
                 if(responseJson.status == "OK"){
+                    setUserData({
+                        token : responseJson.token
+                    });
                     await AsyncStorage.setItem('auth_code',responseJson.token);
                     navigateToSuitable(responseJson.token)
                 }else{
-                    ToastAndroid.show(responseJson.error)
+                     ToastAndroid.show(responseJson.error,ToastAndroid.SHORT)
                 }
+            }).catch((error) => {
+                //console.log("error: " +error)
+                 console.log(error);
+                ToastAndroid.show("Error Occured From Server", ToastAndroid.SHORT);
             })
-            }catch(error){
-                console.log(error);
-            }
         }else{
-            ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
+            ToastAndroid.show("cannot insert empty email and(or) password",ToastAndroid.SHORT);
         }
     }
 
@@ -46,7 +61,6 @@ const Login = ({ navigation }) => {
         //this functon create to navigate for suitable directory
         //TODO1:Check Profile Availability
         //Todo2:route to suitab;e terfaces
-        try{
         fetch(Connection.getConnection()+"/api/auth/profile-data",{
             method:"POST",
             headers:{
@@ -64,14 +78,14 @@ const Login = ({ navigation }) => {
                     state:"NEW"
                 })
             }else{
-                AsyncStorage.setItem("current_profile", responseJson.data._id)
+                AsyncStorage.setItem("current_profile", responseJson.data._id);
                 AsyncStorage.setItem("type", responseJson.data.type);
                 navigation.navigate('DrawerContainer')
             }
-        })
-        }catch(error){
+        }).catch((error) => {
             console.log(error)
-        }
+            ToastAndroid.show("Error Occured!", ToastAndroid.SHORT);
+        })
     }
 
     return (
@@ -80,7 +94,7 @@ const Login = ({ navigation }) => {
                 <ScrollView>
                 <View style={styles.mainCont}>
                     <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                    <Text style={styles.headerText}>Vege Sup</Text>
+                    <Text style={styles.headerText}>Govi Saviya</Text>
                     </View>
                          <ImageBackground style={styles.backImage} source={require('../assets/Login.png')}>
                         </ImageBackground> 
@@ -123,26 +137,27 @@ const styles = StyleSheet.create({
         height:'100%',
     },
     mainCont: {
-        paddingTop: 50,
+        paddingTop: 30,
         display: 'flex',
         flexDirection: 'row',
+        alignItems:'center'
     },
     logo: {
-        width:120,
-        height: 120,
+        width:90,
+        height: 90,
         display: 'flex',
-        justifyContent:'flex-start'
     },
     headerText: {
-        fontSize: 30,
+        fontSize: 32,
         color: '#6B8E23',
         fontWeight: 'bold',
-        paddingTop: 20,
-        alignItems:'center'
+        textAlign: 'center',
+        alignContent: 'center',
+        justifyContent:'center'
         
     },
     backImage: {
-        width:380,
+        width:'100%',
         height: 250,
         justifyContent: "center",
         opacity: 0.8,
@@ -185,7 +200,7 @@ const styles = StyleSheet.create({
         padding: 2,
         borderRadius: 15,
         justifyContent: "center",
-        width: 375,
+        width: '90%',
         fontSize: 18,
         height: 60,
         backgroundColor:'white'

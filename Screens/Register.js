@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from '@react-native-async-storage/async-storage'
 import Connection from '../Connection'
 import {TextInput} from 'react-native-paper'
+import UserContext from '../Context/UserContext';
 
 const Register = ({ navigation }) => {
     const [email, setemail] = useState('');
@@ -12,37 +13,45 @@ const Register = ({ navigation }) => {
     const [passwordVisible, setPasswordVisible] = useState(true);
     const [RepasswordVisible, ResetPasswordVisible] = useState(true);
 
+    // context api
+    const {setUserData} = React.useContext(UserContext);
+
     const registerNow = () => {
         //Registration process goes here
-        if(email != "" && password != "" && password == ReTypepassword){
-            try{
-            fetch(Connection.getConnection()+"/api/auth/signup",{
-                method:'POST',
-                headers:{
-                    Accept:'application/json',
-                    'Content-Type':'application/json',
-                },
-                body: JSON.stringify({
-                    email:email,
-                    password:password
-                }),
-            })
-            .then((response)=>response.json()).then(async (responseJson)=>{
-                //response coming from server
-                if(responseJson.status == "OK"){
-                    await AsyncStorage.setItem('auth_code',responseJson.token);
-                    navigation.navigate('Profile',{
-                        state:"NEW"
-                    })
-                }else{
-                    ToastAndroid.show(responseJson.error)
-                }
-            })
-            }catch(error){
-                console.log(error)
+        if (email != "" && password != "") {
+            if (password == ReTypepassword) {
+                fetch(Connection.getConnection() + "/api/auth/signup", {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    }),
+                })
+                .then((response) => response.json()).then(async (responseJson) => {
+                    //response coming from server
+                    if (responseJson.status == "OK") {
+                        await AsyncStorage.setItem('auth_code', responseJson.token);
+                        navigation.navigate('Profile', {
+                            state: "NEW"
+                        })
+                        setUserData({
+                            token : responseJson.token
+                        });
+                    } else {
+                        ToastAndroid.show(responseJson.error)
+                    }
+                }).catch((error) => {
+                    ToastAndroid.show("Internal Server Error Occured!",ToastAndroid.SHORT)
+                })
+            } else {
+                ToastAndroid.show("Please enter Same password for both", ToastAndroid.SHORT);
             }
         }else{
-            ToastAndroid.show("Error Occured Here!",ToastAndroid.SHORT);
+            ToastAndroid.show("Please Enter Valid email and(or) password",ToastAndroid.SHORT);
         }
     }
 
@@ -53,7 +62,7 @@ const Register = ({ navigation }) => {
                     <View style={styles.mainCont}>
                         <Image style={styles.logo} source={require('../assets/logo.jpg')} />
                         <View style={styles.htext}>
-                            <Text style={styles.headerText}>Vege Sup</Text>
+                            <Text style={styles.headerText}>Govi Saviya</Text>
                         </View>
                     </View>
                         <ImageBackground style={styles.backImage} source={require('../assets/Register.png')}>
@@ -91,29 +100,30 @@ const styles = StyleSheet.create({
         height:'100%',
     },
     mainCont: {
-        paddingTop: 50,
+        paddingTop: 30,
         display: 'flex',
         flexDirection: 'row',
+        alignItems:'center'
     },
     logo: {
-        width:120,
-        height: 120,
-        
+        width:90,
+        height: 90,
         display: 'flex',
     },
     headerText: {
-        fontSize: 30,
+        fontSize: 32,
         color: '#6B8E23',
         fontWeight: 'bold',
-        justifyContent: 'center',
-        alignContent:'center',
+        textAlign: 'center',
+        alignContent: 'center',
+        justifyContent:'center'
         
     },
     htext: {
         justifyContent:'center'
     },
     backImage: {
-        width:380,
+        width:'100%',
         height: 250,
         justifyContent: 'center',
     },
@@ -121,7 +131,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#6B8E23',
         padding: 15,
         borderRadius: 20,
-        paddingHorizontal: 60,  
+         
     },
     Touchable1: {
         backgroundColor: '#4d8aeb',
@@ -156,7 +166,7 @@ const styles = StyleSheet.create({
         padding: 2,
         borderRadius: 15,
         justifyContent: "center",
-        width: 375,
+        width: '90%',
         fontSize: 18,
         height: 60,
         backgroundColor:'white'
@@ -184,9 +194,10 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     container: {
-        flex: 1,
+        display: 'flex',
+        flexDirection:'column',
         justifyContent: 'center',
-        alignContent:'center'
+        alignItems:'center'
     }
 
 

@@ -20,8 +20,31 @@ import About from './Screens/About';
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
 
+// import context API
+import UserContext from './Context/UserContext';
+import { getConnection } from './Connection';
+
+// socket
+const { io } = require("socket.io-client");
+const socket = io(getConnection);
+
 const stack = createNativeStackNavigator();
 export default function App() {
+
+  React.useEffect(() => {
+    socket.on("connect", () => {
+      console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    });
+    
+    socket.on("disconnect", () => {
+      console.log(socket.id); // undefined
+    });
+  } , []);
+
+  const [userData , setUserData] = React.useState({
+    token : undefined,
+    user : undefined
+  });
 
   const theme = {
     ...DefaultTheme,
@@ -29,11 +52,13 @@ export default function App() {
     colors: {
       ...DefaultTheme.colors,
       primary: '#6b8e23',
-      accent: '#6b8e23',
+      accent: 'red',
+      black : 'black'
     },
   };
 
   return (
+    <UserContext.Provider value={{userData , setUserData}}>
     <PaperProvider theme={theme}>
     <NavigationContainer>
       <stack.Navigator screenOptions={{ headerShown: false }}>
@@ -49,6 +74,7 @@ export default function App() {
       </stack.Navigator>
     </NavigationContainer>
     </PaperProvider> 
+    </UserContext.Provider>
   );
 }
 
