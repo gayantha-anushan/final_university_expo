@@ -136,6 +136,7 @@ const Orders = ({navigation}) => {
                                         setOrders={setOrders}
                                         title={order.postId.title}
                                         remainDays={order.remainDays}
+                                        postId={order.postId}
                                         />
                             })
                         }

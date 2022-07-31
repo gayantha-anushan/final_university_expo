@@ -42,13 +42,17 @@ const MyComponent = (props) => {
       body : JSON.stringify({
         sellerId : props.sellerId,
         buyerId : props.buyerId,
-        cartId : props.index
+        cartId : props.index,
+        postId : props.postId,
+        qty : props.qty
       })
     }).then((result) => result.json()).then((jres) => {
       console.log(jres);
     }).catch((error) => {
         console.log(error);
     });
+
+
     props.setToggle(false);
     setVisible(false);
     setDays("");

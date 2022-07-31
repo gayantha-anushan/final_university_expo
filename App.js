@@ -22,6 +22,7 @@ import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
 
 // import context API
 import UserContext from './Context/UserContext';
+import { getConnection } from './Connection';
 
 // socket
 const { io } = require("socket.io-client");

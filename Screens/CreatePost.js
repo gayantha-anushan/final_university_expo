@@ -114,40 +114,43 @@ const CreatePost = ({navigation}) => {
         formdata.append('longitude',point.longitude)
         formdata.append('image',{type:type,uri:image.localUri,name:name})
 
+        var _id;
         fetch(getConnection()+'/api/posts/createpost',{
             method: 'POST',
             body:formdata
-        }).then((response)=>response.text()).then((responseText)=>{
-            console.log("Responded by server")
+        }).then((response)=>response.json()).then((responseJson)=>{
+            _id = responseJson._id;
+            fetch(getConnection() + '/api/stock/createstock' , {
+                method : 'POST',
+                headers : {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    // 'token' : authCode
+                },
+                body : JSON.stringify({
+                    postId : _id,
+                    sellerId : authToken,
+                    qty : quantity,
+                    title : title
+                })
+            }).then((result) => result.json()).then((jres) => {
+                console.log(jres);
+            }).catch((error) => {
+                console.log(error);
+            });
             setTitle("")
             setQuantity("")
             setWholeSeller("")
             setLocalSeller("")
             setCustomer("")
             setdescription("")
-            console.log(responseText)
+            
             setIsProgress(false)
         }).catch((error) => {
             console.log(error)
         })
 
-        fetch(getConnection() + '/api/stock/createstock' , {
-            method : 'POST',
-            headers : {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                // 'token' : authCode
-            },
-            body : JSON.stringify({
-                sellerId : authToken,
-                qty : quantity,
-                title : title
-            })
-        }).then((result) => result.json()).then((jres) => {
-            console.log(jres);
-        }).catch((error) => {
-            console.log(error);
-        });
+        
     }
 
   return (
