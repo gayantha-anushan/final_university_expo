@@ -25,7 +25,7 @@ import UserContext from './Context/UserContext';
 
 // socket
 const { io } = require("socket.io-client");
-const socket = io("http://192.168.1.4:3001");
+const socket = io(getConnection);
 
 const stack = createNativeStackNavigator();
 export default function App() {
