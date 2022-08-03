@@ -26,7 +26,7 @@ import { getConnection } from './Connection';
 
 // socket
 const { io } = require("socket.io-client");
-const socket = io(getConnection);
+const socket = io(getConnection());
 
 const stack = createNativeStackNavigator();
 export default function App() {
