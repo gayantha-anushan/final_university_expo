@@ -19,6 +19,7 @@ import UserContext from '../Context/UserContext'
 import Contacts from './Contacts';
 import ContactPost from './ContactPost';
 import SellerBids from './SellerBids';
+import ChatScreen from './ChatScreen'
 
 
 const Drawer = createDrawerNavigator()
@@ -70,7 +71,8 @@ const DrawerContainer = () => {
       <Drawer.Screen name="Stock" component={Stock}/>
       <Drawer.Screen name="Contacts" component={Contacts}/>
       <Drawer.Screen name="ContactPost" component={ContactPost}/>
-      <Drawer.Screen name="SellerBids" component={SellerBids}/>
+      <Drawer.Screen name="SellerBids" component={SellerBids} />
+      <Drawer.Screen name="chatscreen" component={ChatScreen} />
     </Drawer.Navigator>
   )
 }

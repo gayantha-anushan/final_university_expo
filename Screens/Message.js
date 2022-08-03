@@ -1,85 +1,101 @@
-import React from 'react';
-import {Text,StyleSheet,View,ScrollView,Keyboard,KeyboardAvoidingView,TouchableWithoutFeedback,TouchableOpacity} from 'react-native'
+import React, {useEffect,useState} from 'react';
+import {Text,StyleSheet,View,FlatList, ToastAndroid, TouchableOpacity, Dimensions} from 'react-native'
 import { TextInput,Image} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import Header from '../components/Header'
+import { getConnection } from '../Connection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const ConnectionViewer = ({ id,user,navigation }) => {
+    
+    const image = getConnection() + "/profile/" + user.image;
+    
+    useEffect(() => {
+        console.log(image)
+    }, [])
+    
 
-const Message = ({navigation}) => {
     return (
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView>
-                    <View style={styles.maincont}>
-                        <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
-                            <AntDesign name="arrowleft" size={30} color="black"></AntDesign>
-                        </TouchableOpacity>
-                        
-                        <Image source={require('../assets/profile.jpg')} style={styles.image}></Image>
-                        <TouchableOpacity onPress={()=>navigation.navigate("ViewProfile")}>
-                            <Text style={styles.maintext}>Amal Srinath</Text>  
-                        </TouchableOpacity>
-                        </View>
+        <TouchableOpacity onPress={() => navigation.navigate("chatscreen", { id: id })} style={styles.chatItem}>
+            <Image source={{ uri: image }} resizeMode="cover" style={styles.chatItemImage} />
+            <View style={styles.chatItemContent}>
+                <Text style={styles.chatItemUser}>{user.firstname} {user.lastname}</Text>
+                <Text style={styles.chatItemType}>{user.type}</Text>
+            </View>
+        </TouchableOpacity>
+    )
+}
 
-                    <View style={styles.messagecontainer}>
-                    <View style={styles.Message}>
-                       <TextInput style={styles.Input} placeholder='Message' />
-                            <TouchableOpacity style={styles.Touchable}>
-                            </TouchableOpacity>
-                        </View>
-                        </View>
-                </ScrollView>
-            </TouchableWithoutFeedback>
-            
-        </KeyboardAvoidingView>
-        
-        
+const Message = ({ navigation }) => {
+
+    const [myId, setMyId] = useState(null)
+    
+    const renderItem = ({ item }) => <ConnectionViewer navigation={navigation} id={item._id} user={ item.user._id == myId ? item.user2 : item.user} />
+
+    useEffect(() => {
+      //content goes here
+        const unsubscribe = navigation.addListener('focus', () => {
+            loadContent()
+        })
+    }, [])
+    
+
+    const loadContent = () => {
+        AsyncStorage.getItem("current_profile", (error, result) => {
+            if (error) {
+                ToastAndroid.show(error, ToastAndroid.SHORT);
+            } else {
+                setMyId(result)
+                fetch(getConnection() + "/api/chat/connections/" + result, {
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type":"application/json"
+                    }
+                }).then((result) => result.json()).then((jsonResult) => {
+                    //Implement Code Here!
+                    setConnections(jsonResult)
+                    console.log(jsonResult)
+                })
+            }
+        })
+    }
+    
+    const [connections, setConnections] = useState([])
+
+    return (
+        <View>
+            <Header navigation={navigation}/>
+            <FlatList renderItem={renderItem} data={connections} keyExtractor={item=>item._id} />
+        </View>
     )
 }
 const styles = StyleSheet.create({
-    mainArea: {
-        backgroundColor: "white",
-        height:'100%',
-    },
-    maincont: {
-        paddingTop: 60,
-        padding: 10,
+    chatItem: {
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
         flexDirection: 'row',
-        backgroundColor: '#40e0d0',
-        justifyContent:'flex-start'
-        
-        
+        padding: 5,
+        margin: 5,
+        borderColor: '#aaaaaa',
+        borderWidth: 1,
+        borderRadius:40
     },
-    maintext: {
-        fontSize: 25,
-        textAlign: "justify",
-        fontWeight:'bold'
-        
+    chatItemContent: {
+        paddingHorizontal: 10,
+        width: Dimensions.get("window").width - 90,
     },
-    icon1: {
-        paddingTop:6
+    chatItemImage: {
+        height: 70,
+        width: 70,
+        borderRadius:35,
     },
-    icon: {
-        marginLeft: 200,
-        paddingTop:10
+    chatItemType: {
 
     },
-    messagecontainer: {
-        paddingTop:650
-    },
-    image: {
-        width: 40,
-        height: 40,
-        borderRadius:30
-    },
-    Input: {
-        backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius:10,
-        marginHorizontal:10,
-        marginBottom:8,
-        borderColor: "green",  
-        padding:8
-}       
-    
+    chatItemUser: {
+        fontWeight: 'bold',
+        fontSize:18
+    }
 });
 export default Message;
