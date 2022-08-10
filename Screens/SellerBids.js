@@ -6,12 +6,13 @@ import { TouchableOpacity } from 'react-native'
 import { Avatar, Button,  Dialog, Portal, Provider } from 'react-native-paper';
 import { RadioButton } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { getConnection } from '../Connection'
 import { FlatList } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed, quantity, accepted, value, days, amount, loader }) => {
+const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed,navigation, quantity, accepted, value, days, amount, loader }) => {
 
     const [showDialog, setShowDialog] = useState(false)
     const [radioValue, setRadioValue] = useState("3");
@@ -63,6 +64,32 @@ const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed, 
                 });
             }
         });
+    }
+
+    const startChat = () => {
+        //Here is code for start chat
+        AsyncStorage.getItem("current_profile", (error, res) => {
+            if (error) {
+                throw error
+            } else {
+                fetch(getConnection() + "/api/chat/new_connection", {
+                    method:"POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept":"application/json"
+                    },
+                    body: JSON.stringify({
+                        user:res,
+                        user2:bidder_id
+                    })
+                }).then(result => result.text()).then(jres => {
+                    navigation.navigate("chatscreen", {
+                        id:jres
+                    })
+                })
+            }
+        })
+        
     }
     
     const acceptBid = (stat) => {
@@ -152,6 +179,9 @@ const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed, 
                 alignItems: 'center',
                 flexDirection:'row'
             }}>
+                <TouchableOpacity style={styles.buttonCover} onPress={()=>startChat()}>
+                    <MaterialIcons name="message" size={22} color="#fff" />
+                </TouchableOpacity>
                 {
                     accepted ? (
                         <View style={{
@@ -233,7 +263,7 @@ const SellerBids = ({ route, navigation }) => {
     
     const [refreshList, setRefreshList] = useState(false)
 
-    const renderItem = ({ item }) => <SingleBidItem completed={item.completed} loader={loadData} accepted={item.accepted} bidder_id={item.bidder._id} name={item.bidder.firstname + " " + item.bidder.lastname} address={item.bidder.address} amount={item.amount} quantity={item.quantity} value={item.value} days={item.buy_after} contact={item.bidder.contact} image={getConnection() + "/profile/" + item.bidder.image} id={item._id} />
+    const renderItem = ({ item }) => <SingleBidItem navigation={navigation} completed={item.completed} loader={loadData} accepted={item.accepted} bidder_id={item.bidder._id} name={item.bidder.firstname + " " + item.bidder.lastname} address={item.bidder.address} amount={item.amount} quantity={item.quantity} value={item.value} days={item.buy_after} contact={item.bidder.contact} image={getConnection() + "/profile/" + item.bidder.image} id={item._id} />
     
 
   return (

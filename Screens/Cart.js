@@ -8,7 +8,9 @@ import { ActivityIndicator } from 'react-native-paper';
 import CloseCart from './CloseCart';
 
 
-const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , cartItems , setCartItems , remainDays}) => {
+const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , cartItems , setCartItems , remainDays , navigation}) => {
+
+
 
     const deleteCartItem = async () => {
         fetch(getConnection() + "/api/cart/removecartitem/"+id , {
@@ -67,9 +69,6 @@ const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , car
                     {
                         isApproved ? (
                             isFinish ? (
-                                // <TouchableOpacity style={styles.btn}>
-                                //     <Text style={styles.btntxt}>Close Order</Text>
-                                // </TouchableOpacity>
                                 <CloseCart 
                                     index={id}
                                     sellerId={sellerId}
@@ -77,9 +76,14 @@ const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , car
                                     setCartItems={setCartItems}
                                 />
                             ) : (
-                                <TouchableOpacity style={styles.btn}>
-                                    <Text style={styles.btntxt}>Order Approved</Text>
-                                </TouchableOpacity>
+                                <View>
+                                    <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Direction' , {sellerId : sellerId})}>
+                                        <Text style={styles.btntxt}>Directions</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.btn}>
+                                        <Text style={styles.btntxt}>Order Approved</Text>
+                                    </TouchableOpacity>
+                                </View>
                             )
                         ) : (
                         <TouchableOpacity style={styles.btn} onPress={deleteCartItem}>
@@ -202,7 +206,8 @@ const Cart = ({ navigation }) => {
                     isApproved : jsonResult[i].isApproved,
                     remainDays : parseInt(jsonResult[i].remainDays),
                     isFinish : jsonResult[i].isFinish,
-                    sellerId : jsonResult[i].sellerId 
+                    sellerId : jsonResult[i].sellerId,
+                    navigation : navigation,
                 })
             }
             setCartItems(datas);
@@ -266,7 +271,7 @@ const Cart = ({ navigation }) => {
     const [price, setPrice] = useState("");
     const [qty, setQty] = useState("");
     const renderItem = ({ item }) => (
-        <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} sellerId={item.sellerId} isFinish={item.isFinish} isApproved={item.isApproved} remainDays={item.remainDays} cartItems={CartItems} setCartItems={setCartItems}/>
+        <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} sellerId={item.sellerId} isFinish={item.isFinish} isApproved={item.isApproved} remainDays={item.remainDays} cartItems={CartItems} setCartItems={setCartItems} navigation={item.navigation}/>
     );
 
     const bidRenderItem = ({ item }) => (<BidItem cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)
@@ -353,6 +358,7 @@ const Cart = ({ navigation }) => {
             width: 120,
             borderRadius: 20,
             marginRight: 10,
+            marginBottom: 10
         },
         btntxt: {
             color: 'white',

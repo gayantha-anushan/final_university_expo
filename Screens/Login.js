@@ -23,7 +23,7 @@ const Login = ({ navigation }) => {
 
     const loginNow = () => {
         //connection
-        console.log("Clicked")
+        console.log(Connection.getConnection()+"/api/auth/login");
         if(email != "" && password != ""){
             fetch(Connection.getConnection()+"/api/auth/login",{
                 method:'POST',
