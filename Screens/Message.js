@@ -1,7 +1,8 @@
-import React, {useEffect,useState} from 'react';
+import React, {useContext, useEffect,useState} from 'react';
 import {Text,StyleSheet,View,FlatList, ToastAndroid, TouchableOpacity, Dimensions} from 'react-native'
 import { TextInput,Image} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import SocketContext from '../Context/SocketContext';
 import Header from '../components/Header'
 import { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,7 +12,6 @@ const ConnectionViewer = ({ id,user,navigation }) => {
     const image = getConnection() + "/profile/" + user.image;
     
     useEffect(() => {
-        console.log(image)
     }, [])
     
 
@@ -27,6 +27,8 @@ const ConnectionViewer = ({ id,user,navigation }) => {
 }
 
 const Message = ({ navigation }) => {
+
+    const { socketData } = useContext(SocketContext)
 
     const [myId, setMyId] = useState(null)
     
@@ -54,7 +56,6 @@ const Message = ({ navigation }) => {
                 }).then((result) => result.json()).then((jsonResult) => {
                     //Implement Code Here!
                     setConnections(jsonResult)
-                    console.log(jsonResult)
                 })
             }
         })

@@ -1,5 +1,5 @@
-import { Dimensions, ImageBackground, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Dimensions, FlatList, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useEffect,useState} from 'react'
 import { TouchableOpacity,Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { EvilIcons } from '@expo/vector-icons';
@@ -7,40 +7,178 @@ import { TextInput } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import strawberry from '../assets/strawberry.jpg'
 import background from '../assets/background-chat.jpg'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SocketContext from '../Context/SocketContext';
+import { getConnection } from '../Connection';
+const IncomingMessage = ({message,time}) => {
+    return (<View style={{
+                      backgroundColor: "#aaaaaa",
+                      margin: 8,
+                      borderRadius: 10,
+                      borderTopLeftRadius:0,
+                      marginRight: "40%",
+                      padding:8
+                  }}>
+                      {/*Incoming Messages */}
+        <Text>{message}</Text>
+        <Text>{time.slice(11,16)}</Text>
+                  </View>)
+}
 
-const ChatScreen = () => {
+const SentMessages = ({message,time,status}) => {
+
+    return (<View style={{
+                      backgroundColor: "#6B8E23",
+                      borderRadius: 10,
+                      padding: 8,
+                      margin: 8,
+                      marginLeft: "40%",
+                      borderBottomRightRadius:0
+                   }}>
+                      {/* Outgoing messages */}
+        <Text style={{
+            color: "#ffffff",
+            fontSize:16
+        }}>{message}</Text>
+        <View style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            flexDirection:"row"
+        }}>
+            <Text style={{
+                color: "#ECECEC",
+                fontSize: 12,
+                marginRight:5
+            }} >{time.slice(11,16)}</Text>
+        { status == "sent" ? (<Ionicons name="ios-checkmark" size={14} color="#ececec" />):null }
+        {status == "delivered" ? (<Ionicons name="ios-checkmark-done" size={14} color="#ececec" />):null }
+        </View>
+                    </View>)
+}
+
+const ChatScreen = ({ route, navigation }) => {
+
+
+    const { socketData } = useContext(SocketContext)
+    const [onlineStatus, setOnlineStatus] = useState("Offline")
+    const [messageSet, setMessageSet] = useState([]);
+    const [reference, setReference] = useState(null)
+    const [user, setUser] = useState(null)
+    const { id } = route.params
+    const [connectionData, setConnectionData] = useState(null)
+    //const [socket, setSocket] = useState(null)
+    const [message, setMessage] = useState("")
+    const [otherUser, setOtherUser] = useState(null)
+    
+    const renderitem = ({ item }) => {
+        if (item.sender == user) {
+            return (<SentMessages message={item.message} time={item.time} status={item.status} />)
+        } else {
+            return (<IncomingMessage message={item.message} time={item.time} />)
+        }
+    }
+
+    useEffect(() => {
+        //setSocket(io(getConnection()))
+        console.log("connected ex")
+        AsyncStorage.getItem("current_profile", (error, result) => {
+            if (error) {
+                console.log(error)
+            } else {
+                setUser(result)
+            }
+        })
+        navigation.addListener("focus", () => {
+            socketData.emit("newChat", id)
+            socketData.on("initData", (data) => {
+                console.log("init screen")
+                setConnectionData(data.connectionData)
+                setMessageSet(data.last_10.reverse())
+                //reference.scrollToEnd({animated:true})
+            })
+        })
+
+    }, [])
+
+    useEffect(() => {
+        if (connectionData != null) {
+          socketData.on("incomingMessages", (data) => {
+                console.log(connectionData)
+                console.log("Hooo "+data.data.connection.toString().localeCompare(connectionData._id.toString()))
+                if (data.data.connection.toString().localeCompare(connectionData._id.toString()) == 0) {
+                    var msg = messageSet;
+                    msg = msg.concat(data.data)
+                    //imessages = msg
+                    console.log("its me 0000000000000000000000000000000000000000000000000")
+                    setMessageSet(msg);
+                    if (data.status == true) {
+                        setOnlineStatus("Online")
+                    } else {
+                        setOnlineStatus("Offline")
+                    }
+                    reference.scrollToEnd({animated:true})
+                }
+            })
+      }
+    }, [connectionData,messageSet])
+    
+
+    useEffect(() => {
+        if (user != null && connectionData != null) {
+            if (connectionData.user._id == user) {
+                setOtherUser(connectionData.user2)
+            } else {
+                setOtherUser(connectionData.user);
+            }
+        }
+    }, [connectionData,user])
+    
+
+    const sendNewMessage = () => {
+        var mg = {
+            sender: user,
+            connection:connectionData._id,
+            message: message,
+            time: new Date().toISOString(),
+            status:"sent"
+        }
+        socketData.emit("newMessage", mg);
+        setMessage("")
+    }
+    
+    
+
   return (
-      <View>
+      <KeyboardAvoidingView>
+          <View style={{
+              height:"100%"
+          }}>
           {/* Header Component */}
           <View style={styles.header}>
-              <TouchableOpacity style={styles.headerNav}>
+              <TouchableOpacity onPress={()=>navigation.openDrawer()} style={styles.headerNav}>
                   <EvilIcons name="navicon" size={30} color="black" />
               </TouchableOpacity>
-              <Image source={strawberry} style={styles.headerImage} />
-              <View style={styles.headerContent}>
-                  <Text style={styles.headerTitle}>This is Header</Text>
-                  <Text style={styles.headerStatus}>Online / Offline</Text>
-              </View>
+                  {otherUser != null ? (<Image source={{uri:getConnection()+"/profile/"+otherUser.image}} style={styles.headerImage} />):null }
+                  {otherUser != null ? (<View style={styles.headerContent}>
+                      <Text style={styles.headerTitle}>{otherUser.firstname + " "+otherUser.lastname}</Text>
+                      <Text style={styles.headerStatus}>{onlineStatus}</Text>
+                  </View>) : null}
           </View>
           {/* Messages List */}
           <ImageBackground source={background} style={styles.imageBackgroundStyles}>
-              <View style={styles.chatScreenView}>
-                  <View>
-                        {/* Message Type 1 */}
-                        <Ionicons name="ios-checkmark" size={24} color="black" />
-                        <Ionicons name="ios-checkmark-done" size={24} color="black" />
-                        <MaterialCommunityIcons name="clock-time-eight-outline" size={24} color="black" />
-                    </View>
-                {/* Message Type 2 */}
-            </View>
+                  <FlatList data={messageSet} ref={(ref)=>{ setReference(ref)}} renderItem={renderitem} keyExtractor={item => item._id} style={{
+                      marginBottom:160
+                  }} />
               <View style={styles.typeWriter}>
-                  <TextInput multiline={true} style={styles.typeWriterInput} placeholder='type message here' />
-                  <TouchableOpacity style={styles.typeWriterButton}>
+                      <TextInput value={message} onChangeText={setMessage} multiline={true} style={styles.typeWriterInput} placeholder='type message here' />
+                  <TouchableOpacity onPress={()=>sendNewMessage()} style={styles.typeWriterButton}>
                     <Ionicons name="md-send-sharp" size={26} color="#6B8E23" />
                 </TouchableOpacity>
             </View>
           </ImageBackground>
     </View>
+      </KeyboardAvoidingView>
   )
 }
 
@@ -71,12 +209,14 @@ const styles = StyleSheet.create({
         height:"100%"
     },
     chatScreenView: {
-        height:Dimensions.get("screen").height - 200
+        //height:Dimensions.get("screen").height - 200
     },
     typeWriter: {
         margin: 4,
         padding: 4,
         borderRadius: 10,
+        position: "absolute",
+        bottom: 100,
         backgroundColor:'#f5deb3',
         display: 'flex',
         justifyContent: 'center',

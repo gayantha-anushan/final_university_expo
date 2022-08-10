@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -16,7 +16,8 @@ import DrawerContainer from './Screens/DrawerContainer';
 import ViewProfile from './Screens/ViewProfile';
 import ViewPost from './components/ViewPost';
 import About from './Screens/About';
-
+import SocketContext from './Context/SocketContext';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
 
@@ -35,11 +36,38 @@ export default function App() {
     socket.on("connect", () => {
       console.log(socket.id); // x8WIv7-mJelg7on_ALbx
     });
+
+    AsyncStorage.getItem("current_profile", (error, result) => {
+      if (error) {
+        console.log(error)
+      } else {
+        if (result == null || result == undefined) {
+          console.log("Not user Already availabale!")
+        } else {
+          AsyncStorage.getItem("auth_code", (error, resultx) => {
+            if (error) {
+              console.log(error)
+            } else {
+              if (resultx == null || resultx == undefined) {
+                console.log("Token undefined!")
+              } else {
+                setUserData({
+                  token: resultx,
+                  user:result
+                })
+              }
+            }
+          })
+        }
+      }
+    })
     
     socket.on("disconnect", () => {
       console.log(socket.id); // undefined
     });
-  } , []);
+  }, []);
+  
+  const [socketData, setSocketData] = useState(null)
 
   const [userData , setUserData] = React.useState({
     token : undefined,
@@ -58,23 +86,24 @@ export default function App() {
   };
 
   return (
-    <UserContext.Provider value={{userData , setUserData}}>
-    <PaperProvider theme={theme}>
-    <NavigationContainer>
-      <stack.Navigator screenOptions={{ headerShown: false }}>
-        <stack.Screen name="Home" component={Home}/>
-        <stack.Screen name="Login" component={Login} />
-        <stack.Screen name="Register" component={Register} />
-          <stack.Screen name="Profile" component={Profile} />
-          {/* <stack.Screen name="CompletePost" component={CompletePost}/> */}
-        <stack.Screen name='DrawerContainer' component={DrawerContainer} />
-        <stack.Screen name='ViewProfile' component={ViewProfile} />
-          <stack.Screen name="ViewPost" component={ViewPost} />
-          <stack.Screen name="About" component={About}/>
-      </stack.Navigator>
-    </NavigationContainer>
-    </PaperProvider> 
-    </UserContext.Provider>
+    <SocketContext.Provider value={{socketData,setSocketData}}>
+      <UserContext.Provider value={{userData , setUserData}}>
+        <PaperProvider theme={theme}>
+          <NavigationContainer>
+            <stack.Navigator screenOptions={{ headerShown: false }}>
+              <stack.Screen name="Login" component={Login} />
+              <stack.Screen name="Register" component={Register} />
+              <stack.Screen name="Home" component={Home}/>
+              <stack.Screen name="Profile" component={Profile} />
+              <stack.Screen name='DrawerContainer' component={DrawerContainer} />
+              <stack.Screen name='ViewProfile' component={ViewProfile} />
+              <stack.Screen name="ViewPost" component={ViewPost} />
+              <stack.Screen name="About" component={About}/>
+            </stack.Navigator>
+          </NavigationContainer>
+        </PaperProvider> 
+      </UserContext.Provider>
+    </SocketContext.Provider>
   );
 }
 

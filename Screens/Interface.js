@@ -1,6 +1,6 @@
-import React,{useState,useEffect} from 'react';
+import React,{useContext,useState,useEffect} from 'react';
 import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard, FlatList, ToastAndroid} from 'react-native';
-
+import SocketContext from '../Context/SocketContext';
 import Post from '../components/Post';
 import Header from '../components/Header';
 import { getConnection } from '../Connection';
@@ -10,6 +10,8 @@ import { io } from "socket.io-client";
 
 const Interface = ({ route, navigation }) => {
     
+    const {setSocketData} = useContext(SocketContext)
+
     const renderItem = ({ item }) => <Post socket={socket} postid={item.postid} incompleted={item.incompleted} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     // const renderItem = ({ item }) => <Post  postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     const [data, setData] = useState([])
@@ -23,19 +25,21 @@ const Interface = ({ route, navigation }) => {
 
     React.useEffect(() => {
         // setSocket(io("http://192.168.1.4:3001"));
-        setSocket(io("http://192.168.43.201:3001"));
+        setSocket(io(getConnection()));
     } , []);
 
 
     React.useEffect(() => {
         socket?.emit('newUser', userData.user);
+        if (socket != null) {
+            setSocketData(socket)
+        }
       } , [socket , userData]);
 
 
     useEffect(() => {
         //startup functions
         const unsubscribe = navigation.addListener('focus', () => {
-            console.log("parameters : "+ route.params)
             AsyncStorage.getItem("type", (error, result) => {
                 if (error) {
                     ToastAndroid.show(error,ToastAndroid.SHORT)
@@ -78,7 +82,6 @@ const Interface = ({ route, navigation }) => {
                     default:
                         price = responseJson[i].price.customer
                 }
-                //console.log(responseJson[i]);
                 datas.push({
                     key:responseJson[i]._id,
                     authimg: responseJson[i].author.image,
@@ -95,7 +98,6 @@ const Interface = ({ route, navigation }) => {
                 })
             }
             setData(datas)
-            console.log(datas)
         })
         setListRefreshing(false)
     }
