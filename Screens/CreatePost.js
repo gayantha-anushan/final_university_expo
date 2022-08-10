@@ -146,6 +146,7 @@ const CreatePost = ({navigation}) => {
             setdescription("")
             
             setIsProgress(false)
+            
         }).catch((error) => {
             console.log(error)
         })
