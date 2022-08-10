@@ -16,6 +16,7 @@ import DrawerContainer from './Screens/DrawerContainer';
 import ViewProfile from './Screens/ViewProfile';
 import ViewPost from './components/ViewPost';
 import About from './Screens/About';
+import Direction from './Screens/Direction';
 
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
@@ -26,7 +27,7 @@ import { getConnection } from './Connection';
 
 // socket
 const { io } = require("socket.io-client");
-const socket = io(getConnection);
+const socket = io("http://192.168.43.201:3001");
 
 const stack = createNativeStackNavigator();
 export default function App() {
@@ -71,6 +72,7 @@ export default function App() {
         <stack.Screen name='ViewProfile' component={ViewProfile} />
           <stack.Screen name="ViewPost" component={ViewPost} />
           <stack.Screen name="About" component={About}/>
+          <stack.Screen name="Direction" component={Direction}/>
       </stack.Navigator>
     </NavigationContainer>
     </PaperProvider> 
