@@ -1,12 +1,16 @@
+
 import React,{useContext,useState,useEffect} from 'react';
-import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard, FlatList, ToastAndroid} from 'react-native';
 import SocketContext from '../Context/SocketContext';
+import { View,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,StyleSheet,Keyboard, FlatList, ToastAndroid,TouchableOpacity,TextInput} from 'react-native';
+
+
 import Post from '../components/Post';
 import Header from '../components/Header';
 import { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserContext from '../Context/UserContext';
 import { io } from "socket.io-client";
+import { AntDesign } from '@expo/vector-icons';
 
 const Interface = ({ route, navigation }) => {
     
@@ -50,7 +54,8 @@ const Interface = ({ route, navigation }) => {
         });
     }, []);
 
-    
+    const [searchComponent, setSearchComponent] = useState(false)
+    const [keywords, setKeywords] = useState("")
 
     const loaddata = (type) => {
         setListRefreshing(true)
@@ -105,10 +110,17 @@ const Interface = ({ route, navigation }) => {
  
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
-            <Header navigation={navigation} socket={socket}/>
+            <Header navigation={navigation} socket={socket} />
+            <View>
+                <TouchableOpacity style={styles.Touchable}>
+                    <AntDesign name="search1"  onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
+                </TouchableOpacity>
+                {
+                    searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' value={keywords} onChangeText={setKeywords} />) : null
+                }
+            </View>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item.key} />
-                
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     );
@@ -117,6 +129,18 @@ const styles = StyleSheet.create({
     mainArea: {
         backgroundColor: "white",
         height:'100%',
-    }
+    },
+    Input: {
+        backgroundColor: "white",
+        borderWidth: 1,
+        borderRadius: 10,
+        marginHorizontal: 10,
+        marginBottom: 8,
+        borderColor: "green",
+        padding: 8
+    },
+    Touchable:{
+        marginStart:340
+    },
 });
 export default Interface;
