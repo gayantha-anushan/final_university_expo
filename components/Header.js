@@ -1,17 +1,13 @@
 import { StyleSheet, View,Image,Text,TouchableHighlight,TouchableOpacity, ToastAndroid } from 'react-native'
 import React, { useEffect,useState} from 'react'
-import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome } from '@expo/vector-icons';
 
 const Header = ({ navigation , socket}) => {
     const [notification , setNotification] = useState([]);
     const [notify , setNotify] = useState(false);
-    const [searchComponent, setSearchComponent] = useState(false)
     const [typw, setTypw] = useState("");
-    const [keywords, setKeywords] = useState("")
 
     useEffect(() => {
         AsyncStorage.getItem("type", (error, result) => {
@@ -55,14 +51,7 @@ const Header = ({ navigation , socket}) => {
                     </View>
                     
               </View>
-              
-            <TouchableOpacity style={styles.Touchable}>
-                <AntDesign name="search1"  onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
-            </TouchableOpacity>
         </View>
-          {
-              searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' value={keywords} onChangeText={setKeywords}  />):null
-        }
           <View style={styles.mainCont1}>
             <TouchableHighlight onPress={()=>navigation.openDrawer()} activeOpacity={0.2} underlayColor='#6B8E23'>
                   <FontAwesome name="navicon" size={30} />
@@ -120,9 +109,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         alignContent:'center'
-    },
-    Touchable:{
-        marginEnd:10
     },
     topContent:{
         display:'flex',
