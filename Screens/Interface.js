@@ -103,9 +103,15 @@ const Interface = ({ route, navigation }) => {
                 })
             }
             setData(datas)
+            setfiltereddata(datas)
+            console.log(datas)
         })
         setListRefreshing(false)
     }
+    const [filtereddata, setfiltereddata] = useState([
+        
+        
+    ])
     
  
     return (
@@ -120,7 +126,7 @@ const Interface = ({ route, navigation }) => {
                 }
             </View>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={data} renderItem={renderItem} keyExtractor={item => item.key} />
+                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={filtereddata} renderItem={renderItem} keyExtractor={item => item.key} />
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     );
