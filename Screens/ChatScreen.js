@@ -89,17 +89,23 @@ const ChatScreen = ({ route, navigation }) => {
                 setUser(result)
             }
         })
-        navigation.addListener("focus", () => {
-            socketData.emit("newChat", id)
-            socketData.on("initData", (data) => {
-                console.log("init screen")
-                setConnectionData(data.connectionData)
-                setMessageSet(data.last_10.reverse())
-                //reference.scrollToEnd({animated:true})
-            })
-        })
+        // navigation.addListener("focus", () => {
+            
+        // })
 
     }, [])
+    
+    useEffect(() => {
+        if (id != null && id != undefined) {
+            console.log(id)
+            socketData.emit("newChat", id)
+            socketData.on("initData", (data) => {
+                setConnectionData(data.connectionData)
+                setMessageSet(data.last_10.reverse())
+            })
+        }
+    }, [id])
+    
 
     useEffect(() => {
         if (connectionData != null) {

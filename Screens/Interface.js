@@ -6,11 +6,13 @@ import Header from '../components/Header';
 import { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserContext from '../Context/UserContext';
+import MessagesContext from '../Context/MessagesContext';
 import { io } from "socket.io-client";
 
 const Interface = ({ route, navigation }) => {
     
-    const {setSocketData} = useContext(SocketContext)
+    const { setSocketData } = useContext(SocketContext)
+    const { setMessagesData } = useContext(MessagesContext)
 
     const renderItem = ({ item }) => <Post socket={socket} postid={item.postid} incompleted={item.incompleted} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     // const renderItem = ({ item }) => <Post  postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
@@ -33,6 +35,21 @@ const Interface = ({ route, navigation }) => {
         socket?.emit('newUser', userData.user);
         if (socket != null) {
             setSocketData(socket)
+            AsyncStorage.getItem("current_profile", (error, result) => {
+                if (error) {
+                    ToastAndroid.show(error, ToastAndroid.SHORT);
+                } else {
+                    fetch(getConnection() + "/api/chat/connections/" + result, {
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type":"application/json"
+                        }
+                    }).then((result) => result.json()).then((jsonResult) => {
+                        //Implement Code Here!
+                        setMessagesData(jsonResult)
+                    })
+                }
+            })
         }
       } , [socket , userData]);
 
