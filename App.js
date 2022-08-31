@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Direction from './Screens/Direction';
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
+import ForgotPassword from './Screens/ForgotPassword';
 
 // import context API
 import UserContext from './Context/UserContext';
@@ -101,6 +102,7 @@ export default function App() {
               <stack.Screen name="ViewPost" component={ViewPost} />
               <stack.Screen name="About" component={About} />
               <stack.Screen name="Direction" component={Direction}/>
+              <stack.Screen name="ForgotPassword" component={ForgotPassword}/>
             </stack.Navigator>
           </NavigationContainer>
         </PaperProvider> 

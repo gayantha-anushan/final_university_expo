@@ -115,9 +115,12 @@ const Direction = ({navigation , route}) => {
                     {
                         directions ? (
                             <MapViewDirections
+                                lineDashPattern={[0]}
+                                strokeWidth={5}
+                                strokeColor="red"
                                 origin={location}
                                 destination={destination}
-                                apikey='AIzaSyDVkGD6_dUV4IBd1AyV0IGdfuNo7rJEaXY'
+                                apikey='AIzaSyCntH5jS8tK4eyzF1CQDYbxeiP3UdHY5gk'
                             />
                         ) : null
                     }
