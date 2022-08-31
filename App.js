@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Direction from './Screens/Direction';
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
+import MessagesContext from './Context/MessagesContext';
 
 // import context API
 import UserContext from './Context/UserContext';
@@ -70,6 +71,8 @@ export default function App() {
   
   const [socketData, setSocketData] = useState(null)
 
+  const [messagesData, setMessagesData] = useState([])
+
   const [userData , setUserData] = React.useState({
     token : undefined,
     user : undefined
@@ -87,25 +90,27 @@ export default function App() {
   };
 
   return (
-    <SocketContext.Provider value={{socketData,setSocketData}}>
-      <UserContext.Provider value={{userData , setUserData}}>
-        <PaperProvider theme={theme}>
-          <NavigationContainer>
-            <stack.Navigator screenOptions={{ headerShown: false }}>
-              <stack.Screen name="Login" component={Login} />
-              <stack.Screen name="Register" component={Register} />
-              <stack.Screen name="Home" component={Home}/>
-              <stack.Screen name="Profile" component={Profile} />
-              <stack.Screen name='DrawerContainer' component={DrawerContainer} />
-              <stack.Screen name='ViewProfile' component={ViewProfile} />
-              <stack.Screen name="ViewPost" component={ViewPost} />
-              <stack.Screen name="About" component={About} />
-              <stack.Screen name="Direction" component={Direction}/>
-            </stack.Navigator>
-          </NavigationContainer>
-        </PaperProvider> 
-      </UserContext.Provider>
-    </SocketContext.Provider>
+    <MessagesContext.Provider value={{messagesData,setMessagesData}}>
+      <SocketContext.Provider value={{socketData,setSocketData}}>
+        <UserContext.Provider value={{userData , setUserData}}>
+          <PaperProvider theme={theme}>
+            <NavigationContainer>
+              <stack.Navigator screenOptions={{ headerShown: false }}>
+                <stack.Screen name="Login" component={Login} />
+                <stack.Screen name="Register" component={Register} />
+                <stack.Screen name="Home" component={Home}/>
+                <stack.Screen name="Profile" component={Profile} />
+                <stack.Screen name='DrawerContainer' component={DrawerContainer} />
+                <stack.Screen name='ViewProfile' component={ViewProfile} />
+                <stack.Screen name="ViewPost" component={ViewPost} />
+                <stack.Screen name="About" component={About} />
+                <stack.Screen name="Direction" component={Direction}/>
+              </stack.Navigator>
+            </NavigationContainer>
+          </PaperProvider> 
+        </UserContext.Provider>
+      </SocketContext.Provider>
+    </MessagesContext.Provider>
   );
 }
 
