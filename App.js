@@ -22,6 +22,7 @@ import Direction from './Screens/Direction';
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
 import MessagesContext from './Context/MessagesContext';
+import ForgotPassword from './Screens/ForgotPassword';
 
 // import context API
 import UserContext from './Context/UserContext';
@@ -90,26 +91,27 @@ export default function App() {
   };
 
   return (
-    <MessagesContext.Provider value={{messagesData,setMessagesData}}>
-      <SocketContext.Provider value={{socketData,setSocketData}}>
-        <UserContext.Provider value={{userData , setUserData}}>
-          <PaperProvider theme={theme}>
-            <NavigationContainer>
-              <stack.Navigator screenOptions={{ headerShown: false }}>
-                <stack.Screen name="Login" component={Login} />
-                <stack.Screen name="Register" component={Register} />
-                <stack.Screen name="Home" component={Home}/>
-                <stack.Screen name="Profile" component={Profile} />
-                <stack.Screen name='DrawerContainer' component={DrawerContainer} />
-                <stack.Screen name='ViewProfile' component={ViewProfile} />
-                <stack.Screen name="ViewPost" component={ViewPost} />
-                <stack.Screen name="About" component={About} />
-                <stack.Screen name="Direction" component={Direction}/>
-              </stack.Navigator>
-            </NavigationContainer>
-          </PaperProvider> 
-        </UserContext.Provider>
-      </SocketContext.Provider>
+      <MessagesContext.Provider value={{messagesData,setMessagesData}}>
+    <SocketContext.Provider value={{socketData,setSocketData}}>
+      <UserContext.Provider value={{userData , setUserData}}>
+        <PaperProvider theme={theme}>
+          <NavigationContainer>
+            <stack.Navigator screenOptions={{ headerShown: false }}>
+              <stack.Screen name="Login" component={Login} />
+              <stack.Screen name="Register" component={Register} />
+              <stack.Screen name="Home" component={Home}/>
+              <stack.Screen name="Profile" component={Profile} />
+              <stack.Screen name='DrawerContainer' component={DrawerContainer} />
+              <stack.Screen name='ViewProfile' component={ViewProfile} />
+              <stack.Screen name="ViewPost" component={ViewPost} />
+              <stack.Screen name="About" component={About} />
+              <stack.Screen name="Direction" component={Direction}/>
+              <stack.Screen name="ForgotPassword" component={ForgotPassword}/>
+            </stack.Navigator>
+          </NavigationContainer>
+        </PaperProvider> 
+      </UserContext.Provider>
+    </SocketContext.Provider>
     </MessagesContext.Provider>
   );
 }
