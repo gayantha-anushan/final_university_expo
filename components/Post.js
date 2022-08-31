@@ -1,8 +1,7 @@
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View ,TextInput} from 'react-native'
 import React,{useState,useEffect} from 'react'
-import strawberry from '../assets/strawberry.jpg'
 import { LinearGradient } from 'expo-linear-gradient'
-import { AntDesign } from '@expo/vector-icons';
+
 import { getConnection } from '../Connection';
 
 const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
@@ -10,6 +9,8 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
     const [authUri, setAuthUri] = useState(null)
+    
+    
 
     useEffect(() => {       
         setAuthUri(getConnection() + "/profile/" + authimg);
@@ -23,9 +24,9 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
     }, [])
     
 
-  return (
-    <View style={styles.card}>
-        <View style={styles.container2}>
+    return (
+        <View style={styles.card}>
+            <View style={styles.container2}>
               <TouchableOpacity onPress={() => navigation.navigate("ViewProfile", {uid:authid})} style={styles.container1}>
                   {
                       authUri ? (<Image source={{uri:authUri}} style={styles.userImage} />):null
@@ -44,15 +45,15 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
                         <Text style={{color:'white',fontWeight:'bold'}}>Bid Now</Text>
                     </TouchableOpacity>)
               }
-        </View>
-        <ImageBackground source={{uri:image}} style={styles.image}>
-            <LinearGradient
-                colors={["rgba(0,0,0,0.7)","transparent"]}
-                style={styles.gradient}
-            />
-            <Text style={styles.titleText}>{title}</Text>
-        </ImageBackground>
-        <View style={styles.container2}>
+            </View>
+            <ImageBackground source={{uri:image}} style={styles.image}>
+                <LinearGradient
+                    colors={["rgba(0,0,0,0.7)","transparent"]}
+                    style={styles.gradient}
+                />
+                <Text style={styles.titleText}>{title}</Text>
+            </ImageBackground>
+            <View style={styles.container2}>
             <View>
                   <Text style={styles.typeBtn}>{ typeName}</Text>
                 <View style={styles.container1}>
@@ -66,12 +67,13 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={{margin:10}}>
-                  <Text style={{ fontSize: 17 }}>{quantity} { incompleted > 0 ? " - "+incompleted : null} kg</Text>
-                <Text style={{fontSize:17}}>Rs :{price.toFixed(2)}</Text>
-            </View>
+                <View style={{margin:10}}>
+                    <Text style={{ fontSize: 17 }}>{quantity} { incompleted > 0 ? " - "+incompleted : null} kg</Text>
+                    <Text style={{fontSize:17}}>Rs :{price.toFixed(2)}</Text>
+                </View>
         </View>
-    </View>
+            </View>
+    
   )
 }
 
@@ -153,5 +155,5 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25,
         tintColor:'white'
-    }
+    },
 })
