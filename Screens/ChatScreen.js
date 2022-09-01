@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native'
+import { BackHandler, Dimensions, FlatList, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect,useState} from 'react'
 import { TouchableOpacity,Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import background from '../assets/background-chat.jpg'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SocketContext from '../Context/SocketContext';
 import { getConnection } from '../Connection';
+import { useFocusEffect } from '@react-navigation/native';
 const IncomingMessage = ({message,time}) => {
     return (<View style={{
                       backgroundColor: "#aaaaaa",
@@ -24,6 +25,7 @@ const IncomingMessage = ({message,time}) => {
         <Text>{time.slice(11,16)}</Text>
                   </View>)
 }
+
 
 const SentMessages = ({message,time,status}) => {
 
@@ -89,17 +91,35 @@ const ChatScreen = ({ route, navigation }) => {
                 setUser(result)
             }
         })
-        navigation.addListener("focus", () => {
-            socketData.emit("newChat", id)
-            socketData.on("initData", (data) => {
-                console.log("init screen")
-                setConnectionData(data.connectionData)
-                setMessageSet(data.last_10.reverse())
-                //reference.scrollToEnd({animated:true})
-            })
-        })
+        // navigation.addListener("focus", () => {
+            
+        // })
 
     }, [])
+    
+    useEffect(() => {
+        if (id != null && id != undefined) {
+            console.log(id)
+            socketData.emit("newChat", id)
+            socketData.on("initData", (data) => {
+                setConnectionData(data.connectionData)
+                setMessageSet(data.last_10.reverse())
+            })
+        }
+    }, [id])
+    
+    useFocusEffect(
+    React.useCallback(() => {
+        const onBackPress = () => {
+          navigation.navigate("Message")
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
 
     useEffect(() => {
         if (connectionData != null) {

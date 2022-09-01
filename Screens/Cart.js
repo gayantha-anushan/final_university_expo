@@ -5,10 +5,13 @@ import strawberry from '../assets/strawberry.jpg'
 import { getConnection } from '../Connection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
+import { FontAwesome5 } from '@expo/vector-icons';
 import CloseCart from './CloseCart';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
-const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , cartItems , setCartItems , remainDays , navigation}) => {
+const Item = ({id,name, qty, price,image , profile, isApproved ,sellerId , isFinish , cartItems , setCartItems , remainDays , navigation}) => {
 
 
 
@@ -26,6 +29,26 @@ const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , car
         setCartItems(
             cartItems.filter(cartItem =>  cartItem.id !== id)
         );
+    }
+
+    const chatNow = () => {
+        fetch(getConnection() + "/api/chat/new_connection", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept":"application/json"
+            },
+            body: JSON.stringify({
+                user: sellerId,
+                user2:profile
+            })
+        }).then(resul => resul.json()).then(trex => {
+            navigation.navigate("chatscreen", {
+                id:trex.id
+            });
+        }).catch((error) => {
+            console.log(result)
+        })
     }
 
     return (
@@ -77,9 +100,19 @@ const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , car
                                 />
                             ) : (
                                 <View>
-                                    <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Direction' , {sellerId : sellerId})}>
-                                        <Text style={styles.btntxt}>Directions</Text>
-                                    </TouchableOpacity>
+                                        <View style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            flexDirection:"row"
+                                        }}>
+                                             <TouchableOpacity style={styles.btn2} onPress={() => navigation.navigate('Direction' , {sellerId : sellerId})}>
+                                            <FontAwesome5 name="route" size={20} color="#fff" />
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={styles.btn2} onPress={() => chatNow()}>
+                                            <Ionicons name="chatbubbles" size={20} color="#fff" />
+                                            </TouchableOpacity>
+                                       </View>
                                     <TouchableOpacity style={styles.btn}>
                                         <Text style={styles.btntxt}>Order Approved</Text>
                                     </TouchableOpacity>
@@ -97,7 +130,27 @@ const Item = ({id,name, qty, price,image , isApproved ,sellerId , isFinish , car
     )
 };
 
-const BidItem = ({ id, name, qty, price, image, accepted,cancelBid }) => {
+const BidItem = ({ id, name, qty, navigation, price, image, accepted, cancelBid, seller, profile }) => {
+    
+    const chatNow = () => {
+        fetch(getConnection() + "/api/chat/new_connection", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept":"application/json"
+            },
+            body: JSON.stringify({
+                user: seller,
+                user2:profile
+            })
+        }).then(resul => resul.json()).then(trex => {
+            navigation.navigate("chatscreen", {
+                id:trex.id
+            });
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
 
     return (
     <View style={{
@@ -126,14 +179,31 @@ const BidItem = ({ id, name, qty, price, image, accepted,cancelBid }) => {
                 alignItems: 'center',
                 marginHorizontal:10
             }}>
-                    <TouchableOpacity disabled={ accepted} style={{
-                    backgroundColor: accepted ? '#a4a4a4' : '#6B8E23',
-                    padding: 5,
-                    paddingHorizontal: 15,
-                    borderRadius: 15
-                }} onPress={ ()=>cancelBid(id)}>
-                    <Text>Cancel Bid</Text>
-                </TouchableOpacity>
+                    <View style={{
+                        display: 'flex',
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection:"row"
+                    }}>
+                        <TouchableOpacity disabled={ accepted} style={{
+                            backgroundColor: accepted ? '#a4a4a4' : '#6B8E23',
+                            padding: 10,
+                            margin:3,
+                            paddingHorizontal: 10,
+                            borderRadius: 25
+                        }} onPress={ ()=>cancelBid(id)}>
+                            <MaterialCommunityIcons name="cancel" size={24} color="#fff" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{
+                            backgroundColor: accepted ? '#a4a4a4' : '#6B8E23',
+                            padding: 10,
+                            margin: 3,
+                            paddingHorizontal: 10,
+                            borderRadius: 25
+                        }} onPress={()=>chatNow()}>
+                            <Ionicons name="chatbubbles" size={24} color="#fff" />
+                        </TouchableOpacity>
+                    </View>
                 <View>
                     <Text>Qty: {qty}Kg</Text>
                     <Text>Bid Price: Rs.{price}</Text>
@@ -232,6 +302,7 @@ const Cart = ({ navigation }) => {
                     amount: jsonResult[i].amount,
                     buy_after: jsonResult[i].buy_after,
                     image: getConnection() + "/post-img/" + jsonResult[i].post.image,
+                    seller:jsonResult[i].post.author,
                     title: jsonResult[i].post.title,
                     quantity: jsonResult[i].quantity
                 }
@@ -239,7 +310,7 @@ const Cart = ({ navigation }) => {
             }
             setBidList(datas)
             console.log("-------------------------------------------------------------")
-            console.log(datas)
+            console.log(jsonResult[0])
         }).catch((error) => {
             console.log(error)
         })
@@ -271,16 +342,16 @@ const Cart = ({ navigation }) => {
     const [price, setPrice] = useState("");
     const [qty, setQty] = useState("");
     const renderItem = ({ item }) => (
-        <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} sellerId={item.sellerId} isFinish={item.isFinish} isApproved={item.isApproved} remainDays={item.remainDays} cartItems={CartItems} setCartItems={setCartItems} navigation={item.navigation}/>
+        <Item id={item.id} name={item.title} profile={profile} qty={item.quantity} price={item.price} image={item.image} sellerId={item.sellerId} isFinish={item.isFinish} isApproved={item.isApproved} remainDays={item.remainDays} cartItems={CartItems} setCartItems={setCartItems} navigation={item.navigation}/>
     );
 
-    const bidRenderItem = ({ item }) => (<BidItem cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)
+    const bidRenderItem = ({ item }) => (<BidItem navigation={navigation} seller={item.seller} profile={profile} cancelBid={cancelBid} accepted={item.accepted} id={item.id} name={item.title} qty={item.quantity} image={item.image} price={item.amount} />)
     
 
     // check the conditional render
     const renderItem1 = ({item}) => {
         if(item.price == 400){
-            return <Item id={item.id} name={item.title} qty={item.quantity} price={item.price} image={item.image} /> 
+            return <Item id={item.id}  name={item.title} qty={item.quantity} price={item.price} image={item.image} /> 
         }
     }
 
@@ -344,6 +415,13 @@ const Cart = ({ navigation }) => {
         },
         container1: {
             justifyContent: 'flex-end',
+        },
+        btn2: {
+            backgroundColor: "#6b8e23",
+            marginHorizontal: 4,
+            marginBottom:2,
+            padding: 12,
+            borderRadius:25
         },
         item: {
             fontWeight: 'bold',
