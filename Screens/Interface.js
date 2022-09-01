@@ -12,6 +12,7 @@ import UserContext from '../Context/UserContext';
 import MessagesContext from '../Context/MessagesContext';
 import { io } from "socket.io-client";
 import { AntDesign } from '@expo/vector-icons';
+import axios from 'axios';
 
 const Interface = ({ route, navigation }) => {
     
@@ -22,6 +23,8 @@ const Interface = ({ route, navigation }) => {
     // const renderItem = ({ item }) => <Post  postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     const [data, setData] = useState([])
     const [listRefreshing, setListRefreshing] = useState(false);
+    const [term, setterm] = useState([]);
+    const [err, seterr] = useState([]);
 
 
     // for socket
@@ -70,9 +73,6 @@ const Interface = ({ route, navigation }) => {
             })
         });
     }, []);
-
-    const [searchComponent, setSearchComponent] = useState(false)
-    const [keywords, setKeywords] = useState("")
 
     const loaddata = (type) => {
         setListRefreshing(true)
@@ -125,22 +125,34 @@ const Interface = ({ route, navigation }) => {
         })
         setListRefreshing(false)
     }
-    const [filtereddata, setfiltereddata] = useState([
-        
-        
-    ])
+    const [filtereddata, setfiltereddata] = useState([]);
+
+    const searchHandler = () => {
+        //data
+        let newData = data.filter(item => {
+            const name = item.title.toUpperCase();
+            const termnew = term.toUpperCase();
+            if (termnew.length == 0) {
+                return true;
+            } else {
+                return name.indexOf(termnew) > -1;
+            }
+        })
+        setfiltereddata(newData);
+        //filter data
+    }
     
  
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation} socket={socket} />
-            <View>
-                <TouchableOpacity style={styles.Touchable}>
-                    <AntDesign name="search1"  onPress={()=>setSearchComponent(!searchComponent)} color="black" size={32} />
+            <View style={styles.search}>
+                <TextInput style={styles.Input} placeholder='Search here......' value={term} onChangeText={(newText) => {
+                    setterm(newText);
+                }} />
+                <TouchableOpacity style={styles.Touchable} onPress={()=>searchHandler()}>
+                    <AntDesign name="search1" color="green" size={36} />
                 </TouchableOpacity>
-                {
-                    searchComponent ? (<TextInput style={styles.Input} placeholder='Search here......' value={keywords} onChangeText={setKeywords} />) : null
-                }
             </View>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={filtereddata} renderItem={renderItem} keyExtractor={item => item.key} />
@@ -155,15 +167,25 @@ const styles = StyleSheet.create({
     },
     Input: {
         backgroundColor: "white",
-        borderWidth: 1,
-        borderRadius: 10,
-        marginHorizontal: 10,
-        marginBottom: 8,
+        borderWidth: 2,
+        borderRadius: 30,
         borderColor: "green",
-        padding: 8
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+        paddingLeft: 15,
+        flex: 1,
+        marginLeft: 8,
+        fontSize: 18,
+        fontWeight:'bold',
     },
-    Touchable:{
-        marginStart:340
+    Touchable: {
+        padding:7
     },
+    search: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 export default Interface;

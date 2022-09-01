@@ -16,6 +16,7 @@ const ViewProfile = ({ route,navigation }) => {
     const [contact, setContact] = useState("")
     const [location, setLocation] = useState(null)
     const [point, setPoint] = useState(null)
+    const [typew,setTypw]=useState(null)
 
     const { uid} = route.params
     
@@ -86,6 +87,16 @@ const ViewProfile = ({ route,navigation }) => {
             })
         }
     }, [uid])
+
+     useEffect(() => {
+     AsyncStorage.getItem("type", (error, result) => {
+         if (error) {
+             ToastAndroid.show(error, ToastAndroid.SHORT);
+         } else {
+             setTypw(result);
+         }
+     })
+         }, []);
     
     
     return (
@@ -122,18 +133,20 @@ const ViewProfile = ({ route,navigation }) => {
                             </View>  
                             <View style={styles.ButtonCont1}>
                             {
-                                uid ? null :(<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
+                                typew !="customer" && uid ? (<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
                                <Image style={styles.icon} source={require('../assets/products.png')} />
                                <Text style={styles.text3}>Your Products</Text>
-                            </TouchableOpacity>)
+                            </TouchableOpacity>):null
                             }
                             </View>
                     </View>
-                    <View>
-                        <DialogReport 
-                        reporteeId={uid}
-                        reportorId={userData.user}
-                        />
+                <View>
+                    {
+                        uid ? (<DialogReport
+                            reporteeId={uid}
+                            reportorId={userData.user}
+                        />):null
+                    }
                     </View>
                     
                         <View style={styles.textset}>
