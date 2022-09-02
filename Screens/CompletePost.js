@@ -239,13 +239,13 @@ const CompletePost = ({ route,navigation}) => {
                     userType != "farmer" ? ( <View>
                     {
                     type == "Auction" ? (<View style={ styles.auctionButtonContainer}><TouchableOpacity onPress={()=>setIsShow(true)} style={styles.btn1}>
-                        <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                        <AntDesign name="shoppingcart" size={30} color="white"></AntDesign>
                         <Text style={styles.text2}>Bid Now</Text>
                     </TouchableOpacity><TouchableOpacity onPress={()=>navigation.navigate("ViewBids",{id:id})} style={styles.btn1}>
-                        <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                        <AntDesign name="shoppingcart" size={30} color="white"></AntDesign>
                         <Text style={styles.text2}>All Bids</Text>
                     </TouchableOpacity></View>):(<TouchableOpacity style={styles.btn1} onPress={()=>order()}>
-                        <AntDesign name="shoppingcart" size={30} color="black"></AntDesign>
+                        <AntDesign name="shoppingcart" size={30} color="white"></AntDesign>
                         <Text style={styles.text2}>Create an Order</Text>
                     </TouchableOpacity>)
                     }
@@ -253,13 +253,14 @@ const CompletePost = ({ route,navigation}) => {
                }
                 <Dialog visible={isShow} title="Bid Now!" onTouchOutside={() => setIsShow(false)} >
                     <View>
+                        <Text style={{ fontWeight: 'bold', fontSize: 22 }}>Seller Amount :{orderPrice}</Text>
                         <Text>Days</Text>
                         <TextInput style={styles.alertText} value={buyDate} onChangeText={setBuyDate} placeholder='How many days you take to buy ?' />
                         <Text>Bid Amount</Text>
                         <TextInput value={bidAmount} style={styles.alertText} onChangeText={ setBidAmount} placeholder='Your Bid Amount ?' />
                         <View style={ styles.auctionButtonContainer}>
                             <TouchableOpacity style={ styles.btn2} onPress={()=>bidNow()}>
-                                <Text>Bid Now</Text>
+                                <Text style={{color:'white',fontWeight:'bold'}}>Bid Now</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={ styles.btn3} onPress={()=>setIsShow(false)}>
                                 <Text>Cancel</Text>
