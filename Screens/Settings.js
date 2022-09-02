@@ -30,16 +30,6 @@ const Settings = ({ navigation }) => {
                 onPressCallback={() => { console.log('on Body Press (optional)') }}
                 _value={false}
                 _onValueChange={() => { console.log('switched') }} />
-            <SliderRow
-                navigate
-                text='Font Size'
-                iconName='pencil-square'
-                onPressCallback={() => { console.log('on Body Press (optional)') }}
-                _color='#000'
-                _value={70}
-                _min={0}
-                _max={100}
-                _onValueChange={value => { console.log('value: ' + value) }} />
             <NavigateRow text='LogOut' iconName='sign-out' onPressCallback={() => { console.log('onPress') }} />
             <NavigateRow text='About' iconName='info-circle' onPressCallback={() => navigation.navigate("About")} />
 
