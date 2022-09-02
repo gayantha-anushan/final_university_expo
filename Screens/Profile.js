@@ -274,13 +274,19 @@ const Profile = ({route,navigation}) => {
                                 }).then((response) => response.json()).then((responseJson) => {
                                     //post action after setup url
                                     console.log(responseJson.id)
-                                    setUserData({
-                                        user : responseJson.id
-                                    });
-                                    AsyncStorage.setItem("current_profile", responseJson.id)
-                                    AsyncStorage.setItem("type", responseJson.type)
-                                    setInProgress(false)
-                                    navigation.navigate('DrawerContainer')
+                                    if(responseJson.isActive == true){
+                                        setUserData({
+                                            user : responseJson.id
+                                        });
+                                        AsyncStorage.setItem("current_profile", responseJson.id)
+                                        AsyncStorage.setItem("type", responseJson.type)
+                                        setInProgress(false)
+                                        navigation.navigate('DrawerContainer')
+                                    } else {
+                                        ToastAndroid.show('Please Verify the Email !! ' , ToastAndroid.SHORT);
+                                        setInProgress(false);
+                                    }
+                                    
                                 }).catch((error) => {
                                     setInProgress(false)
                                     console.log(error)
