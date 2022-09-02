@@ -57,7 +57,7 @@ const CompletePost = ({ route,navigation}) => {
             console.log(responseJson)
             setImage(getConnection() + "/post-img/" + responseJson.image);
             setTitle(responseJson.title);
-            setAmmount(responseJson.quantity)
+            setAmmount(responseJson.quantity-responseJson.successQuantity)
             setPrice(responseJson.price.customer)
             setType(responseJson.type)
             setDescription(responseJson.description)
@@ -71,6 +71,14 @@ const CompletePost = ({ route,navigation}) => {
     }, [id])
 
     const bidNow = () => {
+        if (Number(orderAmount) > Number(Amount)) {
+            ToastAndroid.show("Too larger than available amount",ToastAndroid.SHORT)
+        } else {
+            bidNow_do()
+        }
+    }
+
+    const bidNow_do = () => {
         if (profileId != null) {
             fetch(getConnection() + "/api/auction/bid", {
                 method: 'POST',
@@ -103,8 +111,16 @@ const CompletePost = ({ route,navigation}) => {
             })
         }
     }
-    
+
     const order = () => {
+        if (orderAmount > Amount) {
+            ToastAndroid.show("Too larger Than Available Amount", ToastAndroid.SHORT);
+        } else {
+            order_do();
+        }
+    }
+    
+    const order_do = () => {
 
         socket.emit('sendNotification' , {
             senderName : userData.user,
@@ -153,23 +169,6 @@ const CompletePost = ({ route,navigation}) => {
         }).catch((error) => {
             console.log(error)
         });  
-        
-        // fetch(getConnection() + '/api/posts/transaction/'+id , {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept':'application/json',
-        //         'Content-Type':'application/json',
-        //     },
-        //     body : JSON.stringify({
-        //         amount : orderAmount,
-        //     })
-        // }).then((response) => response.json()).then((jsonResult) => {
-        //     setIsProgress(false);
-        //     navigation.navigate("Cart");
-    
-        // }).catch((error) => {
-        //     console.log(error)
-        // });
     }
 
     const selectAmount = (value) => {
@@ -184,7 +183,9 @@ const CompletePost = ({ route,navigation}) => {
     }
     
     return (
-        <ScrollView>
+        <ScrollView style={{
+            backgroundColor:"#fff"
+        }}>
             <View style={styles.maincont}>
                 <TouchableOpacity onPress={()=>navigation.navigate("Interface")}>
                 <AntDesign name="arrowleft" size={25} color="black"></AntDesign>

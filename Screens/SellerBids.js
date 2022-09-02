@@ -1,7 +1,7 @@
 import { StyleSheet, Text,Image, View, ToastAndroid } from 'react-native'
 import React,{useEffect,useState} from 'react'
 import strawberry from '../assets/strawberry.jpg'
-import { TextInput } from 'react-native-paper'
+import { TextInput } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import { Avatar, Button,  Dialog, Portal, Provider } from 'react-native-paper';
 import { RadioButton } from 'react-native-paper';
@@ -19,14 +19,17 @@ const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed,n
     const [comment, setComment] = useState("")
     
     const completeBid = () => {
+        console.log("called 1")
         AsyncStorage.getItem('auth_code', (error, result) => {
             if (error) {
                 ToastAndroid.show("Internal Error!", ToastAndroid.SHORT)
             } else {
+                console.log("called 2"+result)
                 AsyncStorage.getItem('current_profile', (err, resu) => {
                     if (err) {
                         console.log(err)
                     } else {
+                        console.log("called 3"+resu)
                         //fetch complete bid
                         fetch(getConnection() + "/api/auction/complete-bid", {
                             method: 'GET',
@@ -36,6 +39,7 @@ const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed,n
                                 bid:id
                             }
                         }).then((result) => result.text()).then((jres) => {
+                            console.log("called 4")
                             fetch(getConnection() + "/api/auth/createrate", {
                                 method: "POST",
                                 headers: {
@@ -191,14 +195,23 @@ const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed,n
                             alignItems:'center'
                         }}>
                             <TouchableOpacity disabled={completed} onPress={() => setShowDialog(true)} style={completed ? styles.buttonCoverDisabled : styles.buttonCover}>
-                    <Text>Complete</Text>
+                                <Text style={{
+                                    color: "#fff",
+                                    fontWeight:"bold"
+                    }}>Complete</Text>
                             </TouchableOpacity>
                             <TouchableOpacity disabled={completed} onPress={() => acceptBid(false)} style={completed ? styles.buttonCoverDisabled : styles.buttonCover}>
-                    <Text>Reject</Text>
+                                <Text style={{
+                                    color: "#fff",
+                                    fontWeight:"bold"
+                    }}>Reject</Text>
                 </TouchableOpacity>
                         </View>
                     ):(<TouchableOpacity onPress={()=>acceptBid(true)} style={styles.buttonCover}>
-                    <Text>Accept</Text>
+                            <Text style={{
+                                color: "#fff",
+                                fontWeight:"bold"
+                    }}>Accept</Text>
                 </TouchableOpacity>)
                 }
             </View>
@@ -215,7 +228,15 @@ const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed,n
                     <RadioButton.Item label="Very Good" value="5" />
                 </RadioButton.Group>
                 <TextInput
-                    label="Add a Comment.."
+                    placeholder="Add a Comment.."
+                            style={{
+                                borderWidth: 1,
+                                borderColor: "#000",
+                                padding: 5,
+                                margin: 5,
+                                paddingHorizontal: 15,
+                                borderRadius:20
+                    }}        
                     value={comment}
                     onChangeText={comment => setComment(comment)}
                 />
@@ -310,39 +331,9 @@ const SellerBids = ({ route, navigation }) => {
                 </View>
               </View>
           </View> 
-          <View style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection:'row'
-          }}>
-              <TextInput style={{
-                  backgroundColor: '#c3c3c3',
-                  width: '70%',
-                  margin: 5,
-                  padding: 8,
-                  borderRadius: 25,
-                  paddingHorizontal: 18,
-                  fontWeight:'bold'
-              }} />
-              <TouchableOpacity style={{
-                  backgroundColor: '#c3c3c3',
-                  margin: 5,
-                  padding: 8,
-                  borderRadius:25
-              }}>
-                  <FontAwesome name="search" size={24} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity  style={{
-                  backgroundColor: '#c3c3c3',
-                  margin: 5,
-                  padding: 8,
-                  borderRadius:25
-              }}>
-                  <FontAwesome name="filter" size={24} color="black" />
-              </TouchableOpacity>
-          </View>
-          <FlatList data={dataList} renderItem={renderItem} refreshing={refreshList} onRefresh={()=>loadData()} keyExtractor={item=>item._id} />
+          <FlatList style={{
+              marginBottom:240
+          }} data={dataList} renderItem={renderItem} refreshing={refreshList} onRefresh={()=>loadData()} keyExtractor={item=>item._id} />
     </View>
   )
 }
