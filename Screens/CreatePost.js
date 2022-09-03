@@ -164,7 +164,7 @@ const CreatePost = ({navigation}) => {
                     <View style={styles.container}>
                        <Text style={styles.priceChooser}>Title:</Text>   
                         <TextInput value={title} onChangeText={setTitle} style={styles.inputStyler} placeholder='Title' />
-                        <Text style={styles.priceChooser}>Available Quantity:</Text>   
+                        <Text style={styles.priceChooser}>Available Quantity(kg):</Text>   
                         <TextInput value={quantity} onChangeText={setQuantity} style={styles.inputStyler} placeholder='Available Quantity' keyboardType='numeric' />
                         <Text style={styles.priceChooser}>Auction Or Not?</Text>  
                         <View style={styles.auctionContainer}>
@@ -175,7 +175,7 @@ const CreatePost = ({navigation}) => {
                         <Text style={styles.priceChooser}>Expire in Days:</Text>
                         <NumericInput type='plus-minus' value={expirity} onChange={value => setExpirity(value)} minValue={0} totalWidth={100} totalHeight={50} iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#4d8aeb' leftButtonBackgroundColor='#4d8aeb' />
                     </View>
-                <Text style={styles.priceChooser}>Price:</Text>
+                <Text style={styles.priceChooser}>Price(Rs.per kg):</Text>
                 <View style={styles.container2}>
                               <View>
                                 <Text>WholeSeller</Text>  

@@ -22,8 +22,10 @@ const ViewBids = ({ route, navigation }) => {
                 var data = [];
                 for (var i = 0; i < jsonResult.length; i++){
                     data = data.concat({
-                        _id:jsonResult[i]._id,
-                        authorname: jsonResult[i].bidder.firstname+" "+jsonResult[i].bidder.lastname,
+                        _id: jsonResult[i]._id,
+                        auth_id:jsonResult[i].bidder._id,
+                        authorname: jsonResult[i].bidder.firstname + " " + jsonResult[i].bidder.lastname,
+                        image:getConnection()+"/profile/"+jsonResult[i].bidder.image,
                         amount: jsonResult[i].amount,
                         quantity: jsonResult[i].quantity,
                         buydate:jsonResult[i].buy_after,
@@ -37,7 +39,7 @@ const ViewBids = ({ route, navigation }) => {
     }, [])
     
 
-    const renderItem = ({ item }) => <BidContent buydays={ item.buydate} authorname={item.authorname} amount={item.amount} quantity={ item.quantity} />
+    const renderItem = ({ item }) => <BidContent author_id={item.auth_id} buydays={ item.buydate} image={item.image} authorname={item.authorname} amount={item.amount} quantity={ item.quantity} />
 
   return (
       <View>

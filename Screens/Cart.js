@@ -194,8 +194,8 @@ const BidItem = ({ id, name, qty, navigation, price, image, accepted, cancelBid,
                         }} onPress={ ()=>cancelBid(id)}>
                             <MaterialCommunityIcons name="cancel" size={24} color="#fff" />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            backgroundColor: accepted ? '#a4a4a4' : '#6B8E23',
+                        <TouchableOpacity disabled={!accepted} style={{
+                            backgroundColor: !accepted ? '#a4a4a4' : '#6B8E23',
                             padding: 10,
                             margin: 3,
                             paddingHorizontal: 10,
@@ -324,7 +324,7 @@ const Cart = ({ navigation }) => {
                 'token': authCode,
                 'profile': profile
             }
-        }).then((result) => result.json()).then((jres) => {
+        }).then((result) => result.text()).then((jres) => {
             console.log(jres);
             loadBids(profile)
         }).catch((error) => {

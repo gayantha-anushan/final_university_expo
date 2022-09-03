@@ -325,10 +325,10 @@ const Profile = ({route,navigation}) => {
                         <Text style={styles.Text}>Contact</Text>
                         <TextInput value={contact} onChangeText={setContact} style={styles.input} />
                         <Text style={styles.Text}>Type</Text>
-                        <View style={styles.container}>
+                        {profileID == null ? (<View style={styles.container}>
                             <RadioGroup radioButtons={radioButtons} onPress={onPressRadioButton} layout="column" />
                         {/* <SegmentedControl values={["Farmer", "Wholeseller", "Local Seller", "Customer"]} selectedIndex={index}  onChange={ (e)=>setIndex(e.nativeEvent.selectedSegmentIndex)} /> */}
-                    </View>
+                    </View>):null}
                     <Text style={styles.Text}>Location</Text>
                         <View style={styles.container1}>
                         <MapView style={styles.map} initialRegion={location} onRegionChange={setLocation} >

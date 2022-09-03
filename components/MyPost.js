@@ -4,7 +4,7 @@ import strawberry from '../assets/strawberry.jpg'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AntDesign } from '@expo/vector-icons';
 
-const MyPost = ({username,postdate,title,quantity,price,type,image}) => {
+const MyPost = ({username,postdate,title,quantity,price,type,image,editDetails,id,authorImage}) => {
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
@@ -24,7 +24,7 @@ const MyPost = ({username,postdate,title,quantity,price,type,image}) => {
     <View style={styles.card}>
         <View style={styles.container2}>
             <View style={styles.container1}>
-                <Image source={strawberry} style={styles.userImage} />
+                <Image source={{uri:authorImage}} style={styles.userImage} />
                 <View>
                     <Text style={styles.user}>{username}</Text>
                     <Text>{postdate}</Text>
@@ -42,7 +42,7 @@ const MyPost = ({username,postdate,title,quantity,price,type,image}) => {
             <View>
                 <Text style={styles.typeBtn}>{typeName}</Text>
                 <View style={styles.container1}>
-                      <TouchableOpacity style={styles.btn1}>
+                      <TouchableOpacity onPress={()=>editDetails(id)} style={styles.btn1}>
                           <AntDesign name="edit" size={20} color="black"></AntDesign>
                         <Text>Edit Details</Text>
                     </TouchableOpacity>
