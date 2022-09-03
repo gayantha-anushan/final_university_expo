@@ -12,7 +12,6 @@ import UserContext from '../Context/UserContext';
 import MessagesContext from '../Context/MessagesContext';
 import { io } from "socket.io-client";
 import { AntDesign } from '@expo/vector-icons';
-import axios from 'axios';
 
 const Interface = ({ route, navigation }) => {
     
