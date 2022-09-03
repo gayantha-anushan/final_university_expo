@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     },
     htxt: {
         alignItems: 'center',
-        backgroundColor:'purple'
+        backgroundColor:'#6B8E23'
     },
     mtxt: {
         flexDirection: 'row',
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     card3: {
-        backgroundColor: '#cd5c5c',
+        backgroundColor: 'white',
         borderRadius: 30,
         padding: 10,
         margin: 1,

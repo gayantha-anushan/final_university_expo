@@ -82,9 +82,9 @@ const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed,n
                         user:res,
                         user2:bidder_id
                     })
-                }).then(result => result.text()).then(jres => {
+                }).then(result => result.json()).then(jres => {
                     navigation.navigate("chatscreen", {
-                        id:jres
+                        id:jres.id
                     })
                 })
             }
@@ -116,7 +116,7 @@ const SingleBidItem = ({ id, name, address,bidder_id, contact, image,completed,n
                         }).then((respi) => respi.json()).then((jsonResponse) => {
                             if (jsonResponse.data) {
                                 loader();
-                                console.log(accepted + " "+ stat + " " + jsonResponse.data)
+                                //console.log(accepted + " "+ stat + " " + jsonResponse.data)
                             } else {
                                 ToastAndroid.show("Something Went Wrong!",ToastAndroid.SHORT)
                             }
@@ -250,11 +250,9 @@ const SellerBids = ({ route, navigation }) => {
                 "Content-Type":"application/json"
             }
         }).then((result) => result.json()).then(resasjson => {
-            console.log(resasjson.bids)
             setImage(getConnection() + "/post-img/" + resasjson.post.image);
             setTitle(resasjson.post.title)
             setDataList(resasjson.bids)
-            console.log(resasjson.bids)
         }).catch(error => {
             ToastAndroid.show("Loading Error", ToastAndroid.SHORT);
         })

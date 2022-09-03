@@ -5,7 +5,9 @@ import { AntDesign } from '@expo/vector-icons';
 import SocketContext from '../Context/SocketContext';
 import Header from '../components/Header'
 import { getConnection } from '../Connection';
+import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MessagesContext from '../Context/MessagesContext';
 
 const ConnectionViewer = ({ id,user,navigation }) => {
     
@@ -20,7 +22,40 @@ const ConnectionViewer = ({ id,user,navigation }) => {
             <Image source={{ uri: image }} resizeMode="cover" style={styles.chatItemImage} />
             <View style={styles.chatItemContent}>
                 <Text style={styles.chatItemUser}>{user.firstname} {user.lastname}</Text>
-                <Text style={styles.chatItemType}>{user.type}</Text>
+                <View style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                    alignItems:'center'
+                }}>
+                    <View style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection:'row'
+                    }}>
+                        <Text style={styles.chatItemType}>{user.type}</Text>
+                        <TouchableOpacity style={{
+                            marginHorizontal: 5,
+                            paddingHorizontal: 10,
+                            marginTop:4,
+                            paddingVertical: 3,
+                            borderColor: '#CACACA',
+                            borderWidth: 1,
+                            borderRadius:15
+                        }}>
+                            <Feather name="more-horizontal" size={24} color="black" />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={{
+                        marginHorizontal: 10,
+                        padding: 5,
+                        paddingHorizontal:10,
+                        backgroundColor: '#cacaca',
+                        borderRadius:15
+                    }}>100</Text>
+                </View>
+                
             </View>
         </TouchableOpacity>
     )
@@ -29,7 +64,7 @@ const ConnectionViewer = ({ id,user,navigation }) => {
 const Message = ({ navigation }) => {
 
     const { socketData } = useContext(SocketContext)
-
+    const { messagesData} = useContext(MessagesContext)
     const [myId, setMyId] = useState(null)
     
     const renderItem = ({ item }) => <ConnectionViewer navigation={navigation} id={item._id} user={ item.user._id == myId ? item.user2 : item.user} />
@@ -48,15 +83,16 @@ const Message = ({ navigation }) => {
                 ToastAndroid.show(error, ToastAndroid.SHORT);
             } else {
                 setMyId(result)
-                fetch(getConnection() + "/api/chat/connections/" + result, {
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type":"application/json"
-                    }
-                }).then((result) => result.json()).then((jsonResult) => {
-                    //Implement Code Here!
-                    setConnections(jsonResult)
-                })
+                setConnections(messagesData)
+                // fetch(getConnection() + "/api/chat/connections/" + result, {
+                //     headers: {
+                //         "Accept": "application/json",
+                //         "Content-Type":"application/json"
+                //     }
+                // }).then((result) => result.json()).then((jsonResult) => {
+                //     //Implement Code Here!
+                //     setConnections(jsonResult)
+                // })
             }
         })
     }

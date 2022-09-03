@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Direction from './Screens/Direction';
 import Contacts from './Screens/Contacts';
 import { DefaultTheme , Provider as PaperProvider } from 'react-native-paper';
+import MessagesContext from './Context/MessagesContext';
 import ForgotPassword from './Screens/ForgotPassword';
 
 // import context API
@@ -71,6 +72,8 @@ export default function App() {
   
   const [socketData, setSocketData] = useState(null)
 
+  const [messagesData, setMessagesData] = useState([])
+
   const [userData , setUserData] = React.useState({
     token : undefined,
     user : undefined
@@ -88,6 +91,7 @@ export default function App() {
   };
 
   return (
+      <MessagesContext.Provider value={{messagesData,setMessagesData}}>
     <SocketContext.Provider value={{socketData,setSocketData}}>
       <UserContext.Provider value={{userData , setUserData}}>
         <PaperProvider theme={theme}>
@@ -108,6 +112,7 @@ export default function App() {
         </PaperProvider> 
       </UserContext.Provider>
     </SocketContext.Provider>
+    </MessagesContext.Provider>
   );
 }
 

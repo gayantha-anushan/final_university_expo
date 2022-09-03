@@ -8,6 +8,7 @@ import DialogOrders from './DialogOrders';
 import CompleteOrder from './CompleteOrder';
 import { useEffect } from 'react';
 import UserContext from '../Context/UserContext';
+import { getConnection } from '../Connection';
 
 const LeftContent = props =><Avatar.Icon {...props} icon="folder" />
 
@@ -41,7 +42,25 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
         })
     },[]);
 
-    
+    const chatNow = () => {
+        fetch(getConnection() + "/api/chat/new_connection", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept":"application/json"
+            },
+            body: JSON.stringify({
+                user: buyerId._id,
+                user2:userData.user
+            })
+        }).then(resul => resul.json()).then(trex => {
+            navigation.navigate("chatscreen", {
+                id:trex.id
+            });
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
 
     const cancelOrder = () => {
         fetch(Connection.getConnection() + '/api/cart/cancelcartitem/' + index , {
@@ -80,6 +99,7 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
             }
             </Card.Content>
             <Card.Actions>
+                <Button onPress={()=>chatNow()} >Chat</Button>
             {
                 toggle ? (
                     <DialogOrders 

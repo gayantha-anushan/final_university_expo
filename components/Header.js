@@ -29,14 +29,6 @@ const Header = ({ navigation , socket}) => {
         });
     } , [socket]);
 
-  
-    const searchme = () => {
-        navigation.navigate("", {
-            keywords:keywords
-        })
-    }
-    
-
   return (
     <View>
         <View style={styles.topContent}>
