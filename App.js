@@ -96,10 +96,10 @@ export default function App() {
       <UserContext.Provider value={{userData , setUserData}}>
         <PaperProvider theme={theme}>
           <NavigationContainer>
-            <stack.Navigator screenOptions={{ headerShown: false }}>
+              <stack.Navigator screenOptions={{ headerShown: false }}>
+              <stack.Screen name="Home" component={Home}/>
               <stack.Screen name="Login" component={Login} />
               <stack.Screen name="Register" component={Register} />
-              <stack.Screen name="Home" component={Home}/>
               <stack.Screen name="Profile" component={Profile} />
               <stack.Screen name='DrawerContainer' component={DrawerContainer} />
               <stack.Screen name='ViewProfile' component={ViewProfile} />
