@@ -146,8 +146,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 23,
         fontWeight: 'bold',
-        
-        
     },
     htxt: {
         alignItems: 'center',
