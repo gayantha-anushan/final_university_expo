@@ -4,7 +4,7 @@ import home from '../assets/home.png';
 import profile from '../assets/user.png';
 import orders from '../assets/clipboard.png';
 import contacts from '../assets/contact-book.png';
-import settings from '../assets/settings.png';
+import about from '../assets/about.png';
 import logout from '../assets/logout.png';
 import stocks from '../assets/risk.png';
 import records from '../assets/medical-record.png';
@@ -63,7 +63,7 @@ const Drawer = (props) => {
                     {TabButton(currentTab,setCurrentTab,"Contacts",contacts,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Stocks", stocks ,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Records", records,props.navigation)}
-                    {TabButton(currentTab, setCurrentTab, "Settings", settings,props.navigation)}
+                    {TabButton(currentTab, setCurrentTab, "About", about,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
                 </View>
             </View>
@@ -96,9 +96,9 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                 case "Records":
                     navigation.navigate("Records");
                     break;
-                case "Settings":
-                    navigation.navigate("Settings");
-                    setCurrentTab("Settings")
+                case "About":
+                    navigation.navigate("About");
+                    setCurrentTab("About")
                     break;
                 case "Logout":
                     AsyncStorage.clear();
