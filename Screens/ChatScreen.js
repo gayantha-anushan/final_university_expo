@@ -130,7 +130,7 @@ const ChatScreen = ({ route, navigation }) => {
                     var msg = messageSet;
                     msg = msg.concat(data.data)
                     //imessages = msg
-                    console.log("its me 0000000000000000000000000000000000000000000000000")
+                    //console.log("its me 0000000000000000000000000000000000000000000000000")
                     setMessageSet(msg);
                     if (data.status == true) {
                         setOnlineStatus("Online")

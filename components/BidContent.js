@@ -1,22 +1,49 @@
 import { StyleSheet, Text, View,Image } from 'react-native'
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import strawberry from '../assets/strawberry.jpg'
 import { FontAwesome } from '@expo/vector-icons';
+import { getConnection } from '../Connection';
 
-const BidContent = ({authorname,amount,quantity,buydays }) => {
+const BidContent = ({ author_id, authorname, amount, image, quantity, buydays }) => {
+    
+    const [rate, setRate] = useState(0);
+    const [rates, setRates] = useState(0);
+    
+    useEffect(() => {
+        if (author_id != undefined) {
+            fetch(getConnection() + "/api/auth/userrate/" + author_id, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept":"application/json"
+                }
+            }).then((result) => result.json()).then((resultJson) => {
+                setRate(resultJson.rate);
+                setRates(resultJson.rates)
+            })
+        }
+    }, [author_id])
+    
+
   return (
       <View style={ styles.cardCover}>
           <View style={ styles.cardHeader}>
-            <Image source={strawberry} style={styles.imgStyle} />
+            <Image source={{uri:image}} style={styles.imgStyle} />
             <View>
                   <Text style={styles.title}>{ authorname}</Text>
-                <View style={ styles.ratingContainer}>
-                    <FontAwesome name="star" size={24} color="gold" />
-                    <FontAwesome name="star" size={24} color="gold" />
-                    <FontAwesome name="star" size={24} color="gold" />
-                    <FontAwesome name="star-o" size={24} color="gold" />
-                    <FontAwesome name="star-o" size={24} color="gold" />
+                  {
+                      rates == 0 ? (<View>
+                          <Text>There are no rates yet</Text>
+                      </View>):(
+                  <View style={ styles.ratingContainer}>
+                                  {rate >= 1 ? (<FontAwesome name="star" size={24} color="gold" />) : (<FontAwesome name="star-o" size={24} color="gold" />)}
+                                  {rate >= 2 ? (<FontAwesome name="star" size={24} color="gold" />) : (<FontAwesome name="star-o" size={24} color="gold" />)}
+                                  {rate >= 3 ? (<FontAwesome name="star" size={24} color="gold" />) : (<FontAwesome name="star-o" size={24} color="gold" />)}
+                                  {rate >= 4 ? (<FontAwesome name="star" size={24} color="gold" />) : (<FontAwesome name="star-o" size={24} color="gold" />)}
+                                  { rate >= 5 ? (<FontAwesome name="star" size={24} color="gold" />):(<FontAwesome name="star-o" size={24} color="gold" />) }
                 </View>
+                      )
+                }
               </View>
           </View>
           <Text>Amount(RS) : { amount}</Text>
