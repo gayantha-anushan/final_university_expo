@@ -133,7 +133,7 @@ const ViewProfile = ({ route,navigation }) => {
                             </View>  
                             <View style={styles.ButtonCont1}>
                             {
-                                typew !="customer" && uid ? (<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
+                                typew !="customer" && !uid ? (<TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate('ViewPost')}>
                                <Image style={styles.icon} source={require('../assets/products.png')} />
                                <Text style={styles.text3}>Your Products</Text>
                             </TouchableOpacity>):null

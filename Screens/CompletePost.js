@@ -29,7 +29,8 @@ const CompletePost = ({ route,navigation}) => {
     const [isProgress, setIsProgress] = useState(false);
     const [userType, setUserType] = useState(null);
     const [authorId, setAuthorId] = useState("");
-    const [cartId , setCartId] = useState();
+    const [cartId, setCartId] = useState();
+    const [authorType, setAuthorType] = useState("")
 
     const { id , socket } = route.params
     AsyncStorage.getItem('current_profile', (error, result) => {
@@ -45,28 +46,37 @@ const CompletePost = ({ route,navigation}) => {
                 ToastAndroid.show(error, ToastAndroid.SHORT);
             } else {
                 setUserType(result)
+                fetch(getConnection() + "/api/posts/singlepost/" + id, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept":"application/json"
+                    }
+                }).then((response) => response.json()).then((responseJson) => {
+                    console.log(responseJson)
+                    setImage(getConnection() + "/post-img/" + responseJson.image);
+                    setTitle(responseJson.title);
+                    setAmmount(responseJson.quantity - responseJson.successQuantity)
+                    if (result === "wholeseller") {
+                        setPrice(responseJson.price.wholeseller)
+                    } else if (result === "customer") {
+                        setPrice(responseJson.price.customer)
+                    } else if (result === "localseller") {
+                        setPrice(responseJson.price.localseller)
+                    } else {
+                        setPrice(0);
+                    }
+                    setType(responseJson.type)
+                    setDescription(responseJson.description)
+                    setExpirity(responseJson.expirity)
+                    setContact(responseJson.author.contact)
+                    setAuthorId(responseJson.author._id)
+                    setAuthorType(responseJson.author.type)
+                    console.log(image)
+                }).catch((error) => {
+                    console.log(error)
+                })
             }
-        })
-        fetch(getConnection() + "/api/posts/singlepost/" + id, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept":"application/json"
-            }
-        }).then((response) => response.json()).then((responseJson) => {
-            console.log(responseJson)
-            setImage(getConnection() + "/post-img/" + responseJson.image);
-            setTitle(responseJson.title);
-            setAmmount(responseJson.quantity-responseJson.successQuantity)
-            setPrice(responseJson.price.customer)
-            setType(responseJson.type)
-            setDescription(responseJson.description)
-            setExpirity(responseJson.expirity)
-            setContact(responseJson.author.contact)
-            setAuthorId(responseJson.author._id)
-            console.log(image)
-        }).catch((error) => {
-            console.log(error)
         })
     }, [id])
 
@@ -88,6 +98,7 @@ const CompletePost = ({ route,navigation}) => {
                 },
                 body:JSON.stringify({
                     post: id,
+                    author:authorId,
                     bidder: profileId,
                     amount: bidAmount,
                     quantity: orderAmount,
@@ -236,7 +247,7 @@ const CompletePost = ({ route,navigation}) => {
                     <Text style={{ fontSize: 15, marginStart: 8, fontWeight: 'bold' }}>{ orderPrice}</Text>
                 </View>
                 {
-                    userType != "farmer" ? ( <View>
+                    userType != "farmer" && !( userType == "wholesller" && authorType == "localseller") ? ( <View>
                     {
                     type == "Auction" ? (<View style={ styles.auctionButtonContainer}><TouchableOpacity onPress={()=>setIsShow(true)} style={styles.btn1}>
                         <AntDesign name="shoppingcart" size={30} color="white"></AntDesign>

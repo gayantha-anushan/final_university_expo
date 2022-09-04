@@ -18,7 +18,7 @@ const Interface = ({ route, navigation }) => {
     const { setSocketData } = useContext(SocketContext)
     const { setMessagesData } = useContext(MessagesContext)
 
-    const renderItem = ({ item }) => <Post socket={socket} postid={item.postid} incompleted={item.incompleted} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
+    const renderItem = ({ item }) => <Post authType={item.authType} socket={socket} postid={item.postid} incompleted={item.incompleted} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     // const renderItem = ({ item }) => <Post  postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     const [data, setData] = useState([])
     const [listRefreshing, setListRefreshing] = useState(false);
@@ -107,7 +107,8 @@ const Interface = ({ route, navigation }) => {
                     key:responseJson[i]._id,
                     authimg: responseJson[i].author.image,
                     postid:responseJson[i]._id,
-                    authid:responseJson[i].author._id,
+                    authid: responseJson[i].author._id,
+                    authType: responseJson[i].author.type,
                     username:responseJson[i].author.firstname + " "+responseJson[i].author.lastname,
                     date:responseJson[i].date,
                     title:responseJson[i].title,

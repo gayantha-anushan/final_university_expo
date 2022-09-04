@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Connection from '../Connection'
 import {TextInput} from 'react-native-paper'
 import UserContext from '../Context/UserContext';
-
+import * as WebBrowser from 'expo-web-browser';
 
 const Login = ({ navigation }) => {
 
@@ -55,6 +55,10 @@ const Login = ({ navigation }) => {
         }else{
             ToastAndroid.show("cannot insert empty email and(or) password",ToastAndroid.SHORT);
         }
+    }
+
+    const openWebBrowser = async () => {
+        await WebBrowser.openBrowserAsync("https://agro-support.herokuapp.com/forgotpassword")
     }
 
     const navigateToSuitable = (token) => {
@@ -119,7 +123,7 @@ const Login = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.ButtonCont1}>
-                        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                        <TouchableOpacity onPress={() => openWebBrowser()}>
                         <Text style={{color:'red',fontSize:18,fontWeight:'bold'}}>Forgot Password?</Text>
                         </TouchableOpacity>
                     </View>

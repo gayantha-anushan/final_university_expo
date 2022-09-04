@@ -1,15 +1,17 @@
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View ,TextInput} from 'react-native'
 import React,{useState,useEffect} from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-
+import { AntDesign } from '@expo/vector-icons';
 import { getConnection } from '../Connection';
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 
-const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,price,type,image,authid,navigation,authimg}) => {
+const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,price,type,image,authid,navigation,authimg,authType}) => {
 
     const [typeName, setTypeName] = useState("")
     const [isDirect, setIsDirect] = useState(false)
     const [authUri, setAuthUri] = useState(null)
-    
+    const [rate, setRate] = useState(0)
+    const [rates, setRates] = useState(0)
     
 
     useEffect(() => {       
@@ -21,6 +23,16 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
             setTypeName("Auction")
             setIsDirect(false)
         }
+        fetch(getConnection() + "/api/auth/userrate/" + authid, {
+            headers: {
+                "Content-Type": "application/json",
+                "Accept":"application/json"
+            },
+            method:"GET"
+        }).then((res) => res.json()).then((jsres) => {
+            setRate(jsres.rate);
+            setRates(jsres.rates);
+        })
     }, [])
     
 
@@ -33,10 +45,38 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
                 }
                 <View>
                     <Text style={styles.user}>{username}</Text>
-                    <Text>{postdate.substring(0,10)}</Text>
+                        <Text>{postdate.substring(0, 10)}</Text>
+                        <Text style={{
+                            color:"#777"
+                        }}>{ authType}</Text>
                 </View>
-              </TouchableOpacity>
-              {
+                </TouchableOpacity>
+                    <View>
+                        <View style={{
+                        display: 'flex',
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "row",
+                        margin:5
+                    }}>
+                        {rate >= 1 ? (<AntDesign name="star" size={20} color="gold" />) : (<AntDesign name="staro" size={20} color="gold" />)}
+                        {rate >= 2 ? (<AntDesign name="star" size={20} color="gold" />) : (<AntDesign name="staro" size={20} color="gold" />)}
+                        {rate >= 3 ? (<AntDesign name="star" size={20} color="gold" />) : (<AntDesign name="staro" size={20} color="gold" />)}
+                        {rate >= 4 ? (<AntDesign name="star" size={20} color="gold" />) : (<AntDesign name="staro" size={20} color="gold" />)}
+                        {rate >= 5 ? (<AntDesign name="star" size={20} color="gold" />) : (<AntDesign name="staro" size={20} color="gold" />)}
+                        
+                    </View>
+                    <View style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems:"center"
+                    }}>
+                        <Text style={{
+                            color:"#777"
+                        }}>from {rates} rates</Text>
+                    </View>
+                </View>
+              {/* {
                   isDirect ? (<TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate("Cart")}>
                         <Image style={styles.icon} source={require('../assets/add-cart.png')} />
                         <Text style={{color:'white',fontWeight:'bold'}}>Add To Cart</Text>
@@ -44,7 +84,7 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
                         <Image style={styles.icon} source={require('../assets/bid.png')} />
                         <Text style={{color:'white',fontWeight:'bold'}}>Bid Now</Text>
                     </TouchableOpacity>)
-              }
+              } */}
             </View>
             <ImageBackground source={{uri:image}} style={styles.image}>
                 <LinearGradient
@@ -68,7 +108,7 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
                 </View>
             </View>
                 <View style={{margin:10}}>
-                    <Text style={{ fontSize: 17 }}>{quantity} { incompleted > 0 ? " - "+incompleted : null} kg</Text>
+                    <Text style={{ fontSize: 17,fontWeight:'bold' }}>{quantity} { incompleted > 0 ? " - "+incompleted : null} kg</Text>
                     <Text style={{fontSize:17}}>Rs :{price.toFixed(2)}</Text>
                 </View>
         </View>
@@ -147,8 +187,8 @@ const styles = StyleSheet.create({
         alignItems:'center',
         padding:5,
         margin:8,
-        paddingHorizontal:10,
-        borderRadius: 8,
+        paddingHorizontal:15,
+        borderRadius: 20,
         flexDirection:'row'
     },
     icon: {
