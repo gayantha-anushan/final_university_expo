@@ -28,7 +28,8 @@ const CreatePost = ({navigation}) => {
     const [location, setLocation] = useState(null)
     const [point, setPoint] = useState(null)
     const [isProgress, setIsProgress] = useState(false);
-    const [expirity, setExpirity] = useState(0)
+    const [expirity, setExpirity] = useState(0);
+    const [typew,setTypw]=useState(null)
 
     useEffect(() => {
         AsyncStorage.getItem("current_profile",(error,result)=>{
@@ -41,6 +42,15 @@ const CreatePost = ({navigation}) => {
         })
         getLocation()
     }, [])
+    useEffect(() => {
+            AsyncStorage.getItem("type", (error, result) => {
+            if (error) {
+                ToastAndroid.show(error, ToastAndroid.SHORT);
+            } else {
+                setTypw(result);
+            }
+        })
+    }, []);
 
     const getLocation = async() =>{
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -176,15 +186,20 @@ const CreatePost = ({navigation}) => {
                         <NumericInput type='plus-minus' value={expirity} onChange={value => setExpirity(value)} minValue={0} totalWidth={100} totalHeight={50} iconSize={20} rounded valueType='real' rightButtonBackgroundColor='#4d8aeb' leftButtonBackgroundColor='#4d8aeb' />
                     </View>
                 <Text style={styles.priceChooser}>Price(Rs.per kg):</Text>
-                <View style={styles.container2}>
-                              <View>
-                                <Text>WholeSeller</Text>  
-                        <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric'/>
-                    </View>
-                              <View>
+                          <View style={styles.container2}>
+                              {
+                                 typew !="localseller" && "wholeseller"?( <View>
+                                      <Text>WholeSeller</Text>
+                                      <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric' />
+                                  </View>):null
+                              }
+                              {
+                              
+                                  typew !="localseller" ?(<View>   
                                   <Text>Local Seller</Text>
                                   <TextInput value={localSeller} onChangeText={setLocalSeller} style={styles.inputStyler} placeholder='Local Seller'  keyboardType='numeric'/>
-                    </View>
+                                    </View>):null
+                                }
                               <View>
                                   <Text>Customer</Text>
                                   <TextInput value={customer} onChangeText={setCustomer} style={styles.inputStyler} placeholder='Customer'  keyboardType='numeric'/>

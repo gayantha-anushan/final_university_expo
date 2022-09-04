@@ -27,7 +27,7 @@ const Interface = ({ route, navigation }) => {
 
 
     // for socket
-    const {userData} = React.useContext(UserContext);
+    const {userData , setUserData} = React.useContext(UserContext);
     const [socket, setSocket] = React.useState(null);
 
 
@@ -67,7 +67,22 @@ const Interface = ({ route, navigation }) => {
                 if (error) {
                     ToastAndroid.show(error,ToastAndroid.SHORT)
                 } else {
-                    loaddata(result)
+                    loaddata(result);
+                    setUserData({
+                        type : result
+                    });
+
+                }
+            })
+            AsyncStorage.getItem("current_profile", (error, result) => {
+                if (error) {
+                    ToastAndroid.show(error,ToastAndroid.SHORT)
+                } else {
+                    loaddata(result);
+                    setUserData({
+                        user : result
+                    });
+
                 }
             })
         });
