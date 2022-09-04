@@ -1,4 +1,4 @@
-import { BackHandler, Dimensions, FlatList, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native'
+import { BackHandler, Dimensions, FlatList, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, ToastAndroid, View } from 'react-native'
 import React, { useContext, useEffect,useState} from 'react'
 import { TouchableOpacity,Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
@@ -27,7 +27,7 @@ const IncomingMessage = ({message,time}) => {
 }
 
 
-const SentMessages = ({message,time,status}) => {
+const SentMessages = ({message,time}) => {
 
     return (<View style={{
                       backgroundColor: "#6B8E23",
@@ -53,8 +53,6 @@ const SentMessages = ({message,time,status}) => {
                 fontSize: 12,
                 marginRight:5
             }} >{time.slice(11,16)}</Text>
-        { status == "sent" ? (<Ionicons name="ios-checkmark" size={14} color="#ececec" />):null }
-        {status == "delivered" ? (<Ionicons name="ios-checkmark-done" size={14} color="#ececec" />):null }
         </View>
                     </View>)
 }
@@ -83,10 +81,9 @@ const ChatScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         //setSocket(io(getConnection()))
-        console.log("connected ex")
         AsyncStorage.getItem("current_profile", (error, result) => {
             if (error) {
-                console.log(error)
+                ToastAndroid.show("Error Occured while getting Profile", ToastAndroid.SHORT);
             } else {
                 setUser(result)
             }
@@ -99,7 +96,6 @@ const ChatScreen = ({ route, navigation }) => {
     
     useEffect(() => {
         if (id != null && id != undefined) {
-            console.log(id)
             socketData.emit("newChat", id)
             socketData.on("initData", (data) => {
                 setConnectionData(data.connectionData)
@@ -123,22 +119,31 @@ const ChatScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (connectionData != null) {
-          socketData.on("incomingMessages", (data) => {
-                console.log(connectionData)
-                console.log("Hooo "+data.data.connection.toString().localeCompare(connectionData._id.toString()))
-                if (data.data.connection.toString().localeCompare(connectionData._id.toString()) == 0) {
+            socketData.on("incomingMessages", (data) => {
+                if (data.connection.toString().localeCompare(connectionData._id.toString()) == 0) {
                     var msg = messageSet;
-                    msg = msg.concat(data.data)
-                    //imessages = msg
-                    //console.log("its me 0000000000000000000000000000000000000000000000000")
+                    msg = msg.concat(data)
                     setMessageSet(msg);
-                    if (data.status == true) {
-                        setOnlineStatus("Online")
-                    } else {
-                        setOnlineStatus("Offline")
-                    }
                     reference.scrollToEnd({animated:true})
                 }
+            })
+            socketData.on("user_online", (datas) => {
+                if (datas == connectionData.user || connectionData.user2) {
+                    if (datas != user) {
+                        setOnlineStatus("Online");
+                    }
+                }
+            })
+            socketData.on("user_logout", (data) => {
+                console.log(data);//TODO: need to changes have done
+            })
+            socketData.on("new_state", (res) => {
+                if (res != null) {
+                    setOnlineStatus("Online")
+                } else {
+                    setOnlineStatus("Offline")
+                }
+                //setOnlineStatus("Online")
             })
       }
     }, [connectionData,messageSet])
@@ -150,6 +155,11 @@ const ChatScreen = ({ route, navigation }) => {
                 setOtherUser(connectionData.user2)
             } else {
                 setOtherUser(connectionData.user);
+            }
+             if (connectionData.user._id == user) {
+                socketData.emit("user_state",connectionData.user2)
+            } else {
+                socketData.emit("user_state",connectionData.user)
             }
         }
     }, [connectionData,user])
