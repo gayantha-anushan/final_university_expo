@@ -188,7 +188,7 @@ const CreatePost = ({navigation}) => {
                 <Text style={styles.priceChooser}>Price(Rs.per kg):</Text>
                           <View style={styles.container2}>
                               {
-                                 typew !="localseller" && "wholeseller"?( <View>
+                                 typew !="localseller" && typew != "wholeseller"?( <View>
                                       <Text>WholeSeller</Text>
                                       <TextInput value={wholeSeller} onChangeText={setWholeSeller} style={styles.inputStyler} placeholder='WholeSeller' keyboardType='numeric' />
                                   </View>):null
