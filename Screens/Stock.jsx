@@ -14,6 +14,8 @@ import StockItem from './StockItem';
 
 const Stock = ({navigation}) => {
 
+    const {userData} = React.useContext(UserContext);
+
     const renderItem = ({ item }) => <StockItem 
                                         navigation={navigation}
                                         title={item.title}
@@ -27,7 +29,7 @@ const Stock = ({navigation}) => {
 
     React.useEffect(() => {
         const unsybscribe = navigation.addListener('focus', () => {
-            fetch(Connection.getConnection() + "/api/stock" , {
+            fetch(Connection.getConnection() + "/api/stock/"+userData.user , { // add userData.user
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

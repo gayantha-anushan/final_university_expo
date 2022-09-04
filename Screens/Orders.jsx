@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Connection, { getConnection }  from '../Connection';
 import { FlatList } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
-
+import UserContext from '../Context/UserContext';
 
 const Orders = ({navigation}) => {
 
@@ -19,6 +19,7 @@ const Orders = ({navigation}) => {
     const [orders, setOrders] = useState([]);
     const [bidData, setBidData] = useState([]);
     const [animating , setAnimating] = React.useState(true);
+    const {userData , setUserData} = React.useContext(UserContext);
 
     const getOrders = (result,token) => {
         fetch(Connection.getConnection() + "/api/cart/seller/" + result, {
@@ -137,6 +138,7 @@ const Orders = ({navigation}) => {
                                         title={order.postId.title}
                                         remainDays={order.remainDays}
                                         postId={order.postId}
+                                        type={userData.type}
                                         />
                             })
                         }

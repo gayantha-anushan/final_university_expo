@@ -9,7 +9,7 @@ import Connection  from '../Connection';
 import { RadioButton } from 'react-native-paper';
 import UserContext from '../Context/UserContext';
 
-const MyComponent = ({index , orders , setOrders , buyerId , sellerId , qty , price , title , postId}) => {
+const MyComponent = ({index , orders , setOrders , buyerId , sellerId , qty , price , title , postId , type}) => {
 
     const {userData} = React.useContext(UserContext);
 
@@ -89,7 +89,7 @@ const MyComponent = ({index , orders , setOrders , buyerId , sellerId , qty , pr
   
     return (
         <View>
-          <Button onPress={showDialog}>Complete Order</Button>
+          <Button onPress={showDialog}>{type == 'localseller' ? 'Complete' : 'Complete Order'}</Button>
           <Portal>
             <Dialog visible={visible} onDismiss={hideDialog}>
 

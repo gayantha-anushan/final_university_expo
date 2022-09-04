@@ -47,6 +47,7 @@ const Direction = ({navigation , route}) => {
 
     const makeDirections = async () => {
         console.log(destination);
+        // console.log(sellerId);
         setDirections(true);
     }
 
@@ -61,6 +62,7 @@ const Direction = ({navigation , route}) => {
                     // 'token': authCode,
                 },
             }).then((result) => result.json()).then((jres) => {
+                console.log(jres);
                 setDestination({
                     latitude : jres.latitude,
                     longitude : jres.longitude,

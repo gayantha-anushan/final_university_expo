@@ -12,7 +12,7 @@ import { getConnection } from '../Connection';
 
 const LeftContent = props =><Avatar.Icon {...props} icon="folder" />
 
-const Order = ({navigation , buyerId , qty , price , index , isApproved , orders , setOrders , title , remainDays , postId}) => {
+const Order = ({navigation , buyerId , qty , price , index , isApproved , orders , setOrders , title , remainDays , postId , type }) => {
 
     const [toggle , setToggle] = useState(!isApproved);
     // this is not update
@@ -32,6 +32,7 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
             //         setAuthCode(result)
             //     }
             // })
+            console.log(buyerId);
             AsyncStorage.getItem("current_profile", (error, result) => {
                 if (error) {
                     console.log(error)
@@ -100,6 +101,9 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
             </Card.Content>
             <Card.Actions>
                 <Button onPress={()=>chatNow()} >Chat</Button>
+                {
+                    type == 'localseller' ? <Button onPress={() => navigation.navigate('Direction' , {'sellerId' : buyerId._id})}>Delivery</Button> : null
+                }
             {
                 toggle ? (
                     <DialogOrders 
@@ -127,6 +131,7 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
                         price={price}
                         title={title}
                         postId={postId}
+                        type={type}
                         />
                     </View>
                 )
@@ -134,7 +139,9 @@ const Order = ({navigation , buyerId , qty , price , index , isApproved , orders
             }
             {
                 !toggle ? (
-                        <Button onPress={cancelOrder}>Cancel Order</Button>
+                    <View>
+                        <Button onPress={cancelOrder}>{type == 'localseller' ? 'Cancel' : 'Cancel Order'}</Button>
+                    </View>   
                 ) : null
             }
             </Card.Actions>
