@@ -93,7 +93,10 @@ const Message = ({ navigation }) => {
     const [connections, setConnections] = useState([])
 
     return (
-        <View>
+        <View style={{
+            backgroundColor: "#fff",
+            height:"100%"
+        }}>
             <Header navigation={navigation}/>
             <FlatList renderItem={renderItem} data={connections} keyExtractor={item=>item._id} />
         </View>

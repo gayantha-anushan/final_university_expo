@@ -97,7 +97,7 @@ const Post = ({socket ,incompleted, username,postid,postdate,title,quantity,pric
             <View>
                   <Text style={styles.typeBtn}>{ typeName}</Text>
                 <View style={styles.container1}>
-                      <TouchableOpacity style={styles.btn2} onPress={()=>navigation.navigate("Direction",{id:postid , socket:socket})}>
+                      <TouchableOpacity style={styles.btn2} onPress={()=>navigation.navigate("Direction",{sellerId:authid})}>
                           <Image style={styles.icon} source={require('../assets/location.png')} />
                         <Text style={{color:'white',fontWeight:'bold'}}>Location</Text>
                     </TouchableOpacity>

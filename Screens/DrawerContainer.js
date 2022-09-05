@@ -4,6 +4,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import Interface from './Interface'
 import CreatePost from './CreatePost'
 import Message from './Message'
+import About from './About';
 import Draweri from './Drawer'
 import ViewProfile from './ViewProfile'
 import Notifications from './Notifications'
@@ -68,7 +69,8 @@ const DrawerContainer = () => {
       <Drawer.Screen name="Records" component={Records}/>
       <Drawer.Screen name="Settings" component={Settings} />
       <Drawer.Screen name="ViewBids" component={ViewBids}/>
-      <Drawer.Screen name="Stock" component={Stock}/>
+      <Drawer.Screen name="Stock" component={Stock} />
+      <Drawer.Screen name="About" component={About} />
       <Drawer.Screen name="Contacts" component={Contacts}/>
       <Drawer.Screen name="ContactPost" component={ContactPost}/>
       <Drawer.Screen name="SellerBids" component={SellerBids} />

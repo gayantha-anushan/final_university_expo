@@ -36,7 +36,7 @@ const ContactPost = ({navigation , route}) => {
     const loaddata = async () => { 
         setListRefreshing(true)
         //Loading Data
-        fetch(Connection.getConnection()+'/api/posts/'+route.params.id,{
+        fetch(Connection.getConnection()+'/api/posts/my/'+route.params.id,{
             method:'GET',
             headers:{
                 'Accept':'application/json',
@@ -91,7 +91,9 @@ const ContactPost = ({navigation , route}) => {
             </Button>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 {
-                    data ? <FlatList data={data} renderItem={renderItem} keyExtractor={item => item.key} /> : <View></View> 
+                    data ? <FlatList data={data} renderItem={renderItem} keyExtractor={item => item.key} style={{
+                        marginBottom:150
+                    }} /> : <View></View> 
                 }              
             </TouchableWithoutFeedback>
         </View>

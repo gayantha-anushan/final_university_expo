@@ -15,7 +15,6 @@ import CompletePost from './Screens/CompletePost';
 import DrawerContainer from './Screens/DrawerContainer';
 import ViewProfile from './Screens/ViewProfile';
 import ViewPost from './components/ViewPost';
-import About from './Screens/About';
 import SocketContext from './Context/SocketContext';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Direction from './Screens/Direction';
@@ -104,7 +103,6 @@ export default function App() {
               <stack.Screen name='DrawerContainer' component={DrawerContainer} />
               <stack.Screen name='ViewProfile' component={ViewProfile} />
               <stack.Screen name="ViewPost" component={ViewPost} />
-              <stack.Screen name="About" component={About} />
               <stack.Screen name="Direction" component={Direction}/>
               <stack.Screen name="ForgotPassword" component={ForgotPassword}/>
             </stack.Navigator>

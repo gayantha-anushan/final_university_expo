@@ -163,6 +163,11 @@ const Interface = ({ route, navigation }) => {
                 <TextInput style={styles.Input} placeholder='Search here......' value={term} onChangeText={(newText) => {
                     setterm(newText);
                 }} />
+                {
+                    term !== "" ? (<TouchableOpacity style={styles.Touchable} onPress={()=>setterm("")}>
+                    <AntDesign name="closecircleo" size={36} color="green" />
+                </TouchableOpacity>):null
+                }
                 <TouchableOpacity style={styles.Touchable} onPress={()=>searchHandler()}>
                     <AntDesign name="search1" color="green" size={36} />
                 </TouchableOpacity>

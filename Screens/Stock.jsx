@@ -93,7 +93,8 @@ const Stock = ({navigation}) => {
 
 const styles = StyleSheet.create({
     stockContainer : {
-        height :'100%'
+        height: '100%',
+        backgroundColor:"#fff"
     },
     topBar: {
         display: 'flex',

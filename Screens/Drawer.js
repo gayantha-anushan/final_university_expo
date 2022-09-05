@@ -97,12 +97,15 @@ const TabButton = (currentTab, setCurrentTab, title, image, navigation) => {
                     break;
                 case "Contacts":
                     navigation.navigate("Contacts");
+                    setCurrentTab("Contacts")
                     break;
                 case "Stocks":
                     navigation.navigate("Stock");
+                    setCurrentTab("Stocks")
                     break;
                 case "Records":
                     navigation.navigate("Records");
+                    setCurrentTab("Records")
                     break;
                 case "About":
                     navigation.navigate("About");

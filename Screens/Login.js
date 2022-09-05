@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import{Image,ImageBackground,StyleSheet,View,Text, TouchableOpacity,KeyboardAvoidingView,TouchableWithoutFeedback,ScrollView,Keyboard, ToastAndroid} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from '@react-native-async-storage/async-storage'
@@ -16,6 +16,19 @@ const Login = ({ navigation }) => {
     const [password, setpassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(true);
 
+    useEffect(() => {
+        const subscribe = navigation.addListener("focus", () => {
+            AsyncStorage.getItem("auth_code", (error, result) => {
+                if (!error) {
+                    if (result == undefined || result == null) {
+                        //
+                    } else {
+                        navigation.navigate("DrawerContainer")
+                    }
+                }
+            })
+        })
+    }, [])
     
 
     // context api
