@@ -230,9 +230,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginStart: 10,
         fontWeight: 'bold',
+        
         color: '#6B8E23',
     },
     text2: {
+        width:220,
         fontSize: 20,
         color:"black"
     },

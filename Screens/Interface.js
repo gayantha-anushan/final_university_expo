@@ -22,7 +22,7 @@ const Interface = ({ route, navigation }) => {
     // const renderItem = ({ item }) => <Post  postid={item.postid} authimg={item.authimg} navigation={navigation} username={item.username} authid={item.authid} image={item.image} postdate={item.date} title={item.title} price={item.price} quantity={item.quantity} type={item.type} />
     const [data, setData] = useState([])
     const [listRefreshing, setListRefreshing] = useState(false);
-    const [term, setterm] = useState([]);
+    const [term, setterm] = useState("");
     const [err, seterr] = useState([]);
 
 
@@ -68,30 +68,28 @@ const Interface = ({ route, navigation }) => {
                     ToastAndroid.show(error,ToastAndroid.SHORT)
                 } else {
                     loaddata(result);
-                    setUserData({
-                        type : result
-                    });
+                    AsyncStorage.getItem("current_profile", (error, resultx) => {
+                        if (error) {
+                            ToastAndroid.show(error,ToastAndroid.SHORT)
+                        } else {
+                            setUserData({
+                                type:result,
+                                user : resultx
+                            });
 
+                        }
+                    })
                 }
             })
-            AsyncStorage.getItem("current_profile", (error, result) => {
-                if (error) {
-                    ToastAndroid.show(error,ToastAndroid.SHORT)
-                } else {
-                    loaddata(result);
-                    setUserData({
-                        user : result
-                    });
-
-                }
-            })
+            
         });
     }, []);
 
     const loaddata = (type) => {
         setListRefreshing(true)
+        console.log(userData)
         //Loading Data
-        fetch(getConnection()+'/api/posts/',{
+        fetch(getConnection()+'/api/posts/'+type,{
             method:'GET',
             headers:{
                 'Accept':'application/json',
@@ -104,7 +102,7 @@ const Interface = ({ route, navigation }) => {
                 var price = 0;
                 switch (type) {
                     case "farmer":
-                        price = responseJson[i].price.wholeseller
+                        price = responseJson[i].price.customer
                         break;
                     case "wholeseller":
                         price = responseJson[i].price.wholeseller
@@ -136,7 +134,7 @@ const Interface = ({ route, navigation }) => {
             }
             setData(datas)
             setfiltereddata(datas)
-            console.log(datas)
+            //console.log(datas)
         })
         setListRefreshing(false)
     }
@@ -170,7 +168,7 @@ const Interface = ({ route, navigation }) => {
                 </TouchableOpacity>
             </View>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata()} data={filtereddata} renderItem={renderItem} keyExtractor={item => item.key} />
+                <FlatList refreshing={listRefreshing} onRefresh={() => loaddata(userData.type)} data={filtereddata} renderItem={renderItem} keyExtractor={item => item.key} />
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     );

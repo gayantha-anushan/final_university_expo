@@ -35,25 +35,18 @@ const ConnectionViewer = ({ id,user,navigation }) => {
                         flexDirection:'row'
                     }}>
                         <Text style={styles.chatItemType}>{user.type}</Text>
-                        <TouchableOpacity style={{
+                        {/* <TouchableOpacity style={{
                             marginHorizontal: 5,
                             paddingHorizontal: 10,
                             marginTop:4,
                             paddingVertical: 3,
                             borderColor: '#CACACA',
                             borderWidth: 1,
-                            borderRadius:15
+                            borderRadius:15.
                         }}>
                             <Feather name="more-horizontal" size={24} color="black" />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
-                    <Text style={{
-                        marginHorizontal: 10,
-                        padding: 5,
-                        paddingHorizontal:10,
-                        backgroundColor: '#cacaca',
-                        borderRadius:15
-                    }}>100</Text>
                 </View>
                 
             </View>
@@ -83,16 +76,16 @@ const Message = ({ navigation }) => {
                 ToastAndroid.show(error, ToastAndroid.SHORT);
             } else {
                 setMyId(result)
-                setConnections(messagesData)
-                // fetch(getConnection() + "/api/chat/connections/" + result, {
-                //     headers: {
-                //         "Accept": "application/json",
-                //         "Content-Type":"application/json"
-                //     }
-                // }).then((result) => result.json()).then((jsonResult) => {
-                //     //Implement Code Here!
-                //     setConnections(jsonResult)
-                // })
+                //setConnections(messagesData)
+                fetch(getConnection() + "/api/chat/connections/" + result, {
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type":"application/json"
+                    }
+                }).then((result) => result.json()).then((jsonResult) => {
+                    //Implement Code Here!
+                    setConnections(jsonResult)
+                })
             }
         })
     }

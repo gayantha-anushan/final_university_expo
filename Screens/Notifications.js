@@ -54,10 +54,13 @@ const Notifications = ({navigation , route}) => {
         <View>
             <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.mainArea}>
             <Header navigation={navigation}/>
-            <View style={{marginTop : 25 , marginBottom : 25}}>
+                {
+                    animating ? (<View style={{marginTop : 25 , marginBottom : 25}}>
                             <ActivityIndicator animating={animating}/>
-            </View>
-            <ScrollView>
+            </View>):null
+            }
+                {
+                    notifications.length >= 1 ? (<ScrollView>
             {
 
                 notifications.map(notification => {
@@ -74,7 +77,20 @@ const Notifications = ({navigation , route}) => {
                 })
                 
             }
-            </ScrollView>
+                    </ScrollView>) : (<View style={{
+                            height: 100,
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                        alignItems:"center"
+                    }}>
+                            <Text style={{
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color:"#555"
+                            }}>There Are No New Notifications!</Text>
+            </View>)
+            }
             </KeyboardAvoidingView>
         </View>
     )

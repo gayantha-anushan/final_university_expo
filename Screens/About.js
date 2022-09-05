@@ -11,18 +11,31 @@ const About = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Interface")}>
           <AntDesign name="arrowleft" size={30}></AntDesign>
         </TouchableOpacity>
-        <Text style={styles.text}>About</Text>
+        {/* <Text style={styles.text}>About</Text> */}
       </View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ScrollView>
-        <View style={styles.adjuster}>
+            <View style={styles.adjuster}>
+              <Image style={styles.backImage} source={require('../assets/Aboutus.png')} />
               <View>
                 <Text style={{ color: 'black', fontSize: 22, fontWeight: 'bold', fontStyle: 'italic'}}>Description of Application:</Text>
-            <Text style={{color:'black',fontSize:15,fontWeight:'bold',opacity:0.9,color:'#6B8E23',margin:4,alignSelf:'stretch',fontStyle:'italic'}}>A successful solution to this is to build a common interaction between farmers and traders by creating a system that provide access to information about farmers across the country and their products to traders.
+                <Text style={{
+                  color: 'black',
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                  opacity: 0.9,
+                  color: '#6B8E23',
+                  margin: 4,
+                  alignSelf: 'stretch',
+                  fontStyle: 'italic',
+                  backgroundColor: "#eee",
+                  padding: 10,
+                  margin: 10,
+                  borderRadius:12
+                }}>A successful solution to this is to build a common interaction between farmers and traders by creating a system that provide access to information about farmers across the country and their products to traders.
 It is important to build the necessary media to exchange information between farmers and traders and to pass on information about farmers’ produce to traders.
 </Text>
             </View>
-          <Image style={styles.backImage} source={require('../assets/Aboutus.png')} />
         </View>
         <View style={styles.textcont}>
           <Text style={styles.textcontainer}>This app build by the below-mentioned university students for their final group project.</Text>

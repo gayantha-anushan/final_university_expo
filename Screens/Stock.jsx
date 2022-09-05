@@ -50,7 +50,7 @@ const Stock = ({navigation}) => {
     } , []);
 
     const refresh = async () => {
-        fetch(Connection.getConnection() + "/api/stock" , {
+        fetch(Connection.getConnection() + "/api/stock/"+userData.user , {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

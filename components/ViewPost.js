@@ -76,7 +76,7 @@ const ViewPost = ({username,postdate,title,quantity,price,type,image,navigation}
                 console.log(error)
             } else {
                 console.log(result)
-                fetch(getConnection() + '/api/posts/' + result, {
+                fetch(getConnection() + '/api/posts/my/' + result, {
                     method: 'GET'
                 }).then((response) => response.json()).then((responseJson) => {
                     var datas = []

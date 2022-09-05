@@ -43,12 +43,11 @@ const MyPost = ({username,postdate,title,quantity,price,type,image,editDetails,i
                 <Text style={styles.typeBtn}>{typeName}</Text>
                 <View style={styles.container1}>
                       <TouchableOpacity onPress={()=>editDetails(id)} style={styles.btn1}>
-                          <AntDesign name="edit" size={20} color="black"></AntDesign>
-                        <Text>Edit Details</Text>
-                    </TouchableOpacity>
-                      <TouchableOpacity style={styles.btn1}>
-                          <AntDesign name="eye" size={20} color="black"></AntDesign>
-                        <Text>View</Text>
+                          <AntDesign name="edit" size={20} color="#fff"></AntDesign>
+                          <Text style={{
+                              color: "#fff",
+                              fontWeight:"bold"
+                        }}>Edit Details</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     btn1:{
-        backgroundColor:'#c4c4c4',
+        backgroundColor:'#6B8E23',
         display:'flex',
         justifyContent:'center',
         alignItems:'center',

@@ -16,12 +16,20 @@ const Drawer = (props) => {
     const [currentTab, setCurrentTab] = useState("Home");
     const [image, setImage] = useState(null)
     const [name, setName] = useState("")
+    const [type, setType] = useState("")
 
     useEffect(() => {
       AsyncStorage.getItem("auth_code", (error, result) => {
             if (error) {
                 console.log(error)
             } else {
+                AsyncStorage.getItem("type", (error, resultm) => {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        setType(resultm);
+                    }
+                })
                 console.log(result)
                 fetch(Connection.getConnection() + "/api/auth/profile-data", {
                     method: 'POST',
@@ -59,10 +67,10 @@ const Drawer = (props) => {
                 <View>
                     {TabButton(currentTab, setCurrentTab, "Home", home, props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Profile", profile,props.navigation)}
-                    {TabButton(currentTab, setCurrentTab, "Orders", orders,props.navigation)}
+                    { type !== "customer" ? TabButton(currentTab, setCurrentTab, "Orders", orders,props.navigation):null}
                     {TabButton(currentTab,setCurrentTab,"Contacts",contacts,props.navigation)}
-                    {TabButton(currentTab, setCurrentTab, "Stocks", stocks ,props.navigation)}
-                    {TabButton(currentTab, setCurrentTab, "Records", records,props.navigation)}
+                    { type !== "customer" ? TabButton(currentTab, setCurrentTab, "Stocks", stocks ,props.navigation):null}
+                    { type !== "customer" ? TabButton(currentTab, setCurrentTab, "Records", records,props.navigation):null}
                     {TabButton(currentTab, setCurrentTab, "About", about,props.navigation)}
                     {TabButton(currentTab, setCurrentTab, "Logout", logout,props.navigation)}
                 </View>

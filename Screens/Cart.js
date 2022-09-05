@@ -385,9 +385,11 @@ const Cart = ({ navigation }) => {
                         <Text>Bid Status</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{marginTop : 25 , marginBottom : 25}}>
+                {
+                    animating ? (<View style={{marginTop : 25 , marginBottom : 25}}>
                     <ActivityIndicator animating={animating}/>
-                </View>
+                </View>):null
+                }
                 {
                     isDirect ? (<FlatList data={CartItems} onRefresh={() => loadCartItems(profile)} refreshing={ false} renderItem={renderItem} keyExtractor={item => item.id} />) :
                         (<FlatList data={bidList} renderItem={bidRenderItem} keyExtractor={item => item.id} />)
